@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dimmer) dimmer.hidden = !open;
     if (menu) menu.setAttribute('aria-expanded', String(open));
     if (mobileQuery.matches) sidebar?.setAttribute('aria-hidden', String(!open));
-    else sidebar?.removeAttribute('aria-hidden');
   }
   function applyMode(mode, persist = true) {
     currentMode = modes.includes(mode) ? mode : 'expanded';
