@@ -1,0 +1,83 @@
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+
+    /* Print & A4 Simulation Styling */
+    .a4-page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+      body {
+        background: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      .a4-page {
+        width: 100% !important;
+        min-height: 100vh !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        page-break-after: always;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
+    /* Custom Scrollbar for form panel */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  
+    /* Independent report module: locally cropped ministry identity. */
+    .moe-logo{display:block;width:105px;max-width:105px;height:auto;object-fit:contain;flex-shrink:0;}
+    .a4-page,.a4-page *{font-family:'Tajawal',sans-serif;}
+    .report-evidence-gallery:not(:has(img)){display:none!important}
+    .a4-page img{max-width:100%;}
+    /* Keep A4 proportions in editor and never distort print media. */
+    .print-container{min-width:0;max-width:100%;overflow-x:auto;}
+    @media screen and (max-width:1023px){
+      main{min-width:0;}
+      .print-container{padding:12px 8px!important;overflow-x:hidden;}
+      .a4-page{flex:0 0 auto;}
+    }
+    @media print{
+      .a4-page{zoom:1!important;min-height:297mm!important;width:210mm!important;}
+      .a4-page,.a4-page *{font-family:'Tajawal',sans-serif!important;}
+      .report-evidence-gallery:not(:has(img)){display:none!important}
+      .moe-logo{width:105px;}
+    }
+
+.a4-page .moe-logo{max-height:74px;max-width:112px;width:100px;height:auto;}
