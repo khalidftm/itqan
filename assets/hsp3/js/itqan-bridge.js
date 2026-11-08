@@ -1,70 +1,112 @@
-/* Bridge from ITQAN teacher portfolio to the isolated HSP3 print manager.
-   It reads current local metadata and does not transmit or embed actual files. */
+/* ITQAN ↔ HSP3 print bridge: viewer-only report, four accessible A4 templates. */
 (function () {
   "use strict";
-  const selectedTemplateKey = "itqan-hsp3-print-template";
-  const safe = value => String(value ?? "").trim();
-  function buildReport() {
+
+  const templateKey = "itqan-hsp3-print-template";
+  const identityPrefix = "itqan-ftm-school-v1:";
+  const defaults = Object.freeze({
+    educationAdministrationName: "الإدارة العامة للتعليم بمنطقة مكة المكرمة",
+    schoolName: "ابتدائية بحرة المجاهدين الخامسة ببحرة المجاهدين"
+  });
+  const value = input => String(input ?? "").trim();
+  const savedIdentity = userId => {
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(identityPrefix + userId) || "{}") || {}; } catch {}
+    return {
+      educationAdministrationName: value(stored.educationAdministrationName) || defaults.educationAdministrationName,
+      schoolName: value(stored.schoolName) || defaults.schoolName
+    };
+  };
+
+  function reportFromUser() {
     const storage = window.ItqanEngines?.StorageEngine;
-    if (!storage) throw new Error("تعذر قراءة بيانات إتقان. افتح الصفحة من نفس نطاق ملف الإنجاز.");
+    if (!storage) throw new Error("محرك بيانات إتقان غير متاح.");
     const user = storage.getCurrentUser();
-    if (!user) throw new Error("لا توجد جلسة مستخدم متاحة في هذا المتصفح.");
+    if (!user) throw new Error("لا توجد بيانات مستخدم نشط في هذا المتصفح.");
     const items = storage.getPortfolioForUser(user.id) || [];
-    const school = storage.getSchoolById(user.schoolId);
-    const name = safe(user.name) || "المعلمة";
-    const date = new Date().toLocaleDateString("ar-SA");
-    const columns = ["م", "عنوان الشاهد", "التصنيف", "التاريخ", "الملف"];
+    const name = value(user.name) || "المعلمة";
+    const grade = value(user.gradeLevel);
+    const subject = value(user.subjectName || user.specialization);
     const rows = items.map((item, index) => [
       String(index + 1),
-      safe(item.title) || "شاهد بلا عنوان",
-      safe(item.type || item.section) || "—",
-      safe(item.date) || "—",
-      safe(item.fileName) || "لا يوجد ملف مرفق"
+      value(item.title) || "شاهد بدون عنوان",
+      value(item.type || item.section) || "—",
+      value(item.date) || "—",
+      value(item.fileName) || "دون ملف"
     ]);
     if (!rows.length) rows.push(["—", "لم تُضف شواهد إلى ملف الإنجاز بعد", "—", "—", "—"]);
-    const grade = safe(user.gradeLevel);
-    const subject = safe(user.subjectName || user.specialization);
     return {
-      schoolName: safe(school?.name) || "اسم المدرسة",
-      report: {
-        title: "ملف الإنجاز المهني — " + name + (subject ? " — " + subject : "") + (grade ? " — " + grade : ""),
-        columns, rows,
-        statistics: [
-          {label:"الشواهد الموثقة",value:String(items.length)},
-          {label:"مكونات المكتبة",value:String((user.includedLibraryIds || []).length)},
+      identity:savedIdentity(user.id),
+      report:{
+        title:"ملف الإنجاز المهني — " + name +
+          (subject ? " — " + subject : "") + (grade ? " — " + grade : ""),
+        columns:["م", "عنوان الشاهد", "التصنيف", "التاريخ", "اسم الملف"],
+        rows,
+        statistics:[
+          {label:"الشواهد",value:String(items.length)},
+          {label:"المكونات المضمنة",value:String((user.includedLibraryIds || []).length)},
           {label:"التقييم الذاتي",value:String(user.selfEvaluationScore ?? "—") + "%"}
         ],
-        extraComponents: [{kind:"notes",options:{text:"طُبع هذا الكشف بتاريخ " + date + ". الوثائق الأصلية محفوظة في ملف إنجاز المستخدم ولا تُدرج تلقائيًا داخل الطباعة."}}],
+        extraComponents:[{
+          kind:"notes",
+          options:{text:"تم إعداد هذا الكشف في " + new Date().toLocaleDateString("ar-SA") +
+            ". المرفقات محفوظة في ملف الإنجاز ولا تُضمّن ملفاتها الأصلية في هذا الكشف."}
+        }],
         minTailRows:2
       }
     };
   }
-  function launch() {
+
+  function getTemplate() {
+    let stored = null;
+    try { stored = localStorage.getItem(templateKey); } catch {}
+    return window.HSP3?.profiles?.some(p => p.id === stored) ? stored : "official-portrait";
+  }
+
+  function openCurrentReport() {
     const manager = window.hspPrintManager;
     if (!manager) return;
     const note = document.getElementById("itqan-print-message");
     try {
-      const {schoolName, report} = buildReport();
-      const flags = {statistics:true,principal:false,signature:false,stamp:false,employee:false,review:false,notes:false,deputy:false,officer:false,employeeSignature:false,bullets:false};
-      let template = "official-portrait";
-      try { template = localStorage.getItem(selectedTemplateKey) || template; } catch {}
+      const {identity, report} = reportFromUser();
       manager.open({
-        mode:"design",
-        template,
-        schoolName,
-        educationAdministrationName:"اسم إدارة التعليم",
-        components:flags,
-        report
+        mode:"viewer",
+        template:getTemplate(),
+        educationAdministrationName:identity.educationAdministrationName,
+        schoolName:identity.schoolName,
+        report,
+        components:{statistics:true,principal:false,signature:false,stamp:false,
+          employee:false,review:false,notes:false,deputy:false,officer:false,
+          employeeSignature:false,bullets:false}
       });
-      const select = document.getElementById("hsp-print-template");
-      select?.addEventListener("change", () => {
-        try { localStorage.setItem(selectedTemplateKey, select.value); } catch {}
-      });
-      if (note) note.textContent = "تستخدم الطباعة أسماء الشواهد ومعلومات حسابك المحفوظة محليًا، مع إبقاء الملفات الأصلية دون إرسال.";
+      const toolbarSelect = document.getElementById("itqan-template-switch");
+      if (toolbarSelect) toolbarSelect.value = manager.select.value;
+      if (note) note.textContent = "تظهر بيانات الشواهد المحفوظة في متصفحكِ. تعرض هذه المعاينة الكشف ولا تضمّن محتويات الملفات الأصلية.";
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        // Run after the sheet has been measured; only screen zoom changes.
+        manager.mode = "fit-width";
+        manager.refresh();
+      }
     } catch (error) {
-      if (note) note.textContent = "تعذر تجهيز بيانات ملف الإنجاز: " + error.message;
+      if (note) note.textContent = "تعذر إعداد الطباعة: " + error.message;
       console.error("[ITQAN-HSP3]",error);
     }
   }
-  document.addEventListener("DOMContentLoaded", launch);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const manager = window.hspPrintManager;
+    const toolbarSelect = document.getElementById("itqan-template-switch");
+    if (!manager || !toolbarSelect) return;
+    (window.HSP3?.profiles || []).forEach(profile => {
+      toolbarSelect.add(new Option(profile.name, profile.id));
+    });
+    toolbarSelect.addEventListener("change", () => {
+      manager.select.value = toolbarSelect.value;
+      try { localStorage.setItem(templateKey, toolbarSelect.value); } catch {}
+      manager.mode = "fit-width";
+      manager.refresh();
+    });
+    document.getElementById("itqan-reopen-print")?.addEventListener("click", openCurrentReport);
+    openCurrentReport();
+  });
 })();
