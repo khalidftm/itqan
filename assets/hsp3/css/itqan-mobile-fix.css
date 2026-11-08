@@ -1,4 +1,8 @@
 /* FTM-specific phone preview stabilization. Avoid unintentional page-wide horizontal panning. */
+/* The native <dialog> must be truly hidden when closed. */
+body.itqan-print-viewer .hsp-manager-dialog:not([open]){display:none!important}
+body.itqan-print-viewer .hsp-manager-dialog[open]{display:block}
+
 html:has(body.itqan-print-viewer),body.itqan-print-viewer{
   overflow-x:clip;
   max-width:100%;
@@ -232,6 +236,7 @@ body.itqan-print-viewer .hsp-manager-preview .sheet {
     zoom:1!important;
   }
   body.itqan-print-viewer .hsp-manager-preview .sheet{
+    zoom:1!important;
     width:var(--page-w)!important;
     height:var(--page-h)!important;
     max-width:none!important;
