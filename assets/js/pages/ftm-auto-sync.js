@@ -230,7 +230,7 @@
         const summary = await snapshotUser();
         latestError = "";
         statusUpdate((destinationRepo.private ? "✓ نسخة خاصة محفوظة" : "⚠ نسخة محفوظة في مستودع عام") +
-          " • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة","synced");
+          " • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة",destinationRepo.private ? "synced" : "public");
       }
     } catch (error) {
       latestError = error.message;
