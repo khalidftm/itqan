@@ -87,7 +87,8 @@ if(!page)return;
 // Account for mobile browser desktop-site emulation and visual viewport panning.
 // Measure the real available preview width rather than the unscaled A4 content.
 const bounds=page.getBoundingClientRect();
-const pageWidth=bounds.width/(this.zoom||1),pageHeight=bounds.height/(this.zoom||1);
+const appliedZoom=Number.parseFloat(page.style.zoom)||1;
+const pageWidth=bounds.width/appliedZoom,pageHeight=bounds.height/appliedZoom;
 const candidates=[this.screen.clientWidth,document.documentElement.clientWidth,window.innerWidth,
   window.visualViewport?.width,window.screen?.width]
   .filter(number=>Number.isFinite(number)&&number>0);
@@ -97,7 +98,7 @@ const fittedWidth=usableWidth/pageWidth, fittedPage=Math.min(fittedWidth,usableH
 const next=mode==="fit-page"?fittedPage:mode==="fit-width"?fittedWidth:this.zoom;
 this.zoom=Math.min(1.7,Math.max(0.08,next));this.updateZoom();
 }
-updateZoom(){this.root.style.zoom=String(this.zoom);this.zoomIndicator.textContent=digits(Math.round(this.zoom*100))+"٪";}
+updateZoom(){this.root.style.zoom="1";this.root.querySelectorAll(".sheet").forEach(sheet=>{sheet.style.zoom=String(this.zoom);});this.zoomIndicator.textContent=digits(Math.round(this.zoom*100))+"٪";}
 action(action){
 switch(action){
 case "close":this.close();break;
