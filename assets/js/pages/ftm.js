@@ -182,6 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById("ftm-input-education")?.focus();
   }
+  // A removable, optional module. No broken link appears if its folder is absent.
+  const reportsLink = document.getElementById("ftm-design-reports-link");
+  if (reportsLink) {
+    fetch(reportsLink.href, {method:"HEAD", cache:"no-store"})
+      .then(response => {if (response.ok) reportsLink.style.display="flex";})
+      .catch(() => {}); // Do not affect the rest of FTM when the module is removed.
+  }
   document.getElementById("ftm-edit-school")?.addEventListener("click",editSchool);
   document.getElementById("ftm-edit-school-inline")?.addEventListener("click",editSchool);
   const guideMarkup = `
