@@ -20,3 +20,17 @@
 .ftm-page .ftm-unlinked-disclaimer{font-size:.8rem;color:var(--text-secondary,#64748b);margin-top:14px}
 @media(max-width:760px){.ftm-page .ftm-unlinked-toolbar{flex-direction:column;align-items:stretch}.ftm-page .ftm-unlinked-toolbar input{max-width:none;flex-basis:auto}.ftm-page .ftm-unlinked-total{margin:0}.ftm-page .ftm-unlinked-modal{max-height:94dvh}}
 @media print{.ftm-page #tab-unlinked-files{display:none!important}}
+
+/* Consent panel for public, unencrypted GitHub uploads. */
+.ftm-page .ftm-cloud-warning{
+  border:1px solid #edb3b3;background:#fff4f2;color:#832a2a;
+  padding:12px 14px;border-radius:11px;font-size:.86rem;line-height:1.85;
+  margin:12px 0;
+}
+.ftm-page .ftm-cloud-consent{
+  display:flex;align-items:flex-start;gap:10px;line-height:1.75;
+  font-size:.83rem;cursor:pointer;margin:14px 0;padding:10px;
+  border:1px solid var(--border-color,#ddd);border-radius:10px;
+}
+.ftm-page .ftm-cloud-consent input{margin-top:5px;flex:0 0 auto;width:18px;height:18px}
+@media(max-width:760px){.ftm-page .ftm-cloud-warning{padding:10px}.ftm-page .ftm-cloud-consent{font-size:.78rem}}
