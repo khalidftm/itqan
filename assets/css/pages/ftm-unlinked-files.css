@@ -39,3 +39,18 @@
   color:#8a4316!important;background:#fff6e6!important;border-color:#ebbf70!important;
   font-weight:700;
 }
+
+/* Live per-file status: local, waiting, or already backed up. */
+.ftm-page .ftm-unlinked-cloud-status {
+  font-size:.77rem;line-height:1.55;overflow-wrap:anywhere;
+  color:var(--text-secondary,#64748b);
+  background:var(--bg-surface-alt,#f7f9fb);
+  border:1px solid var(--border-color,#e2e8f0);
+  padding:6px 9px;border-radius:8px;
+}
+.ftm-page .ftm-unlinked-cloud-status[data-state="synced"] {
+  color:#176045;background:#ebf8f1;border-color:#bedecd;
+}
+.ftm-page .ftm-unlinked-cloud-status[data-state="pending"] {
+  color:#98500d;background:#fff7e9;border-color:#ead3a8;
+}
