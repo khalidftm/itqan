@@ -77,12 +77,12 @@ this.root.classList.toggle("has-diagnostics",warnings.length>0);
 this.applyFit(this.mode==="manual"?"manual":this.mode);
 }catch(error){if(token!==this.token)return;this.status.textContent="تعذر تقسيم التقرير: "+error.message;this.status.classList.add("is-error");console.error("[HSP3 Print Manager]",error);}
 }
-setZoom(value){this.mode="manual";this.zoom=Math.min(1.7,Math.max(0.3,Math.round(value*100)/100));this.updateZoom();}
+setZoom(value){this.mode="manual";this.zoom=Math.min(1.7,Math.max(window.innerWidth<=760?0.12:0.3,Math.round(value*100)/100));this.updateZoom();}
 applyFit(mode){this.mode=mode;const page=this.root.querySelector(".sheet");if(!page)return;
 const pageWidth=page.getBoundingClientRect().width/(this.zoom||1),pageHeight=page.getBoundingClientRect().height/(this.zoom||1);
 const areaWidth=this.screen.clientWidth-42,areaHeight=this.screen.clientHeight-42;
 let next=mode==="fit-page"?Math.min(areaWidth/pageWidth,areaHeight/pageHeight):mode==="fit-width"?areaWidth/pageWidth:this.zoom;
-this.zoom=Math.min(1.7,Math.max(0.3,next));this.updateZoom();}
+this.zoom=Math.min(1.7,Math.max(window.innerWidth<=760?0.12:0.3,next));this.updateZoom();}
 updateZoom(){this.root.style.zoom=String(this.zoom);this.zoomIndicator.textContent=digits(Math.round(this.zoom*100))+"٪";}
 action(action){
 switch(action){
