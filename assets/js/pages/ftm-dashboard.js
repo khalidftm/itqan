@@ -19,11 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     IndexedDBFileStore,
     GitHubStorageEngine,
     StorageEngine,
-    MessageEngine,
-    PrintEngine
+    MessageEngine
+    // Only HSP3 print manager is used in FTM.
   } = window.ItqanEngines;
 
   let activeLibScopeFilter = 'ALL';
+
+  function openHSP3Print() {
+    window.location.assign('assets/hsp3/preview/itqan-print.html');
+  }
 
   function getActiveUser() {
     let user = StorageEngine.getCurrentUser();
@@ -310,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           `,
           onConfirm: () => {
-            PrintEngine.previewAndPrint(currentUser, 'portfolio');
+            openHSP3Print();
             return false;
           }
         });
@@ -541,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="mt-1">${item.description}</p>
           `,
           onConfirm: () => {
-            PrintEngine.previewAndPrint(currentUser, 'portfolio');
+            openHSP3Print();
             return false;
           }
         });
@@ -691,29 +695,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const attachmentType = typeMap[ext] || 'ملف مرفق موثق';
 
         (async () => {
-          let githubDownloadUrl = null;
-
-          // 1. حفظ الملف الفعلي كاملاً في خزنة المتصفح IndexedDB
-          if (chosenFile) {
-            await IndexedDBFileStore.saveFile(itemId, chosenFile);
-
-            // 2. إذا كان GitHub مربوطاً، نرفع الملف فعلياً إلى مجلد uploads/ في مستودع GitHub
-            if (GitHubStorageEngine.isConfigured()) {
-              try {
-                ToastEngine.show({
-                  type: 'info',
-                  title: '☁️ جاري رفع الملف إلى خزنة GitHub السحابية...',
-                  message: `يتم الآن رفع (${fileName}) إلى مستودعكِ...`
-                });
-                const ghRes = await GitHubStorageEngine.uploadBinaryFile(chosenFile, currentUser.id);
-                if (ghRes.ok) {
-                  githubDownloadUrl = ghRes.downloadUrl;
-                }
-              } catch (ghErr) {
-                console.warn('GitHub upload warning:', ghErr);
-              }
-            }
+          // The attached file is saved locally first. Auto-backup, when privately
+          // configured, transfers it without any per-file cloud action.
+          const savedFile = chosenFile ? await IndexedDBFileStore.saveFile(itemId, chosenFile) : true;
+          if (chosenFile && !savedFile) {
+            ToastEngine.show({
+              type:'danger',title:'تعذر حفظ الملف محليًا',
+              message:'لم يُحفظ الملف في IndexedDB؛ لم يُنشأ الشاهد. أعيدي المحاولة.'
+            });
+            return;
           }
+          const githubDownloadUrl = null;
 
           StorageEngine.addPortfolioItem({
             id: itemId,
@@ -730,9 +722,9 @@ document.addEventListener('DOMContentLoaded', () => {
             description
           });
 
-          if (GitHubStorageEngine.isConfigured()) {
-            GitHubStorageEngine.pushDatabaseToGitHub().catch(() => {});
-          }
+          // The private-repository backup service watches local saves.
+          // A public repository is never an automatic destination.
+          window.FTMAutoSync?.queueBackup('evidence-saved');
 
           renderPortfolioItems();
           renderPerformanceCriteria();
@@ -929,7 +921,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>
               <div class="d-flex gap-1">
                 <button type="button" class="btn btn-sm btn-primary" data-approve-staff="${u.id}">اعتماد التقييم</button>
-                <button type="button" class="btn btn-sm btn-outline" data-print-staff="${u.id}">طباعة الكل</button>
                 <button type="button" class="btn btn-sm btn-ghost" data-msg-staff="${u.id}">مراسلة</button>
               </div>
             </td>
@@ -984,14 +975,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
           }
         });
-      });
-    });
-
-    tbody.querySelectorAll('[data-print-staff]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const uid = btn.getAttribute('data-print-staff');
-        const targetUser = StorageEngine.getUsers().find((x) => x.id === uid);
-        if (targetUser) PrintEngine.previewAndPrint(targetUser, 'full');
       });
     });
 
@@ -1085,11 +1068,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ربط أزرار الإجراءات
-  const btnOpenGhSync = document.getElementById('btn-open-github-sync');
-  if (btnOpenGhSync) {
-    btnOpenGhSync.addEventListener('click', () => GitHubStorageEngine.openSyncModal());
-  }
-
   const btnAddEvidence = document.getElementById('btn-add-portfolio-evidence');
   if (btnAddEvidence) btnAddEvidence.addEventListener('click', () => openAddEvidenceModal());
 
@@ -1099,21 +1077,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnEditCV = document.getElementById('btn-edit-cv-card');
   if (btnEditCV) btnEditCV.addEventListener('click', openEditCVModal);
 
-  const btnPrintCV = document.getElementById('btn-print-cv-only');
-  if (btnPrintCV) btnPrintCV.addEventListener('click', () => PrintEngine.previewAndPrint(currentUser, 'portfolio'));
-
   const btnAddSharedComp = document.getElementById('btn-add-shared-component');
   if (btnAddSharedComp) btnAddSharedComp.addEventListener('click', openAddSharedComponentModal);
-
-  const btnPrintPortfolio = document.getElementById('btn-print-portfolio');
-  if (btnPrintPortfolio) {
-    btnPrintPortfolio.addEventListener('click', () => PrintEngine.previewAndPrint(currentUser, 'portfolio'));
-  }
-
-  const btnPrintFullReport = document.getElementById('btn-print-full-report');
-  if (btnPrintFullReport) {
-    btnPrintFullReport.addEventListener('click', () => PrintEngine.previewAndPrint(currentUser, 'full'));
-  }
 
   const btnComposeMsg = document.getElementById('btn-user-compose-msg');
   if (btnComposeMsg) {
