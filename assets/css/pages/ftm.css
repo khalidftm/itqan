@@ -154,3 +154,35 @@
  .ftm-page.ftm-sidebar-icons .ftm-release-recheck{display:inline-grid}
  .ftm-page .ftm-last-update-label{flex:1 1 155px}
 }
+
+/* Private-only automatic backup status; no manual cloud upload button. */
+.ftm-page .ftm-auto-backup-status {
+  display:flex;align-items:center;gap:6px;min-width:0;
+  border-radius:9px;padding:8px 9px;margin-bottom:10px;
+  color:var(--text-secondary,#64748b);
+  background:var(--bg-surface-alt,#f6f8fa);
+  border:1px solid var(--border-color,#e2e8f0);
+  font-size:.72rem;line-height:1.6;overflow-wrap:anywhere;
+}
+.ftm-page .ftm-auto-backup-status[data-state="synced"]{
+  color:#116a4b;background:#eff9f4;border-color:#c5e8d3;
+}
+.ftm-page .ftm-auto-backup-status[data-state="syncing"]{
+  color:#075985;background:#eff7ff;border-color:#bfdbfe;
+}
+.ftm-page .ftm-auto-backup-status[data-state="error"]{
+  color:#a52b27;background:#fff5f4;border-color:#f4c6c2;
+}
+.ftm-page.ftm-sidebar-icons .ftm-auto-backup-status{
+  max-width:100%;padding:7px 3px;
+  text-align:center;display:block;font-size:0;
+}
+.ftm-page.ftm-sidebar-icons .ftm-auto-backup-status::before{
+  content:"☁";font-size:18px;line-height:1.4;
+}
+@media(max-width:760px){
+ .ftm-page.ftm-sidebar-icons .ftm-auto-backup-status {
+   font-size:.72rem;text-align:right;padding:8px 9px;
+ }
+ .ftm-page.ftm-sidebar-icons .ftm-auto-backup-status::before{display:none}
+}
