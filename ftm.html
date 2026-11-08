@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="assets/css/pages/user-dashboard.css" />
   <link rel="stylesheet" href="assets/css/pages/ftm.css?v=20261108-ftm-print-auto-v2" />
   <link rel="stylesheet" href="assets/css/pages/ftm-layout.css" />
-  <link rel="stylesheet" href="assets/css/pages/ftm-unlinked-files.css?v=20261109-public-preview-v3" />
+  <link rel="stylesheet" href="assets/css/pages/ftm-unlinked-files.css?v=20261109-unlinked-auto-v4" />
   <link rel="stylesheet" href="assets/css/pages/ftm-performance-records.css?v=20261109-perf-records-v1" />
 </head>
 <body class="ftm-page ftm-sidebar-expanded">
@@ -141,7 +141,7 @@
             <div class="ftm-unlinked-total" role="status" aria-live="polite">غير مرتبطة: <strong id="ftm-unlinked-count">0</strong></div>
           </div>
           <div id="ftm-unlinked-list" class="ftm-unlinked-grid" aria-live="polite"></div>
-          <p class="ftm-unlinked-disclaimer">تُحفظ الملفات على هذا المتصفح في IndexedDB. تبقى الملفات غير المرتبطة خارج ملف الإنجاز والأداء حتى ربطها، لكنها تدخل تلقائيًا في النسخ السحابي عند تفعيل مستودع خاص. إذا لم يُفعّل الاتصال تظل محفوظة محليًا.</p>
+          <p class="ftm-unlinked-disclaimer">تُحفظ الملفات أولًا في IndexedDB، ويبدأ نسخها السحابي تلقائيًا عند تفعيل اتصال GitHub (عام أو خاص) دون الحاجة إلى ربطها بملف الإنجاز أو الأداء. يظهر وضع النسخ تحت كل ملف. تنبيه: الملفات المرفوعة إلى المستودع العام دون تشفير تصبح متاحة للجميع.</p>
         </div>
       </section>
 
@@ -285,9 +285,9 @@
   </div>
   <script src="assets/js/core/engines.js"></script>
   <script src="assets/js/pages/ftm.js?v=20261109-public-preview-v3"></script>
-  <script src="assets/js/pages/ftm-auto-sync.js?v=20261109-public-preview-v3"></script>
+  <script src="assets/js/pages/ftm-auto-sync.js?v=20261109-unlinked-auto-v4"></script>
   <script src="assets/js/pages/ftm-dashboard.js?v=20261109-file-view-v2"></script>
   <script src="assets/js/pages/ftm-performance-records.js?v=20261109-perf-records-v1"></script>
-  <script src="assets/js/pages/ftm-unlinked-files.js?v=20261109-file-view-v2"></script>
+  <script src="assets/js/pages/ftm-unlinked-files.js?v=20261109-unlinked-auto-v4"></script>
 </body>
 </html>
