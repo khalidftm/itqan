@@ -1,0 +1,121 @@
+/* FTM-only edge-anchored layout. Loaded after all other page styles. */
+@media screen and (min-width: 761px) {
+  html body.ftm-page {
+    --ftm-sidebar-width: 232px;
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-inline: 0;
+  }
+  html body.ftm-page.ftm-sidebar-icons { --ftm-sidebar-width: 68px; }
+  html body.ftm-page.ftm-sidebar-hidden { --ftm-sidebar-width: 0px; }
+
+  html body.ftm-page > .ftm-shell {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    min-height: calc(100dvh - 76px);
+  }
+
+  /* Pin the menu to the actual right viewport edge, not to an inner grid column. */
+  html body.ftm-page .ftm-shell > aside.ftm-sidebar {
+    position: fixed;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    top: 76px;
+    bottom: 0;
+    width: var(--ftm-sidebar-width);
+    height: auto;
+    max-height: calc(100dvh - 76px);
+    margin: 0;
+    padding: 12px 10px;
+    border-left: 1px solid var(--border-color, #e5e7eb);
+    border-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 90;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transition: width .2s ease, padding .2s ease, visibility .2s;
+  }
+
+  html body.ftm-page .ftm-shell > main.ftm-main {
+    display: block;
+    box-sizing: border-box;
+    width: calc(100% - var(--ftm-sidebar-width));
+    max-width: none;
+    min-width: 0;
+    min-height: calc(100dvh - 76px);
+    margin: 0;
+    margin-inline-start: var(--ftm-sidebar-width);
+    margin-inline-end: 0;
+    padding: clamp(16px, 2vw, 30px);
+    transition: width .2s ease, margin .2s ease;
+  }
+
+  html body.ftm-page.ftm-sidebar-icons .ftm-shell > aside.ftm-sidebar {
+    padding-inline: 6px;
+  }
+  html body.ftm-page.ftm-sidebar-hidden .ftm-shell > aside.ftm-sidebar {
+    width: 0;
+    padding: 0;
+    border: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  html body.ftm-page .ftm-nav { gap: 2px; }
+  html body.ftm-page .ftm-nav-item { min-height: 42px; padding-block: 7px; }
+  html body.ftm-page .ftm-account { padding-block: 6px 10px; }
+  html body.ftm-page .ftm-sidebar-footer { margin-top: auto; }
+  html body.ftm-page .ftm-main > .workspace-section { width: 100%; max-width: none; }
+}
+
+/* Small screens always use an overlay drawer, independent of the stored desktop mode. */
+@media screen and (max-width: 760px) {
+  html body.ftm-page {
+    display: block;
+    margin: 0;
+    padding-inline: 0;
+    width: 100%;
+  }
+  html body.ftm-page > .ftm-shell {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: none;
+  }
+  html body.ftm-page .ftm-shell > main.ftm-main {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 14px;
+  }
+  html body.ftm-page .ftm-shell > aside.ftm-sidebar {
+    position: fixed;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    top: 64px;
+    bottom: 0;
+    width: min(285px, 85vw);
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 130;
+    margin: 0;
+    border-radius: 0;
+    transition: transform .22s ease;
+  }
+}
+
+/* Do not affect the central printing engine or the site's other pages. */
+@media print {
+  html body.ftm-page > .ftm-shell { display: block; width: 100%; }
+  html body.ftm-page .ftm-shell > aside.ftm-sidebar { display: none !important; }
+  html body.ftm-page .ftm-shell > main.ftm-main { width: 100%; margin: 0; padding: 0; }
+}
