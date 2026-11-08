@@ -1,3 +1,34 @@
+/* FTM school identity is page-local and does not rewrite shared school records. */
+(() => {
+  "use strict";
+  const prefix = "itqan-ftm-school-v1:";
+  const defaults = Object.freeze({
+    educationAdministrationName: "الإدارة العامة للتعليم بمنطقة مكة المكرمة",
+    schoolName: "ابتدائية بحرة المجاهدين الخامسة ببحرة المجاهدين"
+  });
+  const currentUserId = () => window.ItqanEngines?.StorageEngine?.getCurrentUser()?.id || "default";
+  const key = userId => prefix + (userId || currentUserId());
+  const get = userId => {
+    let raw = {};
+    try { raw = JSON.parse(localStorage.getItem(key(userId)) || "{}") || {}; } catch {}
+    const educationAdministrationName = typeof raw.educationAdministrationName === "string" && raw.educationAdministrationName.trim()
+      ? raw.educationAdministrationName.trim() : defaults.educationAdministrationName;
+    const schoolName = typeof raw.schoolName === "string" && raw.schoolName.trim()
+      ? raw.schoolName.trim() : defaults.schoolName;
+    return {educationAdministrationName, schoolName};
+  };
+  const save = (values, userId) => {
+    const clean = {
+      educationAdministrationName: String(values.educationAdministrationName || "").trim().slice(0, 160),
+      schoolName: String(values.schoolName || "").trim().slice(0, 160)
+    };
+    if (!clean.educationAdministrationName || !clean.schoolName) throw new Error("اسم الإدارة التعليمية والمدرسة مطلوبان.");
+    localStorage.setItem(key(userId), JSON.stringify(clean));
+    return clean;
+  };
+  window.ITQAN_FTM_IDENTITY = Object.freeze({defaults, get, save});
+})();
+
 /* FTM menu: three persisted desktop modes and mobile drawer. */
 document.addEventListener('DOMContentLoaded', () => {
   const modal = window.ItqanEngines?.ModalEngine;
@@ -47,6 +78,99 @@ document.addEventListener('DOMContentLoaded', () => {
   dimmer?.addEventListener('click',() => setDrawer(false));
   mobileQuery.addEventListener?.('change',() => applyMode(currentMode, false));
   applyMode(readMode() || 'expanded', false);
+
+  // Record successful local database changes, not the last time a page was merely opened.
+  const lastUpdatedKey = "itqan-ftm-last-data-update-v1";
+  const stamp = document.getElementById("ftm-last-update");
+  function renderLastUpdated() {
+    const raw = (() => { try { return localStorage.getItem(lastUpdatedKey); } catch { return null; } })();
+    const ms = Number(raw);
+    const value = raw && Number.isFinite(ms) && ms > 0
+      ? new Intl.DateTimeFormat("ar-SA", {timeZone:"Asia/Riyadh", dateStyle:"medium", timeStyle:"short"}).format(new Date(ms))
+      : "لم يُسجّل بعد";
+    if (stamp) {
+      stamp.title = "آخر تحديث محلي لبيانات الملف: " + value;
+      const label = stamp.querySelector(".ftm-last-update-label");
+      if (label) label.textContent = "آخر تحديث: " + value;
+      stamp.setAttribute("aria-label", stamp.title);
+    }
+  }
+  function markSaved() {
+    try { localStorage.setItem(lastUpdatedKey, String(Date.now())); } catch {}
+    renderLastUpdated();
+  }
+  const storageEngine = window.ItqanEngines?.StorageEngine;
+  if (storageEngine?.saveDB) {
+    const baseSaveDB = storageEngine.saveDB;
+    storageEngine.saveDB = function(...args) {
+      const result = baseSaveDB.apply(this, args);
+      markSaved();
+      return result;
+    };
+  }
+  window.addEventListener("storage",event => {
+    if (event.key === lastUpdatedKey || event.key?.startsWith("itqan-ftm-school-v1:")) {
+      renderLastUpdated();
+      renderSchool();
+    }
+  });
+  renderLastUpdated();
+
+  function renderSchool() {
+    const values = window.ITQAN_FTM_IDENTITY.get();
+    const education = document.getElementById("ftm-education-display");
+    const school = document.getElementById("ftm-school-display");
+    if (education) education.textContent = values.educationAdministrationName;
+    if (school) school.textContent = values.schoolName;
+    document.querySelectorAll(".js-user-school").forEach(node => { node.textContent = values.schoolName; });
+  }
+  renderSchool();
+  function escapeAttr(value) {
+    return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  }
+  function editSchool() {
+    const values = window.ITQAN_FTM_IDENTITY.get();
+    modal.open({
+      type:"form", title:"تحديث بيانات إدارة التعليم والمدرسة", size:"lg",
+      html:`<div class="form-group"><label class="form-label" for="ftm-input-education">الإدارة العامة للتعليم</label><input id="ftm-input-education" class="form-control" type="text" maxlength="160" required value="${escapeAttr(values.educationAdministrationName)}"></div>
+       <div class="form-group"><label class="form-label" for="ftm-input-school">اسم المدرسة</label><input id="ftm-input-school" class="form-control" type="text" maxlength="160" required value="${escapeAttr(values.schoolName)}"></div>
+       <p class="text-muted">تُحفظ هذه البيانات في متصفحكِ لهذا المستخدم وتظهر في ترويسة الطباعة. لا تُعدّل سجلات المدارس العامة.</p>`,
+      showCancel:true,cancelText:"إلغاء",confirmText:"حفظ البيانات",
+      onConfirm:() => {
+        const educationAdministrationName = document.getElementById("ftm-input-education")?.value.trim();
+        const schoolName = document.getElementById("ftm-input-school")?.value.trim();
+        try {
+          window.ITQAN_FTM_IDENTITY.save({educationAdministrationName,schoolName});
+          renderSchool();
+          markSaved();
+          window.dispatchEvent(new Event("itqan:ftmIdentityChanged"));
+          window.ItqanEngines?.ToastEngine?.show({type:"success",title:"تم حفظ بيانات المدرسة",message:"تُستخدم البيانات المحفوظة في ملف الإنجاز ومعاينة الطباعة."});
+        } catch (err) {
+          window.ItqanEngines?.ToastEngine?.show({type:"warning",title:"تعذر الحفظ",message:err.message});
+          return false;
+        }
+      }
+    });
+    document.getElementById("ftm-input-education")?.focus();
+  }
+  document.getElementById("ftm-edit-school")?.addEventListener("click",editSchool);
+  document.getElementById("ftm-edit-school-inline")?.addEventListener("click",editSchool);
+  const guideMarkup = `
+    <div class="ftm-guide">
+      <ol>
+        <li><strong>تحديث بيانات المدرسة:</strong> افتحي «بيانات المدرسة»، عدّلي اسم إدارة التعليم والمدرسة، ثم «حفظ البيانات». ستظهر القيم في القوالب الأربعة.</li>
+        <li><strong>تحديث السيرة الذاتية:</strong> اختاري «السيرة الذاتية»، ثم «تحرير وتحديث بطاقة السيرة الذاتية»، أدخلي المعلومات واضغطي زر الحفظ.</li>
+        <li><strong>رفع شاهد أو تقرير:</strong> اضغطي «إضافة شاهد» أو «رفع الملفات والشواهد»، واختاري ملف PDF أو Word أو Excel أو صورة، ثم حددي القسم ومعيار الأداء، واكتبي عنوانًا ووصفًا واضحين، واضغطي «حفظ الملف وتوثيق الشاهد».</li>
+        <li><strong>مراجعة الملفات:</strong> افتحي «سجل الشواهد والملفات» لمعاينة المرفقات أو تنزيلها أو حذف شاهد. يُحفظ الملف محليًا في IndexedDB على هذا الجهاز.</li>
+        <li><strong>حفظ التقييم:</strong> افتحي «معايير الأداء»، حدّثي درجاتكِ، ثم اضغطي «حفظ واعتماد التقييم الذاتي».</li>
+        <li><strong>الطباعة والتقارير:</strong> افتحي «قوالب الطباعة»، واختاري الرسمي أو المصوّر، طوليًا أو عرضيًا، ثم اختاري «طباعة» أو «تصدير PDF» من معاينة المتصفح. المعاينة الحالية تعرض سجل الشواهد وبياناتها، وليس محتوى المرفقات نفسه.</li>
+        <li><strong>نسخة سحابية اختيارية:</strong> استخدمي «مزامنة GitHub» بعد ضبط إعداداتها إن احتجتِ لها. تأكدي أن المستودع خاص ومصرح برفع هذه البيانات إليه، ولا ترفعي بيانات الطالبات الحساسة إلى مستودع عام.</li>
+      </ol>
+      <p class="text-muted">يعرض أسفل القائمة موعد آخر حفظ محلي مسجّل. لا يدل هذا التاريخ على نجاح المزامنة السحابية.</p>
+    </div>`;
+  document.getElementById("ftm-open-guide")?.addEventListener("click",() => {
+    modal.open({type:"info",title:"دليل العمل على ملف الإنجاز",size:"lg",html:guideMarkup,confirmText:"إغلاق"});
+  });
 
   const originalOpen = modal.open.bind(modal);
   const originalClose = modal.close.bind(modal);
