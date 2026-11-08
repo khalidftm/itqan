@@ -10,12 +10,12 @@
   <link rel="stylesheet" href="assets/css/pages/user-dashboard.css" />
   <link rel="stylesheet" href="assets/css/pages/ftm.css" />
 </head>
-<body class="ftm-page">
+<body class="ftm-page ftm-sidebar-expanded">
 
 
   <header class="ftm-topbar no-print">
     <div class="ftm-brand">
-      <button id="ftm-menu-toggle" class="ftm-menu-toggle" type="button" aria-label="فتح قائمة التنقل" aria-expanded="false" aria-controls="ftm-sidebar">☰</button>
+      <button id="ftm-menu-toggle" class="ftm-menu-toggle" type="button" aria-label="تغيير عرض القائمة الجانبية" aria-controls="ftm-sidebar" aria-expanded="true" title="تغيير عرض القائمة: كامل، أيقونات، إخفاء">☰</button>
       <div class="ftm-mark" aria-hidden="true">إ</div>
       <div class="ftm-brand-text"><strong class="js-portfolio-dynamic-title">ملف الإنجاز المهني (معلمة)</strong><small class="js-user-school">المدرسة</small></div>
     </div>
@@ -29,15 +29,15 @@
   <div id="ftm-menu-backdrop" class="ftm-menu-backdrop" hidden></div>
   <div class="ftm-shell">
     <aside class="ftm-sidebar no-print" id="ftm-sidebar" aria-label="قائمة التنقل">
-      <div class="ftm-account"><span class="ftm-avatar js-user-initials">س</span><div><strong class="js-user-name">المعلمة</strong><small class="js-user-role-badge">معلمة</small></div></div>
+      <div class="ftm-account"><span class="ftm-avatar js-user-initials">س</span><div class="ftm-account-details"><strong class="js-user-name">المعلمة</strong><small class="js-user-role-badge">معلمة</small></div></div>
       <nav class="ftm-nav" aria-label="أقسام ملف الإنجاز">
-        <button type="button" class="ftm-nav-item active" data-workspace-tab="tab-overview" aria-current="page"><span aria-hidden="true">⌂</span>نظرة عامة</button>
-        <button type="button" class="ftm-nav-item" data-ftm-panel="upload"><span aria-hidden="true">⬆</span>رفع الملفات والشواهد</button>
-        <button type="button" class="ftm-nav-item" data-ftm-panel="records"><span aria-hidden="true">▤</span>سجل الشواهد والملفات</button>
-        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-cv-card"><span aria-hidden="true">♧</span>السيرة الذاتية</button>
-        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-shared-library"><span aria-hidden="true">▦</span>مكتبة المكونات</button>
-        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-performance"><span aria-hidden="true">◫</span>معايير الأداء</button>
-        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-messages"><span aria-hidden="true">✉</span>الرسائل والتوجيهات <span class="badge badge-accent" id="unread-msg-count">2</span></button>
+        <button type="button" class="ftm-nav-item active" data-workspace-tab="tab-overview" aria-current="page" title="نظرة عامة"><span aria-hidden="true">⌂</span><span class="ftm-nav-label">نظرة عامة</span></button>
+        <button type="button" class="ftm-nav-item" data-ftm-panel="upload" title="رفع الملفات والشواهد"><span aria-hidden="true">⬆</span><span class="ftm-nav-label">رفع الملفات والشواهد</span></button>
+        <button type="button" class="ftm-nav-item" data-ftm-panel="records" title="سجل الشواهد والملفات"><span aria-hidden="true">▤</span><span class="ftm-nav-label">سجل الشواهد والملفات</span></button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-cv-card" title="السيرة الذاتية"><span aria-hidden="true">♧</span><span class="ftm-nav-label">السيرة الذاتية</span></button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-shared-library" title="مكتبة المكونات"><span aria-hidden="true">▦</span><span class="ftm-nav-label">مكتبة المكونات</span></button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-performance" title="معايير الأداء"><span aria-hidden="true">◫</span><span class="ftm-nav-label">معايير الأداء</span></button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-messages" title="الرسائل والتوجيهات"><span aria-hidden="true">✉</span><span class="ftm-nav-label">الرسائل والتوجيهات</span> <span class="badge badge-accent ftm-nav-count" id="unread-msg-count">2</span></button>
       </nav>
       <div class="ftm-sidebar-footer"><a href="user-dashboard.html">الواجهة الأصلية</a></div>
     </aside>
