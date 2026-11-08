@@ -40,8 +40,10 @@
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-shared-library" title="مكتبة المكونات"><span aria-hidden="true">▦</span><span class="ftm-nav-label">مكتبة المكونات</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-performance" title="معايير الأداء"><span aria-hidden="true">◫</span><span class="ftm-nav-label">معايير الأداء</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-messages" title="الرسائل والتوجيهات"><span aria-hidden="true">✉</span><span class="ftm-nav-label">الرسائل والتوجيهات</span> <span class="badge badge-accent ftm-nav-count" id="unread-msg-count">2</span></button>
+        <button type="button" class="ftm-nav-item" id="ftm-edit-school" title="تحديث بيانات المدرسة"><span aria-hidden="true">⚙</span><span class="ftm-nav-label">بيانات المدرسة</span></button>
+        <button type="button" class="ftm-nav-item" id="ftm-open-guide" title="دليل الاستخدام والخطوات"><span aria-hidden="true">ⓘ</span><span class="ftm-nav-label">دليل الاستخدام</span></button>
       </nav>
-      <div class="ftm-sidebar-footer"><a href="user-dashboard.html">الواجهة الأصلية</a></div>
+      <div class="ftm-sidebar-footer"><div class="ftm-last-update" id="ftm-last-update" role="status" aria-live="polite" title="آخر تحديث محلي لبيانات الملف"><span class="ftm-last-update-icon" aria-hidden="true">◷</span><span class="ftm-last-update-label">آخر تحديث: لم يُسجل بعد</span></div></div>
     </aside>
     <main class="ftm-main">
       <div id="user-inline-alerts" class="page-alerts-stack" aria-live="polite"></div>
@@ -55,6 +57,7 @@
           <div class="ftm-stat"><span>المكونات المضمنة</span><strong class="js-library-count">0</strong><small>من المكتبة المهنية</small></div>
           <div class="ftm-stat"><span>التقييم الذاتي</span><strong class="js-user-score">—</strong><small>مؤشر الأداء</small></div>
         </div>
+        <div class="ftm-school-strip"><span id="ftm-education-display">الإدارة العامة للتعليم بمنطقة مكة المكرمة</span><span class="ftm-school-separator">•</span><strong id="ftm-school-display">ابتدائية بحرة المجاهدين الخامسة ببحرة المجاهدين</strong><button id="ftm-edit-school-inline" type="button" class="btn btn-sm btn-outline">تحديث البيانات</button></div>
         <h2 class="ftm-heading">الوصول السريع</h2>
         <div class="ftm-quick">
           <button type="button" class="ftm-quick-card" data-ftm-panel="upload"><span class="ftm-quick-icon">⬆</span><strong>رفع ملف أو شاهد</strong><small>إضافة الوثائق وربطها بمعايير الأداء</small><em>فتح نافذة الرفع ←</em></button>
