@@ -474,10 +474,10 @@
       const pathParts = window.location.pathname.split('/').filter(Boolean);
       if (host.endsWith('.github.io')) {
         const owner = host.replace('.github.io', '');
-        const repo = pathParts[0] || '';
+        const repo = pathParts[0] || 'itqan';
         return { owner, repo, branch: 'main', token: '' };
       }
-      return { owner: '', repo: '', branch: 'main', token: '' };
+      return { owner: 'khalidftm', repo: 'itqan', branch: 'main', token: '' };
     },
 
     getConfig() {
