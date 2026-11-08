@@ -27,15 +27,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getActiveUser() {
     let user = StorageEngine.getCurrentUser();
-    if (!user || user.systemRole === 'admin') {
-      user = StorageEngine.getUsers()[0]; // أ. سارة بنت عبدالله الشهري - معلمة لغتي ثاني ابتدائي
+    if (!user || user.jobRole !== 'teacher' || user.gender !== 'female') {
+      user =
+        StorageEngine.getUsers().find((u) => u.jobRole === 'teacher' && u.gender === 'female') ||
+        StorageEngine.getUsers()[0];
       StorageEngine.saveSessionUser(user);
     }
     return user;
   }
 
   let currentUser = getActiveUser();
-  GenderEngine.applyToDOM(currentUser.gender || 'female');
+  document.documentElement.setAttribute('data-design-model', 'model-2');
+  GenderEngine.applyToDOM('female');
 
   // 1. رسالة ترحيبية داخلية موحدة قابلة للإغلاق بزر (×)
   function renderWelcomeAlert() {

@@ -1988,11 +1988,14 @@
     },
 
     getCurrentModel() {
-      return localStorage.getItem(THEME_KEY) || 'model-1';
+      if (document.documentElement.hasAttribute('data-lock-teacher-page')) {
+        return 'model-2';
+      }
+      return localStorage.getItem(THEME_KEY) || 'model-2';
     },
 
     setModel(modelId, notify = true) {
-      const validModel = this.models[modelId] ? modelId : 'model-1';
+      const validModel = this.models[modelId] ? modelId : 'model-2';
       localStorage.setItem(THEME_KEY, validModel);
       document.documentElement.setAttribute('data-design-model', validModel);
 
@@ -2101,14 +2104,24 @@
 
     init() {
       StorageEngine.getDB();
+      if (document.documentElement.hasAttribute('data-lock-teacher-page')) {
+        this.setModel('model-2', false);
+        GenderEngine.setPreviewGender('female');
+        return;
+      }
       this.setModel(this.getCurrentModel(), false);
       GenderEngine.applyToDOM();
       this.injectSwitcherDock();
     }
   };
 
-  document.documentElement.setAttribute('data-design-model', localStorage.getItem(THEME_KEY) || 'model-1');
-  document.documentElement.setAttribute('data-gender-theme', localStorage.getItem(GENDER_PREVIEW_KEY) || 'female');
+  if (document.documentElement.hasAttribute('data-lock-teacher-page')) {
+    document.documentElement.setAttribute('data-design-model', 'model-2');
+    document.documentElement.setAttribute('data-gender-theme', 'female');
+  } else {
+    document.documentElement.setAttribute('data-design-model', localStorage.getItem(THEME_KEY) || 'model-2');
+    document.documentElement.setAttribute('data-gender-theme', localStorage.getItem(GENDER_PREVIEW_KEY) || 'female');
+  }
 
   document.addEventListener('DOMContentLoaded', () => {
     ThemeEngine.init();
