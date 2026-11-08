@@ -1,8 +1,8 @@
 /**
- * FTM opt-in GitHub backup: private or publicly hosted encrypted vault.
+ * FTM opt-in GitHub automatic backup, including public plaintext with explicit consent.
  *
  * Security rules:
- *  - NEVER upload readable metadata or file content to a public repository.
+ *  - Public uploads require an explicit, session-scoped acknowledgement of visibility.
  *  - Verify the selected destination via GitHub API before EVERY upload pass.
  *  - Back up linked evidence AND unlinked files belonging to the active teacher.
  *  - No long-lived GitHub token in localStorage or the public repository.
@@ -19,9 +19,9 @@
   const modal = E.ModalEngine;
   const localKey = "itqan-ftm-private-backup-destination-v1";
   const sessionKey = "itqan-ftm-private-backup-token-session-v1";
+  const publicConsentKey = "itqan-ftm-public-upload-accepted-session-v1";
   const status = document.getElementById("ftm-auto-backup-status");
   let token = "";
-  let passphrase = ""; // kept in memory, not browser storage
   let publicConsent = false;
   let destination = null;
   let active = false;
@@ -55,8 +55,6 @@
   function cleanFile(value) {
     return String(value ?? "document.bin").replace(/[^\p{L}\p{N}._-]/gu,"_").slice(0,110) || "document.bin";
   }
-  function isEncrypted(){return destination?.encrypted === true;}
-  function encryptedPrefix(){return "cloud-vault/v1/" + destination.vaultId;}
   function repoSlug() {
     return (destination?.owner + "/" + destination?.repo).toLowerCase();
   }
@@ -72,8 +70,7 @@
     return "ftm/" + cleanId(userId);
   }
   function manifestKey(userId) {
-    return "itqan-ftm-remote-manifest-v1:" + repoSlug() + ":" + cleanId(userId) +
-      (isEncrypted() ? ":encrypted:" + destination.vaultId : "");
+    return "itqan-ftm-remote-manifest-v1:" + repoSlug() + ":" + cleanId(userId);
   }
   function getManifest(userId) {
     try {
@@ -98,43 +95,17 @@
     return result;
   }
   async function verifyDestination() {
-    if (!token || !destination) throw new Error("لم يتم إعداد اتصال GitHub لهذه الجلسة.");
-    if (!validPart(destination.owner) || !validPart(destination.repo)) {
-      throw new Error("اسم مالك المستودع أو اسمه غير صالح.");
-    }
+    if (!token || !destination) throw new Error("لم يُضبط اتصال GitHub لهذه الجلسة.");
+    if (!validPart(destination.owner) || !validPart(destination.repo)) throw new Error("اسم المستودع غير صالح.");
     const repo = await github("");
-    if (String(repo.full_name || "").toLowerCase() !== repoSlug()) {
-      throw new Error("المستودع الذي استجاب لا يطابق المستودع المطلوب.");
-    }
-    if (!repo.permissions?.push) throw new Error("رمز GitHub لا يمتلك صلاحية Contents: Read and write.");
+    if (String(repo.full_name || "").toLowerCase() !== repoSlug()) throw new Error("تعذر التحقق من تطابق المستودع.");
+    if (!repo.permissions?.push) throw new Error("رمز GitHub لا يمتلك صلاحية كتابة Contents.");
     if (repo.private !== true) {
-      if (!isEncrypted() || !publicConsent) {
-        throw new Error("المستودع عام؛ يُسمح فقط بالنسخ المشفر بعد الموافقة.");
-      }
-    }
-    if (isEncrypted()) {
-      if (!window.FTMPublicVault || !/^[a-f0-9]{36}$/.test(destination.vaultId || "") ||
-          passphrase.length < 16) {
-        throw new Error("يلزم تفعيل التشفير بكلمة مرور قوية قبل أي رفع.");
+      if (!publicConsent || safeRead(sessionStorage,publicConsentKey)!==repoSlug()) {
+        throw new Error("المستودع عام؛ يلزم الموافقة الصريحة على أن الملفات وبيانات المعلمة ستكون متاحة لأي شخص.");
       }
     }
     return repo;
-  }
-  async function verifyEncryptedSnapshot() {
-    if (!isEncrypted()) return;
-    const path = encryptedPrefix() + "/snapshot.enc";
-    const response = await fetch(api(dataPath(path)),{
-      headers:authHeaders(),cache:"no-store",signal:controller.signal
-    });
-    if (response.status === 404) return;
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || !payload.content || payload.encoding !== "base64") {
-      throw new Error("تعذر قراءة النسخة السابقة للتحقق من كلمة مرور التشفير.");
-    }
-    // Wrong passphrase should never overwrite an older encrypted snapshot.
-    const plaintext = await window.FTMPublicVault.decryptText(payload.content,passphrase);
-    const snapshot = JSON.parse(plaintext);
-    if (snapshot.schemaVersion !== 1) throw new Error("صيغة النسخة السابقة غير مدعومة.");
   }
   function dataPath(path) {
     return "/contents/" + path.split("/").map(encodeURIComponent).join("/");
@@ -146,10 +117,7 @@
     if (!response.ok) throw new Error(result.message || "تعذر قراءة نسخة الملف السحابي");
     return result.sha || null;
   }
-  async function pushFile(path, base64, message, encryptedPayload=false) {
-    if (isEncrypted() && (!encryptedPayload || !path.startsWith(encryptedPrefix()+"/") || !path.endsWith(".enc"))) {
-      throw new Error("مُنع رفع ملف غير مشفر إلى المستودع العام.");
-    }
+  async function pushFile(path, base64, message) {
     const oldSha = await currentSha(path);
     const body = {message,content:base64,branch:destination.branch || "main"};
     if (oldSha) body.sha = oldSha;
@@ -157,9 +125,7 @@
     return {path,sha:result.content?.sha || ""};
   }
   async function removeFile(path, sha) {
-    if (!sha || !(isEncrypted() ?
-      path.startsWith(encryptedPrefix()+"/files/") && path.endsWith(".enc") :
-      path.startsWith("uploads/ftm/"))) return;
+    if (!sha || !path.startsWith("uploads/ftm/")) return;
     await github(dataPath(path), {
       method:"DELETE",
       body:JSON.stringify({message:"حذف شاهد من نسخة FTM الاحتياطية",sha,
@@ -212,16 +178,10 @@
       const record = await blobs.getFile(id);
       if (!record?.blob) continue; // legacy seed examples with no actual file
       const blob = record.blob;
-      const encrypted = isEncrypted();
-      const path = encrypted
-        ? encryptedPrefix() + "/files/" + window.FTMPublicVault.randomId() + ".enc"
-        : "uploads/" + userPath(user.id) + "/" + cleanId(id) + "/" +
-          cleanFile(record.name || item.fileName);
-      const binaryData = encrypted
-        ? await window.FTMPublicVault.encryptBlob(blob,passphrase)
-        : await base64Blob(blob);
-      const saved = await pushFile(path,binaryData,encrypted
-        ? "FTM encrypted file backup" : "FTM: حفظ شاهد في مستودع خاص",encrypted);
+      const path = "uploads/" + userPath(user.id) + "/" + cleanId(id) + "/" +
+        cleanFile(record.name || item.fileName);
+      const saved = await pushFile(path,await base64Blob(blob),
+        "FTM automatic file backup " + cleanId(id));
       manifest[id] = saved;
       putManifest(user.id,manifest);
       uploaded++;
@@ -240,14 +200,9 @@
       schoolIdentity,
       files:manifest
     };
-    const encrypted=isEncrypted();
-    const snapshotPath = encrypted ? encryptedPrefix()+"/snapshot.enc"
-      : "data/" + userPath(user.id) + "/snapshot.json";
-    const data = encrypted
-      ? await window.FTMPublicVault.encryptText(JSON.stringify(snapshot),passphrase)
-      : base64Utf8(JSON.stringify(snapshot,null,2));
-    await pushFile(snapshotPath,data,
-      encrypted ? "FTM encrypted metadata backup" : "FTM: تحديث نسخة خاصة",encrypted);
+    const snapshotPath = "data/" + userPath(user.id) + "/snapshot.json";
+    await pushFile(snapshotPath,base64Utf8(JSON.stringify(snapshot,null,2)),
+      "FTM automatic metadata backup");
     return {uploaded,count:allFiles.length,linked:items.length,unlinked:unlinkedFiles.length};
   }
 
@@ -257,12 +212,11 @@
     try {
       while (queued && token && destination) {
         queued = false;
-        statusUpdate(isEncrypted() ? "☁️ جارٍ حفظ نسخة مشفرة..." :
-          "☁️ جارٍ النسخ إلى المستودع الخاص...","syncing");
-        await verifyDestination();
+        statusUpdate("☁️ جارٍ رفع النسخة السحابية تلقائيًا...","syncing");
+        const destinationRepo = await verifyDestination();
         const summary = await snapshotUser();
         latestError = "";
-        statusUpdate((isEncrypted() ? "✓ نسخة مشفرة محفوظة" : "✓ نسخة خاصة محفوظة") +
+        statusUpdate((destinationRepo.private ? "✓ نسخة خاصة محفوظة" : "⚠ نسخة محفوظة في مستودع عام") +
           " • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة","synced");
       }
     } catch (error) {
@@ -287,8 +241,8 @@
   }
   function disconnect() {
     token = "";
-    passphrase = "";
     publicConsent = false;
+    safeDelete(sessionStorage,publicConsentKey);
     controller.abort();
     controller = new AbortController();
     queued = false;
@@ -296,59 +250,61 @@
     safeDelete(sessionStorage,sessionKey);
     statusUpdate("◌ محلي فقط • الاتصال السحابي غير مفعّل","idle");
   }
-  async function connect(owner,repo,credential) {
-    if (active) throw new Error("أكملي النسخ الحالي قبل تغيير المستودع.");
-    const proposed = {owner:owner.trim(),repo:repo.trim(),branch:"main"};
-    if (!validPart(proposed.owner) || !validPart(proposed.repo)) {
-      throw new Error("المالك والمستودع يجب أن يكونا اسمي GitHub صحيحين.");
-    }
-    destination = proposed;
-    token = credential.trim();
+  async function connect(owner,repo,credential,options={}) {
+    if (active) throw new Error("انتظري انتهاء النسخ الجاري قبل تغيير المستودع.");
+    const proposed={owner:String(owner).trim(),repo:String(repo).trim(),branch:"main"};
+    if (!validPart(proposed.owner)||!validPart(proposed.repo)) throw new Error("اسم مالك المستودع أو المستودع غير صالح.");
+    if (!String(credential).trim()) throw new Error("رمز GitHub مطلوب.");
+    destination=proposed;
+    token=String(credential).trim();
+    // Consent is specific to the selected repository and never survives the browser session.
+    publicConsent = options.publicConsent === true;
+    if(publicConsent) safeWrite(sessionStorage,publicConsentKey,repoSlug());
+    else safeDelete(sessionStorage,publicConsentKey);
     try {
-      const verified = await verifyPrivate();
-      if (verified.default_branch) destination.branch = verified.default_branch;
+      const verified=await verifyDestination();
+      if(verified.default_branch)destination.branch=verified.default_branch;
       safeWrite(localStorage,localKey,JSON.stringify(destination));
       safeWrite(sessionStorage,sessionKey,token);
       queueBackup("connected");
-    } catch(error) {
+    }catch(error){
       disconnect();
       throw error;
     }
   }
   function openSettings() {
-    const saved = destination || {owner:"",repo:""};
-    const esc = value=>String(value).replace(/[&<>"']/g,char=>({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    }[char]));
+    const saved=destination||{owner:"khalidftm",repo:"itqan"};
+    const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
     modal.open({
-      type:"form",title:"إعداد النسخ الاحتياطي التلقائي إلى GitHub خاص",size:"lg",
-      confirmText:"التحقق من الاتصال وتفعيل النسخ التلقائي",
-      cancelText:"إلغاء",showCancel:true,
-      html:`<div class="form-group"><label class="form-label" for="ftm-cloud-owner">حساب مالك المستودع الخاص</label>
-          <input id="ftm-cloud-owner" class="form-control" autocomplete="off" value="${esc(saved.owner)}" placeholder="اسم حساب GitHub"></div>
-        <div class="form-group"><label class="form-label" for="ftm-cloud-repo">اسم المستودع الخاص (Private)</label>
-          <input id="ftm-cloud-repo" class="form-control" autocomplete="off" value="${esc(saved.repo)}" placeholder="اسم مستودع خاص منفصل عن itqan"></div>
-        <div class="form-group"><label class="form-label" for="ftm-cloud-token">رمز GitHub بصلاحية Contents: Read and write للمستودع الخاص فقط</label>
-          <input id="ftm-cloud-token" type="password" class="form-control" autocomplete="off" spellcheck="false" placeholder="يُستخدم لهذه الجلسة فقط ولا يُحفظ في قاعدة بيانات الموقع"></div>
-        <p class="text-muted">بعد التفعيل: تُرفع الشواهد والملفات غير المرتبطة ونسخة بيانات المعلمة تلقائيًا عند الحفظ، دون زر مزامنة أو رفع سحابي. يُتحقق من كون المستودع Private قبل كل دفعة. الملفات تبقى محفوظة محليًا عند تعذر الاتصال.</p>
-        <p class="text-muted"><strong>تنبيه خصوصية:</strong> هذا حل متصفح تجريبي، وتظل رموز الوصول قابلة للقراءة من سكربتات نفس الموقع. لا تستخدمه لبيانات الطالبات أو غيرها من البيانات الحساسة قبل اعتماد خدمة خلفية آمنة وتصريح جهة العمل.</p>
-        <button id="ftm-cloud-stop" type="button" class="btn btn-sm btn-outline">إيقاف النسخ السحابي لهذه الجلسة</button>`,
-      onConfirm:() => {
+      type:"form",title:"الرفع السحابي التلقائي إلى GitHub",size:"lg",
+      confirmText:"التحقق وتفعيل الرفع التلقائي",cancelText:"إلغاء",showCancel:true,
+      html:`<div class="form-group"><label class="form-label" for="ftm-cloud-owner">حساب GitHub مالك المستودع</label>
+          <input id="ftm-cloud-owner" class="form-control" autocomplete="off" value="${esc(saved.owner)}"></div>
+        <div class="form-group"><label class="form-label" for="ftm-cloud-repo">اسم المستودع</label>
+          <input id="ftm-cloud-repo" class="form-control" autocomplete="off" value="${esc(saved.repo)}"></div>
+        <div class="form-group"><label class="form-label" for="ftm-cloud-token">رمز GitHub محدود للمستودع المحدد بصلاحية Contents: Read and write</label>
+          <input id="ftm-cloud-token" type="password" class="form-control" autocomplete="off" spellcheck="false" placeholder="لا تضعي الرمز في كود الموقع أو ملفات المستودع"></div>
+        <div class="ftm-cloud-warning"><strong>تنبيه مهم:</strong> مستودع itqan عام. الملفات والأسماء وبيانات المعلمة التي ترفعينها إليه دون تشفير يمكن لأي شخص مشاهدتها وتنزيلها، وقد تبقى في سجل GitHub بعد الحذف. لا ترفعي مستندات حساسة أو بيانات طالبات أو موظفات دون تصريح الجهة.</div>
+        <label class="ftm-cloud-consent"><input type="checkbox" id="ftm-cloud-public-consent"><span>أُقر بأنني أسمح مؤقتًا بنشر الملفات وبيانات الحساب في المستودع العام دون تشفير، وأتحمل مسؤولية التحقق من ملاءمة البيانات للنشر العام.</span></label>
+        <p class="text-muted">عند تفعيل الاتصال تبدأ النسخة الأولى تلقائيًا وتشمل الشواهد والملفات غير المرتبطة. بعد ذلك ترفع التعديلات تلقائيًا عند الحفظ ما دامت الجلسة متصلة. رمز GitHub يبقى في جلسة المتصفح وليس في ملفات المستودع.</p>
+        <button id="ftm-cloud-stop" type="button" class="btn btn-sm btn-outline">إيقاف الرفع السحابي</button>`,
+      onConfirm:()=>{
         const owner=document.getElementById("ftm-cloud-owner")?.value.trim()||"";
         const repo=document.getElementById("ftm-cloud-repo")?.value.trim()||"";
-        const secret=document.getElementById("ftm-cloud-token")?.value.trim()||"";
-        if (!validPart(owner)||!validPart(repo)||!secret) {
-          E.ToastEngine?.show({type:"warning",title:"بيانات ناقصة",message:"أدخلي المالك والمستودع ورمز هذه الجلسة."});
+        const credential=document.getElementById("ftm-cloud-token")?.value.trim()||"";
+        const consent=document.getElementById("ftm-cloud-public-consent")?.checked===true;
+        if(!validPart(owner)||!validPart(repo)||!credential){
+          E.ToastEngine?.show({type:"warning",title:"بيانات الاتصال ناقصة",message:"أدخلي المالك والمستودع ورمز الوصول."});
           return false;
         }
-        statusUpdate("⏳ جارٍ التحقق من خصوصية المستودع...","syncing");
-        connect(owner,repo,secret).catch(error=>{
-          statusUpdate("⚠ فشل التفعيل: " + error.message,"error");
-          E.ToastEngine?.show({type:"warning",title:"لم يُفعّل النسخ السحابي",message:error.message});
+        statusUpdate("⏳ جارٍ التحقق من المستودع وصلاحيات الكتابة...","syncing");
+        connect(owner,repo,credential,{publicConsent:consent}).catch(error=>{
+          statusUpdate("⚠ تعذر التفعيل: "+error.message,"error");
+          E.ToastEngine?.show({type:"warning",title:"لم يُفعَّل الرفع",message:error.message});
         });
       }
     });
-    document.getElementById("ftm-cloud-stop")?.addEventListener("click", () => {
+    document.getElementById("ftm-cloud-stop")?.addEventListener("click",()=>{
       disconnect();
       modal.close();
     });
@@ -375,6 +331,7 @@
     } catch {}
   }
   token = safeRead(sessionStorage,sessionKey) || "";
-  if (token && destination) queueBackup("resume-session");
-  else statusUpdate("◌ محلي فقط • أعدي اتصال الخزنة الخاصة لهذه الجلسة","idle");
+  publicConsent = !!destination && safeRead(sessionStorage,publicConsentKey)===repoSlug();
+  if(token && destination) queueBackup("resume-session");
+  else statusUpdate("◌ محلي فقط • اتصلي بالمستودع لتفعيل الرفع التلقائي","idle");
 })();
