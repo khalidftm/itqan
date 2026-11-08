@@ -45,6 +45,7 @@
       status.dataset.state = state;
       status.title = label;
     }
+    window.dispatchEvent(new CustomEvent("itqan:cloudSyncChanged",{detail:{state}}));
   }
   function validPart(value) {
     return /^[a-zA-Z0-9_.-]{1,100}$/.test(value || "") && value !== "." && value !== "..";
@@ -80,6 +81,14 @@
   }
   function putManifest(userId, record) {
     safeWrite(localStorage, manifestKey(userId), JSON.stringify(record));
+    window.dispatchEvent(new CustomEvent("itqan:cloudSyncChanged",{detail:{state:"manifest"}}));
+  }
+  function fileSyncState(fileId) {
+    if (!token || !destination) return "local";
+    const userId=storage.getCurrentUser()?.id;
+    if (!userId || !fileId) return "local";
+    const entry=getManifest(userId)[String(fileId)];
+    return entry?.sha ? "synced" : "pending";
   }
   async function github(path, options = {}) {
     const response = await fetch(api(path), {
@@ -323,7 +332,13 @@
     });
   }
 
-  window.FTMAutoSync = Object.freeze({queueBackup,openSettings,disconnect,connect});
+  window.FTMAutoSync = Object.freeze({queueBackup,openSettings,disconnect,connect,fileSyncState});
+  // Automatic retries after network restoration or when the page becomes active
+  // again; no GitHub interaction is required while the session is connected.
+  window.addEventListener("online",()=>queueBackup("online"));
+  document.addEventListener("visibilitychange",()=>{
+    if (!document.hidden && token && destination && latestError) queueBackup("retry-on-return");
+  });
 
   // Observe all local edits without altering the app's shared storage layer.
   const originalSave = storage.saveDB;
