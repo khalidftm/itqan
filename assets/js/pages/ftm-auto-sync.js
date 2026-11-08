@@ -1,8 +1,8 @@
 /**
- * FTM opt-in private GitHub automatic backup.
+ * FTM opt-in GitHub backup: private or publicly hosted encrypted vault.
  *
  * Security rules:
- *  - NEVER upload to a public repository (including khalidftm/itqan).
+ *  - NEVER upload readable metadata or file content to a public repository.
  *  - Verify the selected destination via GitHub API before EVERY upload pass.
  *  - Back up linked evidence AND unlinked files belonging to the active teacher.
  *  - No long-lived GitHub token in localStorage or the public repository.
@@ -21,6 +21,8 @@
   const sessionKey = "itqan-ftm-private-backup-token-session-v1";
   const status = document.getElementById("ftm-auto-backup-status");
   let token = "";
+  let passphrase = ""; // kept in memory, not browser storage
+  let publicConsent = false;
   let destination = null;
   let active = false;
   let queued = false;
@@ -53,6 +55,8 @@
   function cleanFile(value) {
     return String(value ?? "document.bin").replace(/[^\p{L}\p{N}._-]/gu,"_").slice(0,110) || "document.bin";
   }
+  function isEncrypted(){return destination?.encrypted === true;}
+  function encryptedPrefix(){return "cloud-vault/v1/" + destination.vaultId;}
   function repoSlug() {
     return (destination?.owner + "/" + destination?.repo).toLowerCase();
   }
@@ -68,7 +72,8 @@
     return "ftm/" + cleanId(userId);
   }
   function manifestKey(userId) {
-    return "itqan-ftm-remote-manifest-v1:" + repoSlug() + ":" + cleanId(userId);
+    return "itqan-ftm-remote-manifest-v1:" + repoSlug() + ":" + cleanId(userId) +
+      (isEncrypted() ? ":encrypted:" + destination.vaultId : "");
   }
   function getManifest(userId) {
     try {
@@ -92,26 +97,44 @@
     }
     return result;
   }
-  async function verifyPrivate() {
-    if (!token || !destination) throw new Error("لم يُضبط اتصال المستودع الخاص لهذه الجلسة.");
+  async function verifyDestination() {
+    if (!token || !destination) throw new Error("لم يتم إعداد اتصال GitHub لهذه الجلسة.");
     if (!validPart(destination.owner) || !validPart(destination.repo)) {
-      throw new Error("اسم المالك أو المستودع غير صالح.");
-    }
-    const fullName = repoSlug();
-    if (fullName === "khalidftm/itqan") {
-      throw new Error("مستودع الموقع itqan عام؛ لن تُرسل إليه الشواهد.");
+      throw new Error("اسم مالك المستودع أو اسمه غير صالح.");
     }
     const repo = await github("");
+    if (String(repo.full_name || "").toLowerCase() !== repoSlug()) {
+      throw new Error("المستودع الذي استجاب لا يطابق المستودع المطلوب.");
+    }
+    if (!repo.permissions?.push) throw new Error("رمز GitHub لا يمتلك صلاحية Contents: Read and write.");
     if (repo.private !== true) {
-      throw new Error("المستودع المحدد ليس Private. الحفظ السحابي موقوف لحماية البيانات.");
+      if (!isEncrypted() || !publicConsent) {
+        throw new Error("المستودع عام؛ يُسمح فقط بالنسخ المشفر بعد الموافقة.");
+      }
     }
-    if (!repo.permissions?.push) {
-      throw new Error("رمز الاتصال لا يمتلك صلاحية كتابة الملفات إلى هذا المستودع الخاص.");
-    }
-    if (String(repo.full_name || "").toLowerCase() !== fullName) {
-      throw new Error("المستودع المتحقق منه لا يطابق المستودع المطلوب.");
+    if (isEncrypted()) {
+      if (!window.FTMPublicVault || !/^[a-f0-9]{36}$/.test(destination.vaultId || "") ||
+          passphrase.length < 16) {
+        throw new Error("يلزم تفعيل التشفير بكلمة مرور قوية قبل أي رفع.");
+      }
     }
     return repo;
+  }
+  async function verifyEncryptedSnapshot() {
+    if (!isEncrypted()) return;
+    const path = encryptedPrefix() + "/snapshot.enc";
+    const response = await fetch(api(dataPath(path)),{
+      headers:authHeaders(),cache:"no-store",signal:controller.signal
+    });
+    if (response.status === 404) return;
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.content || payload.encoding !== "base64") {
+      throw new Error("تعذر قراءة النسخة السابقة للتحقق من كلمة مرور التشفير.");
+    }
+    // Wrong passphrase should never overwrite an older encrypted snapshot.
+    const plaintext = await window.FTMPublicVault.decryptText(payload.content,passphrase);
+    const snapshot = JSON.parse(plaintext);
+    if (snapshot.schemaVersion !== 1) throw new Error("صيغة النسخة السابقة غير مدعومة.");
   }
   function dataPath(path) {
     return "/contents/" + path.split("/").map(encodeURIComponent).join("/");
@@ -123,7 +146,10 @@
     if (!response.ok) throw new Error(result.message || "تعذر قراءة نسخة الملف السحابي");
     return result.sha || null;
   }
-  async function pushFile(path, base64, message) {
+  async function pushFile(path, base64, message, encryptedPayload=false) {
+    if (isEncrypted() && (!encryptedPayload || !path.startsWith(encryptedPrefix()+"/") || !path.endsWith(".enc"))) {
+      throw new Error("مُنع رفع ملف غير مشفر إلى المستودع العام.");
+    }
     const oldSha = await currentSha(path);
     const body = {message,content:base64,branch:destination.branch || "main"};
     if (oldSha) body.sha = oldSha;
@@ -131,7 +157,9 @@
     return {path,sha:result.content?.sha || ""};
   }
   async function removeFile(path, sha) {
-    if (!sha || !path.startsWith("uploads/ftm/")) return;
+    if (!sha || !(isEncrypted() ?
+      path.startsWith(encryptedPrefix()+"/files/") && path.endsWith(".enc") :
+      path.startsWith("uploads/ftm/"))) return;
     await github(dataPath(path), {
       method:"DELETE",
       body:JSON.stringify({message:"حذف شاهد من نسخة FTM الاحتياطية",sha,
@@ -184,10 +212,16 @@
       const record = await blobs.getFile(id);
       if (!record?.blob) continue; // legacy seed examples with no actual file
       const blob = record.blob;
-      const path = "uploads/" + userPath(user.id) + "/" + cleanId(id) + "/" +
-        cleanFile(record.name || item.fileName);
-      const saved = await pushFile(path,await base64Blob(blob),
-        "FTM: نسخ ملف المعلمة إلى المستودع الخاص " + cleanId(id));
+      const encrypted = isEncrypted();
+      const path = encrypted
+        ? encryptedPrefix() + "/files/" + window.FTMPublicVault.randomId() + ".enc"
+        : "uploads/" + userPath(user.id) + "/" + cleanId(id) + "/" +
+          cleanFile(record.name || item.fileName);
+      const binaryData = encrypted
+        ? await window.FTMPublicVault.encryptBlob(blob,passphrase)
+        : await base64Blob(blob);
+      const saved = await pushFile(path,binaryData,encrypted
+        ? "FTM encrypted file backup" : "FTM: حفظ شاهد في مستودع خاص",encrypted);
       manifest[id] = saved;
       putManifest(user.id,manifest);
       uploaded++;
@@ -206,9 +240,14 @@
       schoolIdentity,
       files:manifest
     };
-    const snapshotPath = "data/" + userPath(user.id) + "/snapshot.json";
-    await pushFile(snapshotPath,base64Utf8(JSON.stringify(snapshot,null,2)),
-      "FTM: تحديث النسخة الاحتياطية الخاصة بالمستخدمة");
+    const encrypted=isEncrypted();
+    const snapshotPath = encrypted ? encryptedPrefix()+"/snapshot.enc"
+      : "data/" + userPath(user.id) + "/snapshot.json";
+    const data = encrypted
+      ? await window.FTMPublicVault.encryptText(JSON.stringify(snapshot),passphrase)
+      : base64Utf8(JSON.stringify(snapshot,null,2));
+    await pushFile(snapshotPath,data,
+      encrypted ? "FTM encrypted metadata backup" : "FTM: تحديث نسخة خاصة",encrypted);
     return {uploaded,count:allFiles.length,linked:items.length,unlinked:unlinkedFiles.length};
   }
 
@@ -218,11 +257,13 @@
     try {
       while (queued && token && destination) {
         queued = false;
-        statusUpdate("☁️ جارٍ النسخ التلقائي إلى المستودع الخاص...","syncing");
-        await verifyPrivate(); // fail closed on any visibility or authorization change
+        statusUpdate(isEncrypted() ? "☁️ جارٍ حفظ نسخة مشفرة..." :
+          "☁️ جارٍ النسخ إلى المستودع الخاص...","syncing");
+        await verifyDestination();
         const summary = await snapshotUser();
         latestError = "";
-        statusUpdate("✓ نسخة خاصة محفوظة تلقائيًا • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة","synced");
+        statusUpdate((isEncrypted() ? "✓ نسخة مشفرة محفوظة" : "✓ نسخة خاصة محفوظة") +
+          " • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة","synced");
       }
     } catch (error) {
       latestError = error.message;
@@ -237,7 +278,7 @@
   }
   function queueBackup(reason = "changed") {
     if (!token || !destination) {
-      statusUpdate("◌ محلي فقط • يلزم إعداد مستودع خاص","idle");
+      statusUpdate("◌ محلي فقط • يلزم إعداد اتصال سحابي","idle");
       return;
     }
     queued = true;
@@ -246,6 +287,8 @@
   }
   function disconnect() {
     token = "";
+    passphrase = "";
+    publicConsent = false;
     controller.abort();
     controller = new AbortController();
     queued = false;
