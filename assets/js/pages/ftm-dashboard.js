@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>📅 ${displayItem.date}</span>
               </div>
               <div class="d-flex gap-2 justify-between">
-                <button type="button" class="btn btn-sm btn-outline w-100" data-view-evidence="${displayItem.id}">👁️ معاينة وتنزيل الملف</button>
+                <button type="button" class="btn btn-sm btn-outline w-100" data-view-evidence="${displayItem.id}">👁️ معاينة الملف</button>
                 <button type="button" class="btn btn-sm btn-ghost" data-delete-evidence="${displayItem.id}">حذف</button>
               </div>
             </div>
@@ -483,77 +483,11 @@ document.addEventListener('DOMContentLoaded', () => {
       .join('');
 
     grid.querySelectorAll('[data-view-evidence]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const id = btn.getAttribute('data-view-evidence');
-        const item = items.find((x) => x.id === id);
-        if (!item) return;
-        const linkedCriterion = criteriaList.find((c) => c.id === item.criteriaId);
-
-        // فحص هل يوجد ملف فعلي مخزن في IndexedDB لهذا الشاهد
-        const storedRecord = await IndexedDBFileStore.getFile(item.id);
-        let objectUrl = null;
-        let isPdf = false;
-        let isImage = false;
-
-        if (storedRecord && storedRecord.blob) {
-          objectUrl = URL.createObjectURL(storedRecord.blob);
-          const mime = (storedRecord.type || '').toLowerCase();
-          const fname = (storedRecord.name || item.fileName || '').toLowerCase();
-          isPdf = mime.includes('pdf') || fname.endsWith('.pdf');
-          isImage = mime.startsWith('image/') || /\.(png|jpg|jpeg|gif|webp)$/.test(fname);
-        } else if (item.githubDownloadUrl) {
-          objectUrl = item.githubDownloadUrl;
-          const fname = (item.fileName || '').toLowerCase();
-          isPdf = fname.endsWith('.pdf');
-          isImage = /\.(png|jpg|jpeg|gif|webp)$/.test(fname);
-        }
-
-        let filePreviewHtml = '';
-        if (objectUrl && isImage) {
-          filePreviewHtml = `
-            <div class="mb-3 text-center">
-              <img src="${objectUrl}" alt="${item.title}" style="max-height:340px; border-radius:8px; border:1px solid var(--border-color);" />
-            </div>
-          `;
-        } else if (objectUrl && isPdf) {
-          filePreviewHtml = `
-            <div class="mb-3">
-              <iframe src="${objectUrl}" style="width:100%; height:360px; border:1px solid var(--border-color); border-radius:8px;"></iframe>
-            </div>
-          `;
-        }
-
-        const downloadActionHtml = objectUrl
-          ? `<a href="${objectUrl}" download="${item.fileName || 'evidence-file'}" target="_blank" class="btn btn-sm btn-accent">⬇️ تنزيل الملف المرفوع الأصلي (${item.fileName})</a>`
-          : `<span class="badge badge-info">شاهد نصي موثق (يمكنكِ رفع ملف فعلي من جهازكِ لربطه)</span>`;
-
-        ModalEngine.open({
-          type: 'info',
-          title: `معاينة الشاهد والملف المرفق: ${item.title}`,
-          size: 'lg',
-          confirmText: 'طباعة عبر محرك HSP3',
-          cancelText: 'إغلاق',
-          showCancel: true,
-          html: `
-            <div class="gender-accent-card" style="padding:1.15rem; margin-bottom:1rem;">
-              <div class="d-flex align-center justify-between flex-wrap gap-2 mb-2">
-                <div><strong>القسم في ملف الإنجاز:</strong> ${item.section}</div>
-                ${downloadActionHtml}
-              </div>
-              <div><strong>تصنيف الخصوصية والنطاق:</strong> <span class="badge badge-accent">${item.scopeType || 'خاص بالمعلمة الحالية'}</span></div>
-              <div><strong>المعيار الوزاري المرتبط:</strong> ${linkedCriterion ? linkedCriterion.title : 'شاهد عام في ملف الإنجاز'}</div>
-              <div><strong>الملف المرفق:</strong> <code>${item.fileName || 'وثيقة إلكترونية'}</code> (${item.fileSize || 'معتمد'})</div>
-              <div><strong>تاريخ الرفع والتوثيق:</strong> ${item.date} &nbsp;|&nbsp; <span class="badge badge-success">${item.status}</span></div>
-            </div>
-            ${filePreviewHtml}
-            <p><strong>الوصف التربوي والأثر المتحقق لطالبات الصف الثاني الابتدائي:</strong></p>
-            <p class="mt-1">${item.description}</p>
-          `,
-          onConfirm: () => {
-            openHSP3Print();
-            return false;
-          }
-        });
+      btn.addEventListener('click', () => {
+        const id=btn.getAttribute('data-view-evidence');
+        if(!items.some(item=>String(item.id)===id))return;
+        // Same-origin standalone viewer: no sandboxed PDF iframe or download required.
+        window.location.assign('ftm-file-viewer.html?file='+encodeURIComponent(id));
       });
     });
 
