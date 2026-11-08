@@ -30,6 +30,7 @@ this.schoolInput?.addEventListener("change",()=>this.refresh());
 this.dialog.querySelectorAll("[data-print-component]").forEach(x=>x.addEventListener("change",()=>this.refresh()));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&this.dialog.open){e.preventDefault();this.close();} if(e.key==="Tab"&&this.dialog.open)this.trapFocus(e);});
 window.addEventListener("resize",()=>{if(this.dialog.open&&this.mode!=="manual")this.applyFit(this.mode);});
+window.visualViewport?.addEventListener("resize",()=>{if(this.dialog.open&&this.mode!=="manual")this.applyFit(this.mode);});
 }
 trapFocus(e){const nodes=[...this.dialog.querySelectorAll("button:not([disabled]), select:not([disabled]), input:not([disabled])")].filter(el=>el.getClientRects().length);if(!nodes.length)return;const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
 open(options={}){
@@ -75,14 +76,27 @@ const warnings=result.diagnostics||[];
 this.status.textContent="الصفحات: "+digits(result.pages)+" | السجلات: "+digits(result.rows)+(warnings.length?" | "+warnings.join("؛ "):" | جاهز للمعاينة");
 this.root.classList.toggle("has-diagnostics",warnings.length>0);
 this.applyFit(this.mode==="manual"?"manual":this.mode);
+this.screen.scrollTop=0;this.screen.scrollLeft=0;
 }catch(error){if(token!==this.token)return;this.status.textContent="تعذر تقسيم التقرير: "+error.message;this.status.classList.add("is-error");console.error("[HSP3 Print Manager]",error);}
 }
 setZoom(value){this.mode="manual";this.zoom=Math.min(1.7,Math.max(window.innerWidth<=760?0.12:0.3,Math.round(value*100)/100));this.updateZoom();}
-applyFit(mode){this.mode=mode;const page=this.root.querySelector(".sheet");if(!page)return;
-const pageWidth=page.getBoundingClientRect().width/(this.zoom||1),pageHeight=page.getBoundingClientRect().height/(this.zoom||1);
-const areaWidth=this.screen.clientWidth-42,areaHeight=this.screen.clientHeight-42;
-let next=mode==="fit-page"?Math.min(areaWidth/pageWidth,areaHeight/pageHeight):mode==="fit-width"?areaWidth/pageWidth:this.zoom;
-this.zoom=Math.min(1.7,Math.max(window.innerWidth<=760?0.12:0.3,next));this.updateZoom();}
+applyFit(mode){
+this.mode=mode;
+const page=this.root.querySelector(".sheet");
+if(!page)return;
+// Account for mobile browser desktop-site emulation and visual viewport panning.
+// Measure the real available preview width rather than the unscaled A4 content.
+const bounds=page.getBoundingClientRect();
+const pageWidth=bounds.width/(this.zoom||1),pageHeight=bounds.height/(this.zoom||1);
+const candidates=[this.screen.clientWidth,document.documentElement.clientWidth,window.innerWidth,
+  window.visualViewport?.width,window.screen?.width]
+  .filter(number=>Number.isFinite(number)&&number>0);
+const usableWidth=Math.max(150,Math.min(...candidates)-20);
+const usableHeight=Math.max(150,this.screen.clientHeight-16);
+const fittedWidth=usableWidth/pageWidth, fittedPage=Math.min(fittedWidth,usableHeight/pageHeight);
+const next=mode==="fit-page"?fittedPage:mode==="fit-width"?fittedWidth:this.zoom;
+this.zoom=Math.min(1.7,Math.max(0.08,next));this.updateZoom();
+}
 updateZoom(){this.root.style.zoom=String(this.zoom);this.zoomIndicator.textContent=digits(Math.round(this.zoom*100))+"٪";}
 action(action){
 switch(action){
