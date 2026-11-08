@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="assets/css/pages/ftm.css?v=20261108-ftm-print-auto-v2" />
   <link rel="stylesheet" href="assets/css/pages/ftm-layout.css" />
   <link rel="stylesheet" href="assets/css/pages/ftm-unlinked-files.css?v=20261109-public-preview-v3" />
+  <link rel="stylesheet" href="assets/css/pages/ftm-performance-records.css?v=20261109-perf-records-v1" />
 </head>
 <body class="ftm-page ftm-sidebar-expanded">
 
@@ -38,6 +39,7 @@
         <button type="button" class="ftm-nav-item active" data-workspace-tab="tab-overview" aria-current="page" title="نظرة عامة"><span aria-hidden="true">⌂</span><span class="ftm-nav-label">نظرة عامة</span></button>
         <button type="button" class="ftm-nav-item" data-ftm-panel="upload" title="رفع الملفات والشواهد"><span aria-hidden="true">⬆</span><span class="ftm-nav-label">رفع الملفات والشواهد</span></button>
         <button type="button" class="ftm-nav-item" data-ftm-panel="records" title="سجل الشواهد والملفات"><span aria-hidden="true">▤</span><span class="ftm-nav-label">سجل الشواهد والملفات</span></button>
+        <button type="button" class="ftm-nav-item" data-ftm-panel="performance-records" title="سجل شواهد وملفات تقييم الأداء الوظيفي"><span aria-hidden="true">📊</span><span class="ftm-nav-label">سجل شواهد الأداء الوظيفي</span><span class="ftm-performance-nav-count" id="ftm-performance-nav-count">0</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-unlinked-files" title="الملفات غير المرتبطة"><span aria-hidden="true">🗂</span><span class="ftm-nav-label">الملفات غير المرتبطة</span><span id="ftm-unlinked-nav-count" class="ftm-unlinked-nav-count" aria-label="عدد الملفات غير المرتبطة">0</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-cv-card" title="السيرة الذاتية"><span aria-hidden="true">♧</span><span class="ftm-nav-label">السيرة الذاتية</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-shared-library" title="مكتبة المكونات"><span aria-hidden="true">▦</span><span class="ftm-nav-label">مكتبة المكونات</span></button>
@@ -68,6 +70,7 @@
         <div class="ftm-quick">
           <button type="button" class="ftm-quick-card" data-ftm-panel="upload"><span class="ftm-quick-icon">⬆</span><strong>رفع ملف أو شاهد</strong><small>إضافة الوثائق وربطها بمعايير الأداء</small><em>فتح نافذة الرفع ←</em></button>
           <button type="button" class="ftm-quick-card" data-ftm-panel="records"><span class="ftm-quick-icon">▤</span><strong>سجل الشواهد والملفات</strong><small>عرض المرفقات ومعاينتها وتنزيلها</small><em>عرض السجل ←</em></button>
+          <button type="button" class="ftm-quick-card" data-ftm-panel="performance-records"><span class="ftm-quick-icon">📊</span><strong>سجل شواهد تقييم الأداء</strong><small>جميع الملفات المرتبطة بمعايير الأداء الوظيفي</small><em>عرض السجل ←</em></button>
           <button type="button" class="ftm-quick-card" data-workspace-tab="tab-unlinked-files"><span class="ftm-quick-icon">🗂</span><strong>الملفات غير المرتبطة</strong><small>ملفات محفوظة تنتظر ربطها بملف الإنجاز أو الأداء الوظيفي</small><em>استعراض الملفات ←</em></button>
           <button type="button" class="ftm-quick-card" data-workspace-tab="tab-cv-card"><span class="ftm-quick-icon">♧</span><strong>السيرة الذاتية</strong><small>المعلومات والإنجازات المهنية</small><em>فتح القسم ←</em></button>
           <button type="button" class="ftm-quick-card" data-workspace-tab="tab-performance"><span class="ftm-quick-icon">◫</span><strong>التقييم الوظيفي</strong><small>متابعة المعايير والشواهد المرتبطة</small><em>فتح القسم ←</em></button>
@@ -222,6 +225,7 @@
                 <div class="text-muted" style="font-size:0.78rem;">الدرجة الموزونة الكلية</div>
                 <div class="fw-extrabold text-primary" id="live-total-performance-score" style="font-size:1.55rem;">98%</div>
               </div>
+              <button type="button" class="btn btn-outline" data-ftm-panel="performance-records">📂 سجل شواهد الأداء الوظيفي</button>
               <button type="button" class="btn btn-primary" id="btn-save-performance-eval">
                 💾 حفظ واعتماد التقييم الذاتي للمعلمة
               </button>
@@ -239,6 +243,20 @@
           </div>
 
           <div id="criteria-list-container"></div>
+        </div>
+        <div class="card ftm-performance-records-card" id="ftm-performance-records-card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h3 class="card-title">📂 سجل الشواهد والملفات المرفوعة في تقييم الأداء الوظيفي</h3>
+              <p class="text-muted">سجل مستقل للملفات المرتبطة بمعايير الأداء؛ مع معاينة PDF والصور داخل المتصفح دون رفع الملف مرة أخرى.</p>
+            </div>
+            <span class="badge badge-accent">عدد الملفات: <strong id="ftm-performance-files-count">0</strong></span>
+          </div>
+          <div class="ftm-performance-filter">
+            <label for="ftm-performance-files-search">بحث في السجل</label>
+            <input type="search" id="ftm-performance-files-search" class="form-control" placeholder="البحث في العنوان أو اسم الملف أو المعيار">
+          </div>
+          <div id="ftm-performance-evidence-list" class="ftm-performance-evidence-list" aria-live="polite"></div>
         </div>
       </section>
 
@@ -269,6 +287,7 @@
   <script src="assets/js/pages/ftm.js?v=20261109-public-preview-v3"></script>
   <script src="assets/js/pages/ftm-auto-sync.js?v=20261109-public-preview-v3"></script>
   <script src="assets/js/pages/ftm-dashboard.js?v=20261109-file-view-v2"></script>
+  <script src="assets/js/pages/ftm-performance-records.js?v=20261109-perf-records-v1"></script>
   <script src="assets/js/pages/ftm-unlinked-files.js?v=20261109-file-view-v2"></script>
 </body>
 </html>
