@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     BannerEngine,
     ToastEngine,
     IndexedDBFileStore,
-    GitHubStorageEngine,
     StorageEngine,
     MessageEngine
     // Only HSP3 print manager is used in FTM.
@@ -238,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ToastEngine.show({
           type: 'success',
           title: 'تم تحديث بطاقة السيرة الذاتية',
-          message: 'حُفظت بيانات السيرة الذاتية المهنية في ذاكرة المتصفح وتم ربطها بمحرك الطباعة.'
+          message: 'حُفظت بيانات السيرة الذاتية المهنية محليًا وأصبحت متاحة لمحرك HSP3 للطباعة.'
         });
         return true;
       }
@@ -301,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
           type: 'info',
           title: doc.title,
           size: 'lg',
-          confirmText: 'طباعة الوثيقة ضمن ملف الإنجاز',
+          confirmText: 'طباعة عبر محرك HSP3',
           cancelText: 'إغلاق',
           showCancel: true,
           html: `
@@ -526,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
           type: 'info',
           title: `معاينة الشاهد والملف المرفق: ${item.title}`,
           size: 'lg',
-          confirmText: '🖨️ طباعة ضمن ملف الإنجاز الرسمي A4',
+          confirmText: 'طباعة عبر محرك HSP3',
           cancelText: 'إغلاق',
           showCancel: true,
           html: `
@@ -610,7 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${
               defaultFileName
                 ? `<div class="form-hint" style="color:var(--status-success-text); font-weight:700;">✔️ الملف المختار جاهز للحفظ: ${defaultFileName} (${defaultFileSize})</div>`
-                : `<div class="form-hint">يُحفظ الملف كاملاً في خزنة المتصفح الكبرى (IndexedDB) ويرفع إلى GitHub إذا كانت المزامنة مفعّلة.</div>`
+                : `<div class="form-hint">يُحفظ الملف كاملاً في خزنة المتصفح الكبرى (IndexedDB) ويُنسخ تلقائيًا إلى مستودع GitHub خاص إذا كان النسخ السحابي مفعّلًا.</div>`
             }
           </div>
 
