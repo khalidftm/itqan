@@ -1,0 +1,22 @@
+/* FTM-only temporary file vault */
+.ftm-page .ftm-unlinked-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:8px 0 18px}
+.ftm-page .ftm-unlinked-toolbar input{flex:1 1 230px;max-width:420px}
+.ftm-page .ftm-unlinked-total{margin-inline-start:auto;font-size:.84rem;color:var(--text-secondary,#64748b)}
+.ftm-page .ftm-unlinked-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:12px}
+.ftm-page .ftm-unlinked-card{border:1px solid var(--border-color,#ddd);border-radius:14px;padding:16px;background:var(--bg-surface,#fff);display:flex;flex-direction:column;gap:10px;min-width:0}
+.ftm-page .ftm-unlinked-name{font-size:1rem;font-weight:800;color:var(--text-main,#223545);margin:0;overflow-wrap:anywhere}
+.ftm-page .ftm-unlinked-meta{font-size:.8rem;color:var(--text-secondary,#64748b);overflow-wrap:anywhere}
+.ftm-page .ftm-unlinked-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto}
+.ftm-page .ftm-unlinked-actions .btn{flex:1 1 auto}
+.ftm-page .ftm-unlinked-empty{padding:25px;text-align:center;border:1px dashed var(--border-color,#ddd);border-radius:12px;grid-column:1/-1}
+.ftm-page .ftm-unlinked-nav-count{margin-inline-start:auto;border-radius:12px;border:1px solid var(--border-color,#ddd);padding:0 7px;font-size:.73rem}
+.ftm-page.ftm-sidebar-icons .ftm-unlinked-nav-count{display:none}
+.ftm-page .ftm-unlinked-modal{width:min(840px,calc(100vw - 24px));max-height:90dvh;max-width:840px;display:flex;flex-direction:column}
+.ftm-page .ftm-unlinked-modal .modal-body{overflow-y:auto;min-height:0}
+.ftm-page .ftm-unlinked-modal-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px}
+.ftm-page .ftm-unlinked-preview{max-height:55dvh;min-height:140px;border:1px solid var(--border-color,#ddd);border-radius:12px;overflow:auto;margin:12px 0;text-align:center}
+.ftm-page .ftm-unlinked-preview img{max-width:100%;max-height:53dvh}
+.ftm-page .ftm-unlinked-preview iframe{width:100%;height:52dvh;border:0}
+.ftm-page .ftm-unlinked-disclaimer{font-size:.8rem;color:var(--text-secondary,#64748b);margin-top:14px}
+@media(max-width:760px){.ftm-page .ftm-unlinked-toolbar{flex-direction:column;align-items:stretch}.ftm-page .ftm-unlinked-toolbar input{max-width:none;flex-basis:auto}.ftm-page .ftm-unlinked-total{margin:0}.ftm-page .ftm-unlinked-modal{max-height:94dvh}}
+@media print{.ftm-page #tab-unlinked-files{display:none!important}}

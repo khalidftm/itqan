@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="assets/css/pages/user-dashboard.css" />
   <link rel="stylesheet" href="assets/css/pages/ftm.css?v=20261108-ftm-print-auto-v2" />
   <link rel="stylesheet" href="assets/css/pages/ftm-layout.css" />
+  <link rel="stylesheet" href="assets/css/pages/ftm-unlinked-files.css?v=20261109-unlinked-v1" />
 </head>
 <body class="ftm-page ftm-sidebar-expanded">
 
@@ -22,6 +23,7 @@
     </div>
     <div class="ftm-actions">
       <button type="button" class="btn btn-sm btn-accent" id="btn-add-portfolio-evidence">＋ <span>إضافة شاهد</span></button>
+      <button type="button" class="btn btn-sm btn-outline" id="ftm-upload-unlinked">📎 <span>رفع ملف مستقل</span></button>
       
       
       <a href="assets/hsp3/preview/itqan-print.html?v=20261109-toolbar-v1" class="btn btn-sm btn-primary" id="ftm-print-hsp3" title="طباعة ملف الإنجاز بمحرك HSP3 الجديد">🖨️ <span>طباعة ملف الإنجاز</span></a>
@@ -36,6 +38,7 @@
         <button type="button" class="ftm-nav-item active" data-workspace-tab="tab-overview" aria-current="page" title="نظرة عامة"><span aria-hidden="true">⌂</span><span class="ftm-nav-label">نظرة عامة</span></button>
         <button type="button" class="ftm-nav-item" data-ftm-panel="upload" title="رفع الملفات والشواهد"><span aria-hidden="true">⬆</span><span class="ftm-nav-label">رفع الملفات والشواهد</span></button>
         <button type="button" class="ftm-nav-item" data-ftm-panel="records" title="سجل الشواهد والملفات"><span aria-hidden="true">▤</span><span class="ftm-nav-label">سجل الشواهد والملفات</span></button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-unlinked-files" title="الملفات غير المرتبطة"><span aria-hidden="true">🗂</span><span class="ftm-nav-label">الملفات غير المرتبطة</span><span id="ftm-unlinked-nav-count" class="ftm-unlinked-nav-count" aria-label="عدد الملفات غير المرتبطة">0</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-cv-card" title="السيرة الذاتية"><span aria-hidden="true">♧</span><span class="ftm-nav-label">السيرة الذاتية</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-shared-library" title="مكتبة المكونات"><span aria-hidden="true">▦</span><span class="ftm-nav-label">مكتبة المكونات</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-performance" title="معايير الأداء"><span aria-hidden="true">◫</span><span class="ftm-nav-label">معايير الأداء</span></button>
@@ -65,6 +68,7 @@
         <div class="ftm-quick">
           <button type="button" class="ftm-quick-card" data-ftm-panel="upload"><span class="ftm-quick-icon">⬆</span><strong>رفع ملف أو شاهد</strong><small>إضافة الوثائق وربطها بمعايير الأداء</small><em>فتح نافذة الرفع ←</em></button>
           <button type="button" class="ftm-quick-card" data-ftm-panel="records"><span class="ftm-quick-icon">▤</span><strong>سجل الشواهد والملفات</strong><small>عرض المرفقات ومعاينتها وتنزيلها</small><em>عرض السجل ←</em></button>
+          <button type="button" class="ftm-quick-card" data-workspace-tab="tab-unlinked-files"><span class="ftm-quick-icon">🗂</span><strong>الملفات غير المرتبطة</strong><small>ملفات محفوظة تنتظر ربطها بملف الإنجاز أو الأداء الوظيفي</small><em>استعراض الملفات ←</em></button>
           <button type="button" class="ftm-quick-card" data-workspace-tab="tab-cv-card"><span class="ftm-quick-icon">♧</span><strong>السيرة الذاتية</strong><small>المعلومات والإنجازات المهنية</small><em>فتح القسم ←</em></button>
           <button type="button" class="ftm-quick-card" data-workspace-tab="tab-performance"><span class="ftm-quick-icon">◫</span><strong>التقييم الوظيفي</strong><small>متابعة المعايير والشواهد المرتبطة</small><em>فتح القسم ←</em></button>
         </div>
@@ -118,6 +122,26 @@
             <!-- ====================================================================
            التبويب 2: بطاقة السيرة الذاتية المهنية للمعلمة (CV Card)
            ==================================================================== -->
+
+      <section id="tab-unlinked-files" class="workspace-section">
+        <div class="card ftm-unlinked-section">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">🗂 الملفات غير المرتبطة</h2>
+              <p class="text-muted">خزنة مؤقتة لتنظيم الملفات دون ربطها بالأداء الوظيفي أو ملف الإنجاز. يمكنك ربط أي ملف لاحقًا دون إعادة رفعه.</p>
+            </div>
+            <button type="button" class="btn btn-accent" id="ftm-upload-unlinked-in-section">＋ رفع ملف جديد</button>
+          </div>
+          <div class="ftm-unlinked-toolbar">
+            <label for="ftm-unlinked-search" class="ftm-unlinked-search-label">البحث في الملفات</label>
+            <input id="ftm-unlinked-search" class="form-control" type="search" placeholder="ابحثي باسم الملف أو عنوانه" autocomplete="off">
+            <div class="ftm-unlinked-total" role="status" aria-live="polite">غير مرتبطة: <strong id="ftm-unlinked-count">0</strong></div>
+          </div>
+          <div id="ftm-unlinked-list" class="ftm-unlinked-grid" aria-live="polite"></div>
+          <p class="ftm-unlinked-disclaimer">تُحفظ الملفات على هذا المتصفح في IndexedDB. تبقى الملفات غير المرتبطة محفوظة محليًا، ولا تظهر ضمن الإنجاز أو الأداء أو النسخ السحابي للشواهد إلا بعد ربطها.</p>
+        </div>
+      </section>
+
       <section id="tab-cv-card" class="workspace-section">
         <div class="card">
           <div class="card-header flex-wrap">
@@ -244,6 +268,7 @@
   <script src="assets/js/core/engines.js"></script>
   <script src="assets/js/pages/ftm.js?v=20261109-porto-v1"></script>
   <script src="assets/js/pages/ftm-auto-sync.js?v=20261108-ftm-print-auto-v2"></script>
-  <script src="assets/js/pages/ftm-dashboard.js?v=20261108-ftm-print-auto-v2"></script>
+  <script src="assets/js/pages/ftm-dashboard.js?v=20261109-unlinked-v1"></script>
+  <script src="assets/js/pages/ftm-unlinked-files.js?v=20261109-unlinked-v1"></script>
 </body>
 </html>

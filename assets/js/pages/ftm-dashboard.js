@@ -417,6 +417,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Escape user-controlled filenames and titles in evidence HTML.
+  const escapeEvidenceHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[char]));
+
   // 5. عرض ورفع الشواهد والملفات الفعلية (IndexedDB + GitHub Cloud)
   function renderPortfolioItems() {
     const grid = document.getElementById('portfolio-items-grid');
@@ -437,38 +442,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     grid.innerHTML = items
       .map((item) => {
+        const displayItem = Object.fromEntries(Object.entries(item).map(([key,val]) => [key, typeof val === "string" ? escapeEvidenceHtml(val) : val]));
         const linkedCriterion = criteriaList.find((c) => c.id === item.criteriaId);
         return `
           <div class="evidence-card">
             <div>
               <div class="d-flex align-center justify-between flex-wrap gap-1 mb-2">
-                <span class="badge badge-gender">${item.section}</span>
-                <span class="badge badge-accent">${item.scopeType || 'خاص بالمعلمة الحالية'}</span>
+                <span class="badge badge-gender">${displayItem.section}</span>
+                <span class="badge badge-accent">${displayItem.scopeType || 'خاص بالمعلمة الحالية'}</span>
               </div>
-              <h4 class="fw-extrabold mb-1" style="font-size:1.02rem;">${item.title}</h4>
-              <p class="text-muted mb-2" style="font-size:0.86rem;">${item.description || ''}</p>
+              <h4 class="fw-extrabold mb-1" style="font-size:1.02rem;">${displayItem.title}</h4>
+              <p class="text-muted mb-2" style="font-size:0.86rem;">${displayItem.description || ''}</p>
               ${
                 item.fileName
                   ? `<div class="file-attachment-chip mb-2">
-                       📄 ${item.fileName} ${item.fileSize ? `(${item.fileSize})` : ''}
-                       ${item.githubDownloadUrl ? ' <span class="badge badge-success" style="padding:0.1rem 0.45rem;">☁️ محفوظ في GitHub</span>' : ''}
+                       📄 ${displayItem.fileName} ${displayItem.fileSize ? `(${displayItem.fileSize})` : ''}
+                       ${displayItem.githubDownloadUrl ? ' <span class="badge badge-success" style="padding:0.1rem 0.45rem;">☁️ محفوظ في GitHub</span>' : ''}
                      </div>`
                   : ''
               }
               ${
                 linkedCriterion
-                  ? `<div style="font-size:0.79rem; color:var(--primary-700); font-weight:700;">🔗 مرتبط بمعيار: ${linkedCriterion.title}</div>`
+                  ? `<div style="font-size:0.79rem; color:var(--primary-700); font-weight:700;">🔗 مرتبط بمعيار: ${escapeEvidenceHtml(linkedCriterion.title)}</div>`
                   : ''
               }
             </div>
             <div>
               <div class="d-flex align-center justify-between text-muted mb-2" style="font-size:0.79rem; border-top:1px solid var(--border-light); padding-top:0.6rem;">
-                <span>📎 ${item.attachmentType || 'وثيقة PDF'}</span>
-                <span>📅 ${item.date}</span>
+                <span>📎 ${displayItem.attachmentType || 'وثيقة PDF'}</span>
+                <span>📅 ${displayItem.date}</span>
               </div>
               <div class="d-flex gap-2 justify-between">
-                <button type="button" class="btn btn-sm btn-outline w-100" data-view-evidence="${item.id}">👁️ معاينة وتنزيل الملف</button>
-                <button type="button" class="btn btn-sm btn-ghost" data-delete-evidence="${item.id}">حذف</button>
+                <button type="button" class="btn btn-sm btn-outline w-100" data-view-evidence="${displayItem.id}">👁️ معاينة وتنزيل الملف</button>
+                <button type="button" class="btn btn-sm btn-ghost" data-delete-evidence="${displayItem.id}">حذف</button>
               </div>
             </div>
           </div>
@@ -761,7 +767,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ? linkedItems
               .map(
                 (li) =>
-                  `<span class="file-attachment-chip">📎 ${li.title} (${li.fileName || 'مرفق'})</span>`
+                  `<span class="file-attachment-chip">📎 ${escapeEvidenceHtml(li.title)} (${escapeEvidenceHtml(li.fileName || 'مرفق')})</span>`
               )
               .join(' ')
           : `<span class="text-muted" style="font-size:0.82rem;">لم يُرفق ملف مباشر لهذا المعيار بعد — اضغطي زر الإرفاق لإضافة شاهد</span>`;
@@ -1112,8 +1118,15 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPerformanceCriteria();
     renderSchoolStaffManagement();
     renderMessagesList();
+    window.dispatchEvent(new Event('itqan:activeUserChanged'));
   }
 
+  window.addEventListener('itqan:portfolioChanged', () => {
+    currentUser = getActiveUser();
+    renderPortfolioItems();
+    renderPerformanceCriteria();
+    renderUserHeaderAndCover();
+  });
   window.addEventListener('itqan:ftmIdentityChanged', () => { renderUserHeaderAndCover(); renderCVCard(); });
   window.addEventListener('itqan:genderChanged', refreshAllUserViews);
   window.addEventListener('itqan:messagesUpdated', renderMessagesList);
