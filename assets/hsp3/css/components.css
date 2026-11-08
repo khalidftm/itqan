@@ -1,0 +1,9 @@
+.hsp-admin-component{border:1px solid #b8c6d2;border-radius:2mm;padding:3mm 4mm;margin:3mm 0;font-family:"Tajawal",sans-serif;font-size:11pt;break-inside:avoid;page-break-inside:avoid;background:#fff}.hsp-admin-heading{font-size:12pt;text-align:center;margin:0 0 3mm;font-weight:700}.hsp-admin-field{display:flex;align-items:center;gap:3mm;margin:1mm 0;min-height:6mm}.hsp-admin-label{color:#455369}.hsp-admin-value{font-weight:600}.hsp-admin-mark-row{display:flex;justify-content:space-around;gap:5mm;margin-top:2mm}.hsp-admin-image-slot{flex:1;text-align:center;min-width:0}.hsp-admin-mark{display:block;object-fit:contain;max-width:100%;height:18mm;margin:1mm auto}.hsp-admin-dotted{display:grid;place-items:center;border:1px dashed #b1beca;border-radius:1mm;height:18mm;color:#7a8793;font-size:9pt}.hsp-admin-three{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm}.hsp-admin-cell{padding:1mm;border-left:1px solid #d7e0e8}.hsp-admin-notes{white-space:pre-wrap;line-height:1.5;margin:0}@media print{.hsp-admin-dotted{border-color:#999}.hsp-admin-component{box-shadow:none}}
+.hsp-admin-bullets{margin:2mm 0 0;padding:2mm 0 0;border:0;background:transparent;page-break-inside:avoid;break-inside:avoid}
+.hsp-admin-bullets .hsp-admin-heading{margin:0 0 1.5mm;text-align:right}
+.hsp-admin-bullets-list{list-style:none;margin:0;padding:0;display:grid;row-gap:1mm}
+.hsp-admin-bullets-list li{display:flex;align-items:baseline;gap:2.5mm;font:400 11pt/1.35 "Cairo",sans-serif}
+.hsp-admin-bullets-list li::before{content:"";display:inline-block;flex:none;width:2.1mm;height:2.1mm;background:#182f3e}
+@media print{.hsp-admin-bullets{break-inside:avoid}}
+
+.hsp-admin-component,.hsp-admin-component *{font-family:"Tajawal",sans-serif!important}
