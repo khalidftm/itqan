@@ -189,6 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(response => {if (response.ok) reportsLink.style.display="flex";})
       .catch(() => {}); // Do not affect the rest of FTM when the module is removed.
   }
+
+  // Standalone PORTO optional module, hidden when its directory is absent.
+  const portoLink = document.getElementById("ftm-porto-link");
+  if (portoLink) {
+    fetch(portoLink.href, {method:"HEAD",cache:"no-store"})
+      .then(response => { if (response.ok) portoLink.style.display="flex"; })
+      .catch(() => {});
+  }
   document.getElementById("ftm-edit-school")?.addEventListener("click",editSchool);
   document.getElementById("ftm-edit-school-inline")?.addEventListener("click",editSchool);
   const guideMarkup = `

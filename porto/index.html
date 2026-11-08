@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PORTO | ملف الإنجاز المهني الإلكتروني</title>
+
+  <!-- Tailwind CSS CDN -->
+  <link rel="stylesheet" href="css/tailwind-generated.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Cairo (Default), Tajawal, Almarai, Amiri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script src="js/tailwind-config.js"></script>
+
+  
+  <link rel="stylesheet" href="css/porto.css">
+</head>
+<body id="appBody" class="font-cairo">
+
+  <!-- Top Sticky Navigation & Toolbar (No-Print) -->
+  <header class="no-print bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-4 lg:px-8 py-3 shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white text-lg shadow-sm">
+          <i class="fa-solid fa-book-bookmark"></i>
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base md:text-lg text-slate-800 leading-tight">منصة ملف الإنجاز المهني الإلكتروني</h1>
+          <p class="text-xs text-slate-500 font-medium">مدارس البنات • التعليم العام بالمملكة العربية السعودية</p>
+        </div>
+      </div>
+
+      <!-- Controls: Themes, Fonts, Edit, Print -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        
+        <!-- Theme Selector -->
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+          <span class="text-slate-500 px-2 hidden sm:inline"><i class="fa-solid fa-palette ml-1"></i>الهوية:</span>
+          <button onclick="setTheme('rose')" id="theme-btn-rose" class="px-3 py-1.5 rounded-lg transition-all text-pink-700 bg-white shadow-sm flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+            الوردي الملكي
+          </button>
+          <button onclick="setTheme('lavender')" id="theme-btn-lavender" class="px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-purple-700 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+            اللافندر
+          </button>
+          <button onclick="setTheme('sage')" id="theme-btn-sage" class="px-3 py-1.5 rounded-lg transition-all text-slate-600 hover:text-emerald-700 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+            الزمردي التيل
+          </button>
+        </div>
+
+        <!-- Font Family Selector -->
+        <div class="flex items-center bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 text-xs font-bold">
+          <label for="fontSelect" class="text-slate-500 ml-1.5 hidden md:inline"><i class="fa-solid fa-font ml-1"></i>الخط:</label>
+          <select id="fontSelect" onchange="setFontFamily(this.value)" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-slate-800 font-bold outline-none cursor-pointer focus:ring-1 focus:ring-rose-400">
+            <option value="cairo" selected>خط كايرو (Cairo)</option>
+            <option value="tajawal">خط تجوال (Tajawal)</option>
+            <option value="almarai">خط المراعي (Almarai)</option>
+            <option value="amiri">خط أميري (Amiri)</option>
+          </select>
+        </div>
+
+        <!-- Edit Data Modal Button -->
+        <button onclick="openEditModal()" class="px-3.5 py-2 text-xs md:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl transition-all flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-rose-600"></i>
+          <span>بيانات المعلمة</span>
+        </button>
+
+        <!-- Print Action -->
+        <button onclick="window.print()" class="px-5 py-2 text-xs md:text-sm font-extrabold text-white bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+          <i class="fa-solid fa-print"></i>
+          <span>طباعة وتصدير PDF</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Paper Preview Container -->
+  <main class="preview-container py-8 px-4 flex flex-col items-center">
+
+    <!-- ========================================================
+         PAGE 1: COVER PAGE (غلاف ملف الإنجاز الرئيسي الفاخر)
+         ======================================================== -->
+    <section class="a4-sheet" id="page-cover">
+      
+      <!-- Top Header & Logos -->
+      <div class="flex items-center justify-between border-b-2 pb-4" style="border-color: var(--border-color);">
+        <div class="text-right text-xs leading-relaxed font-bold" style="color: var(--heading-color);">
+          <p class="text-sm font-extrabold">المملكة العربية السعودية</p>
+          <p>وزارة التعليم</p>
+          <p id="disp-admin">الإدارة العامة للتعليم بمنطقة مكة المكرمة</p>
+          <p id="disp-school">ابتدائية بحرة المجاهدين الخامسة</p>
+        </div>
+
+        <!-- Identity assets are isolated under porto/assets. -->
+        <div class="porto-vision-identity" aria-label="شعار رؤية السعودية 2030">
+          <img src="assets/vision-2030.svg" alt="شعار رؤية السعودية 2030" class="porto-vision-logo">
+        </div>
+
+
+        <div class="text-left text-xs font-bold leading-relaxed" style="color: var(--heading-color);">
+          <div class="w-20 h-16 rounded-xl flex items-center justify-center border border-dashed text-center p-1 text-[10px]" style="border-color: var(--border-color); background: var(--bg-card);">
+            <img src="assets/ministry-of-education.webp" alt="شعار وزارة التعليم" class="porto-ministry-logo">
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Title Hero Block -->
+      <div class="text-center my-auto py-6">
+        
+        <!-- Elegant Ribbon Tag -->
+        <div class="inline-block px-6 py-1.5 rounded-full text-xs font-black tracking-widest uppercase mb-4 shadow-sm" style="background: var(--bg-card); color: var(--primary-color); border: 1.5px solid var(--border-color);">
+          <i class="fa-solid fa-sparkles ml-1"></i> وثيقة النمو والأداء المهني
+        </div>
+
+        <!-- Main Title -->
+        <h1 class="text-4xl lg:text-5xl font-black mb-3 tracking-tight" style="color: var(--heading-color);">
+          ملف الإنجاز المهني
+        </h1>
+        <p class="text-lg font-bold tracking-wide" style="color: var(--primary-color);">
+          للمعلمة المتميزة
+        </p>
+
+        <!-- Decorative Floral/Geometric Divider SVG -->
+        <div class="w-56 mx-auto my-4 flex items-center justify-center gap-3">
+          <div class="h-0.5 flex-1" style="background: var(--border-color);"></div>
+          <i class="fa-solid fa-fan text-sm" style="color: var(--primary-color);"></i>
+          <div class="h-0.5 flex-1" style="background: var(--border-color);"></div>
+        </div>
+
+        <!-- Teacher Information Card (Gold & Border Ornate Frame) -->
+        <div class="max-w-xl mx-auto rounded-3xl p-6 shadow-sm mt-6 text-right ornate-border" style="background: var(--bg-card);">
+          
+          <div class="grid grid-cols-2 gap-4 text-xs font-semibold">
+            
+            <div class="col-span-2 border-b pb-3 flex items-center justify-between" style="border-color: var(--border-color);">
+              <span class="text-slate-500 font-bold text-sm">اسم المعلمة:</span>
+              <span id="disp-teacher-name" class="text-lg font-black" style="color: var(--heading-color);">فاطمة الحربي</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+              <span class="text-slate-500">الرتبة التعليمية:</span>
+              <span id="disp-rank" class="font-extrabold text-slate-800">معلم متقدم</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+              <span class="text-slate-500">التخصص:</span>
+              <span id="disp-spec" class="font-extrabold text-slate-800">لغة عربية</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+              <span class="text-slate-500">المادة المسندة:</span>
+              <span id="disp-subject" class="font-extrabold text-slate-800">لغتي</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+              <span class="text-slate-500">المرحلة والصف:</span>
+              <span id="disp-grade" class="font-extrabold text-slate-800">الثاني ابتدائي</span>
+            </div>
+
+            <div class="col-span-2 flex items-center justify-between">
+              <span class="text-slate-500">الشُعب المسندة:</span>
+              <span id="disp-sections" class="font-extrabold text-slate-800">1 - 2 - 3</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Quote / Inspiration Message -->
+        <div class="max-w-md mx-auto mt-6 text-center">
+          <p class="text-xs italic font-medium leading-relaxed" style="color: var(--heading-color);">
+            "التعليم رسالة سامية تُبنى بها العقول وترتقي بها الأمم.. نسعى بإتقان وشغف لإلهام جيل المستقبل"
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Bottom Footer Info -->
+      <div class="border-t-2 pt-3 flex items-center justify-between text-xs font-bold" style="border-color: var(--border-color); color: var(--heading-color);">
+        <div>
+          <span>العام الدراسي: </span>
+          <span id="disp-year" class="font-black">1448 هـ</span>
+        </div>
+        <div class="text-[10px] text-slate-400 font-medium">
+          وثيقة رسمية مخصصة للتوثيق والاعتماد الإشرافي
+        </div>
+        <div>
+          <span>المدرسة: </span>
+          <span id="disp-school-foot">ابتدائية بحرة المجاهدين الخامسة</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         PAGE 2: TABLE OF CONTENTS (فهرس المحتويات)
+         ======================================================== -->
+    <section class="a4-sheet" id="page-index">
+      
+      <!-- Mini Header -->
+      <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+        <span class="text-xs font-bold" style="color: var(--heading-color);" id="disp-mini-head1">ملف الإنجاز المهني • المعلمة فاطمة الحربي</span>
+        <span class="text-xs font-bold text-slate-400">الفهرس العام</span>
+      </div>
+
+      <div class="my-auto py-4">
+        <!-- Title & Sub -->
+        <div class="text-center mb-8">
+          <div class="inline-block p-3 rounded-2xl mb-2" style="background: var(--bg-card); color: var(--primary-color);">
+            <i class="fa-solid fa-list-check text-2xl"></i>
+          </div>
+          <h2 class="text-2xl font-black" style="color: var(--heading-color);">فهرس محتويات ملف الإنجاز</h2>
+          <p class="text-xs text-slate-500 mt-1 font-semibold">خارطة التوثيق والشواهد المنظمة للأداء المهني</p>
+        </div>
+
+        <!-- TOC List Items -->
+        <div class="max-w-xl mx-auto space-y-3.5 text-xs font-bold">
+          
+          <!-- Item 1 -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl border transition-all" style="background: var(--bg-card); border-color: var(--border-color);">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style="background: var(--primary-color);">01</span>
+              <div>
+                <span class="text-sm font-extrabold text-slate-800">السيرة الذاتية والرؤية المهنية</span>
+                <p class="text-[10px] text-slate-500 font-normal">البيانات الوظيفية، المؤهلات، وفلسفة التعليم</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-black bg-white" style="color: var(--primary-color);">القسم الأول</span>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl border transition-all" style="background: var(--bg-card); border-color: var(--border-color);">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style="background: var(--primary-color);">02</span>
+              <div>
+                <span class="text-sm font-extrabold text-slate-800">مدونة السلوك الوظيفي وأخلاقيات المهنة</span>
+                <p class="text-[10px] text-slate-500 font-normal">ميثاق أخلاقيات مهنة التعليم وقيم المعلمة</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-black bg-white" style="color: var(--primary-color);">القسم الثاني</span>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl border transition-all" style="background: var(--bg-card); border-color: var(--border-color);">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style="background: var(--primary-color);">03</span>
+              <div>
+                <span class="text-sm font-extrabold text-slate-800">التطوير والنمو المهني المستمر</span>
+                <p class="text-[10px] text-slate-500 font-normal">البرامج التدريبية، الورش، ومجتمعات التعلم المهنية</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-black bg-white" style="color: var(--primary-color);">القسم الثالث</span>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl border transition-all" style="background: var(--bg-card); border-color: var(--border-color);">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style="background: var(--primary-color);">04</span>
+              <div>
+                <span class="text-sm font-extrabold text-slate-800">البرامج والأنشطة والمبادرات الصفية</span>
+                <p class="text-[10px] text-slate-500 font-normal">شواهد تعزيز مهارات القراءة والكتابة والأنشطة التفاعلية</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-black bg-white" style="color: var(--primary-color);">القسم الرابع</span>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl border transition-all" style="background: var(--bg-card); border-color: var(--border-color);">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-sm" style="background: var(--primary-color);">05</span>
+              <div>
+                <span class="text-sm font-extrabold text-slate-800">سجل الشواهد والتقارير المرفقة</span>
+                <p class="text-[10px] text-slate-500 font-normal">نماذج من أعمال الطالبات والخطط العلاجية والتكريم</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-black bg-white" style="color: var(--primary-color);">الملحقات</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t pt-2 flex items-center justify-between text-[11px] text-slate-400 font-semibold" style="border-color: var(--border-color);">
+        <span>العام الدراسي 1448 هـ</span>
+        <span>صفحة 2</span>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         PAGE 3: DIVIDER & SECTION 1 (السيرة الذاتية والرؤية)
+         ======================================================== -->
+    <section class="a4-sheet" id="page-cv">
+      
+      <!-- Mini Header -->
+      <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+        <span class="text-xs font-bold" style="color: var(--heading-color);">ملف الإنجاز المهني • القسم الأول</span>
+        <span class="text-xs font-bold text-slate-400">السيرة الذاتية</span>
+      </div>
+
+      <!-- Main Section Header Art -->
+      <div class="text-center my-3">
+        <div class="w-16 h-16 mx-auto rounded-3xl flex items-center justify-center text-2xl mb-2 shadow-sm" style="background: var(--bg-card); color: var(--primary-color); border: 2px solid var(--border-color);">
+          <i class="fa-solid fa-address-card"></i>
+        </div>
+        <h2 class="text-2xl font-black" style="color: var(--heading-color);">السيرة الذاتية والرؤية التربوية</h2>
+        <p class="text-xs text-slate-500 font-bold">بيانات ومرتكزات الأداء التعليمي</p>
+      </div>
+
+      <!-- Bio Cards & Vision/Mission -->
+      <div class="space-y-4 my-auto text-xs">
+        
+        <!-- Vision & Mission Grid -->
+        <div class="grid grid-cols-2 gap-3.5">
+          <div class="p-4 rounded-2xl border" style="background: var(--bg-card); border-color: var(--border-color);">
+            <div class="flex items-center gap-2 mb-2 font-black text-sm" style="color: var(--primary-color);">
+              <i class="fa-solid fa-eye"></i>
+              <span>رؤيتي التعليمية</span>
+            </div>
+            <p class="text-[11px] leading-relaxed text-slate-700 text-justify font-medium">
+              الريادة في تأسيس طالبات الصف الثاني الابتدائي على حب لغتنا العربية الفصحى وتمكينهن من مهارات القراءة بطلاقة والكتابة التعبيرية الواعية في بيئة محفزة وآمنة تسهم في بناء جيل طموح وواعٍ.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-2xl border" style="background: var(--bg-card); border-color: var(--border-color);">
+            <div class="flex items-center gap-2 mb-2 font-black text-sm" style="color: var(--primary-color);">
+              <i class="fa-solid fa-compass"></i>
+              <span>رسالتي المهنية</span>
+            </div>
+            <p class="text-[11px] leading-relaxed text-slate-700 text-justify font-medium">
+              توظيف استراتيجيات التدريس النشط والتقنيات التعليمية الحديثة لرعاية الفروق الفردية وغرس القيم الإسلامية والوطنية، وتحفيز طالباتي نحو الشغف المعرفي والتعلم المستمر بأسلوب تربوي جاذب.
+            </p>
+          </div>
+        </div>
+
+        <!-- Detailed Teacher Data Grid -->
+        <div class="rounded-2xl border p-4 space-y-2.5" style="border-color: var(--border-color); background: white;">
+          <h4 class="font-extrabold text-sm border-b pb-2 flex items-center gap-2" style="color: var(--heading-color); border-color: var(--border-color);">
+            <i class="fa-solid fa-circle-info text-xs" style="color: var(--primary-color);"></i>
+            <span>البيانات المهنية والتعليمية</span>
+          </h4>
+
+          <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-xs font-semibold">
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">الاسم الثلاثي:</span>
+              <span class="font-bold text-slate-900" id="disp-cv-name">فاطمة الحربي</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">الرتبة الوظيفية:</span>
+              <span class="font-bold text-slate-900" id="disp-cv-rank">معلم متقدم</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">المؤهل والتخصص:</span>
+              <span class="font-bold text-slate-900">بكالوريوس لغة عربية</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">المادة والصف:</span>
+              <span class="font-bold text-slate-900" id="disp-cv-subject">لغتي - الثاني ابتدائي</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">جهة العمل:</span>
+              <span class="font-bold text-slate-900" id="disp-cv-school">ابتدائية بحرة المجاهدين الخامسة</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-500">الإدارة التعليمية:</span>
+              <span class="font-bold text-slate-900" id="disp-cv-admin">تعليم منطقة مكة المكرمة</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Core Values Box -->
+        <div class="p-3.5 rounded-2xl border" style="background: var(--bg-card); border-color: var(--border-color);">
+          <span class="block text-xs font-black mb-2" style="color: var(--heading-color);">قيمي المهنية الراسخة:</span>
+          <div class="flex flex-wrap gap-2 text-[11px] font-bold">
+            <span class="px-3 py-1 bg-white rounded-lg shadow-sm" style="color: var(--primary-color);">• الإخلاص والأمانة التربوية</span>
+            <span class="px-3 py-1 bg-white rounded-lg shadow-sm" style="color: var(--primary-color);">• التطوير والتعلم المستمر</span>
+            <span class="px-3 py-1 bg-white rounded-lg shadow-sm" style="color: var(--primary-color);">• الاحتواء والتعزيز الإيجابي</span>
+            <span class="px-3 py-1 bg-white rounded-lg shadow-sm" style="color: var(--primary-color);">• العمل بروح الفريق المدرسي</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t pt-2 flex items-center justify-between text-[11px] text-slate-400 font-semibold" style="border-color: var(--border-color);">
+        <span>السيرة الذاتية والرؤية</span>
+        <span>صفحة 3</span>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         PAGE 4: DIVIDER & SECTION 2 (مدونة السلوك الوظيفي)
+         ======================================================== -->
+    <section class="a4-sheet" id="page-ethics">
+      
+      <!-- Mini Header -->
+      <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+        <span class="text-xs font-bold" style="color: var(--heading-color);">ملف الإنجاز المهني • القسم الثاني</span>
+        <span class="text-xs font-bold text-slate-400">ميثاق المهنة</span>
+      </div>
+
+      <!-- Main Cover Art for the Ethics section -->
+      <div class="text-center my-3">
+        <div class="w-16 h-16 mx-auto rounded-3xl flex items-center justify-center text-2xl mb-2 shadow-sm" style="background: var(--bg-card); color: var(--primary-color); border: 2px solid var(--border-color);">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+        <h2 class="text-2xl font-black" style="color: var(--heading-color);">مدونة السلوك الوظيفي وأخلاقيات المهنة</h2>
+        <p class="text-xs text-slate-500 font-bold">الالتزام بميثاق مهنة التعليم وأنظمة الخدمة المدنية</p>
+      </div>
+
+      <!-- Ethics Core Clauses -->
+      <div class="space-y-3.5 my-auto text-xs">
+        
+        <div class="p-3.5 rounded-2xl border" style="background: var(--bg-card); border-color: var(--border-color);">
+          <h4 class="font-black text-sm mb-1.5 flex items-center gap-2" style="color: var(--primary-color);">
+            <i class="fa-solid fa-ribbon"></i> رسالة ومكانة المعلم
+          </h4>
+          <p class="text-[11px] text-slate-700 leading-relaxed text-justify">
+            التعليم مهنة ذات قداسة ومسؤولية عظمى، وتستمد مكانتها من شرف غايتها في بناء الإنسان؛ وتلتزم المعلمة بأداء واجباتها بأمانة وإخلاص متوخية مرضاة الله تعالى وإعلاء راية الوطن المعطاء.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          
+          <div class="p-3.5 rounded-2xl border bg-white" style="border-color: var(--border-color);">
+            <h5 class="font-extrabold text-xs mb-1.5 flex items-center gap-1.5" style="color: var(--heading-color);">
+              <i class="fa-solid fa-hand-holding-heart" style="color: var(--primary-color);"></i>
+              <span>الأخلاقيات تجاه الطالبات:</span>
+            </h5>
+            <ul class="text-[11px] space-y-1.5 text-slate-600 list-disc list-inside leading-relaxed font-medium">
+              <li>العدل والمساواة والإنصاف بين جميع الطالبات دون تمييز.</li>
+              <li>الرفق وبث الطمأنينة وتنمية الثقة بالنفس وحب التعلم.</li>
+              <li>حفظ خصوصية الطالبات وأسرهن ومعالجة المشكلات بحكمة.</li>
+            </ul>
+          </div>
+
+          <div class="p-3.5 rounded-2xl border bg-white" style="border-color: var(--border-color);">
+            <h5 class="font-extrabold text-xs mb-1.5 flex items-center gap-1.5" style="color: var(--heading-color);">
+              <i class="fa-solid fa-users-gear" style="color: var(--primary-color);"></i>
+              <span>الأخلاقيات تجاه المجتمع والزملاء:</span>
+            </h5>
+            <ul class="text-[11px] space-y-1.5 text-slate-600 list-disc list-inside leading-relaxed font-medium">
+              <li>التعاون الإيجابي والتكامل مع الزميلات وإدارة المدرسة.</li>
+              <li>توثيق الشراكة التربوية المثمرة مع أمهات الطالبات.</li>
+              <li>تمثيل القدوة الحسنة سلوكاً ومظهراً وفكراً وطنياً معتدلاً.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Pledge Badge -->
+        <div class="p-4 rounded-2xl border-2 border-dashed text-center" style="border-color: var(--border-color); background: var(--bg-card);">
+          <span class="text-xs font-black block mb-1" style="color: var(--heading-color);">إقـــرار والتــزام</span>
+          <p class="text-[11px] text-slate-700 italic">
+            "أعاهد الله تعالى على الالتزام التام بكافة بنود مدونة السلوك الوظيفي، وبذل قصارى جهدي لتنشئة طالباتي على الهدى وحب المعرفة وخدمة الوطن."
+          </p>
+          <div class="flex justify-between items-center max-w-sm mx-auto mt-3 text-[10px] font-bold text-slate-500">
+            <span>المعلمة: <strong id="disp-ethic-teacher" class="text-slate-800">فاطمة الحربي</strong></span>
+            <span>التوقيع: ....................</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t pt-2 flex items-center justify-between text-[11px] text-slate-400 font-semibold" style="border-color: var(--border-color);">
+        <span>مدونة السلوك وأخلاقيات المهنة</span>
+        <span>صفحة 4</span>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         PAGE 5: DIVIDER & SECTION 3 (التطوير المهني)
+         ======================================================== -->
+    <section class="a4-sheet" id="page-dev">
+      
+      <!-- Mini Header -->
+      <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+        <span class="text-xs font-bold" style="color: var(--heading-color);">ملف الإنجاز المهني • القسم الثالث</span>
+        <span class="text-xs font-bold text-slate-400">النمو والتطوير المهني</span>
+      </div>
+
+      <!-- Main Cover Art for Dev Section -->
+      <div class="text-center my-3">
+        <div class="w-16 h-16 mx-auto rounded-3xl flex items-center justify-center text-2xl mb-2 shadow-sm" style="background: var(--bg-card); color: var(--primary-color); border: 2px solid var(--border-color);">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <h2 class="text-2xl font-black" style="color: var(--heading-color);">التطوير والنمو المهني المستمر</h2>
+        <p class="text-xs text-slate-500 font-bold">سجل البرامج التدريبية ومجتمعات التعلم المهنية</p>
+      </div>
+
+      <!-- Training Registry Table Template -->
+      <div class="my-auto space-y-3">
+        <div class="flex items-center justify-between text-xs font-bold">
+          <span style="color: var(--heading-color);"><i class="fa-solid fa-list-ol ml-1" style="color: var(--primary-color);"></i> مصفوفة البرامج والدورات المنجزة للعام 1448 هـ:</span>
+          <span class="text-[10px] text-slate-500 font-normal">* يتم إرفاق شهادات الحضور في الصفحات التالية</span>
+        </div>
+
+        <div class="border rounded-2xl overflow-hidden shadow-sm" style="border-color: var(--border-color);">
+          <table class="w-full text-right text-xs">
+            <thead style="background: var(--bg-card); color: var(--heading-color);">
+              <tr class="font-extrabold border-b" style="border-color: var(--border-color);">
+                <th class="p-2.5 w-12 text-center">#</th>
+                <th class="p-2.5">عنوان البرنامج التدريبي / ورشة العمل</th>
+                <th class="p-2.5 w-32">الجهة المنظمة</th>
+                <th class="p-2.5 w-20 text-center">الساعات</th>
+                <th class="p-2.5 w-24 text-center">التاريخ</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white text-slate-700 font-medium">
+              <tr>
+                <td class="p-2.5 text-center font-bold">1</td>
+                <td class="p-2.5 font-bold text-slate-800">استراتيجيات تدريس القراءة السريعة والفهم القرائي للصفوف الأولية</td>
+                <td class="p-2.5">مكتب التعليم ببحرة</td>
+                <td class="p-2.5 text-center font-bold" style="color: var(--primary-color);">10 س</td>
+                <td class="p-2.5 text-center">1448/02/15</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="p-2.5 text-center font-bold">2</td>
+                <td class="p-2.5 font-bold text-slate-800">توظيف الألعاب اللغوية الرقمية في تعزيز مهارات الإملاء</td>
+                <td class="p-2.5">إدارة التدريب والابتعاث</td>
+                <td class="p-2.5 text-center font-bold" style="color: var(--primary-color);">5 س</td>
+                <td class="p-2.5 text-center">1448/03/10</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-center font-bold">3</td>
+                <td class="p-2.5 font-bold text-slate-800">التقويم التكويني وأساليب قياس الفاقد التعليمي في مادة لغتي</td>
+                <td class="p-2.5">المدرسة (مجتمع مهني)</td>
+                <td class="p-2.5 text-center font-bold" style="color: var(--primary-color);">4 س</td>
+                <td class="p-2.5 text-center">1448/04/02</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="p-2.5 text-center font-bold">4</td>
+                <td class="p-2.5 font-bold text-slate-800">التمايز التعليمي ورعاية الطالبات ذوات صعوبات التعلم الأكاديمية</td>
+                <td class="p-2.5">منصة تطوير المهني</td>
+                <td class="p-2.5 text-center font-bold" style="color: var(--primary-color);">8 س</td>
+                <td class="p-2.5 text-center">1448/05/20</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 text-center font-bold">5</td>
+                <td class="p-2.5 text-slate-400 italic">برنامج تدريبي مسجل / ورشة تخصصية لاحقة</td>
+                <td class="p-2.5 text-slate-400">-</td>
+                <td class="p-2.5 text-center text-slate-400">-</td>
+                <td class="p-2.5 text-center text-slate-400">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Professional Learning Communities Badge -->
+        <div class="p-4 rounded-2xl border" style="background: var(--bg-card); border-color: var(--border-color);">
+          <span class="block text-xs font-black mb-1.5" style="color: var(--heading-color);">
+            <i class="fa-solid fa-users-rectangle ml-1" style="color: var(--primary-color);"></i> مجتمعات التعلم المهنية والزيارات التبادلية:
+          </span>
+          <p class="text-[11px] text-slate-700 leading-relaxed font-medium">
+            المشاركة في جلسات تبادل الزيارات بين معلمات الصفوف الأولية بالمدرسة لدراسة نواتج تعلم مادة لغتي وتطبيق دروس نموذجية وتطوير أدوات القياس التشخيصية للارتقاء بمستوى طالبات الصف الثاني.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t pt-2 flex items-center justify-between text-[11px] text-slate-400 font-semibold" style="border-color: var(--border-color);">
+        <span>التطوير والنمو المهني</span>
+        <span>صفحة 5</span>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         PAGE 6: DIVIDER & SECTION 4 (البرامج والأنشطة)
+         ======================================================== -->
+    <section class="a4-sheet" id="page-activities">
+      
+      <!-- Mini Header -->
+      <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+        <span class="text-xs font-bold" style="color: var(--heading-color);">ملف الإنجاز المهني • القسم الرابع</span>
+        <span class="text-xs font-bold text-slate-400">البرامج والأنشطة</span>
+      </div>
+
+      <!-- Main Cover Art for Activities -->
+      <div class="text-center my-3">
+        <div class="w-16 h-16 mx-auto rounded-3xl flex items-center justify-center text-2xl mb-2 shadow-sm" style="background: var(--bg-card); color: var(--primary-color); border: 2px solid var(--border-color);">
+          <i class="fa-solid fa-palette"></i>
+        </div>
+        <h2 class="text-2xl font-black" style="color: var(--heading-color);">البرامج والأنشطة والمبادرات الصفية</h2>
+        <p class="text-xs text-slate-500 font-bold">توثيق الفعاليات الإثرائية واللاصفية لمادة لغتي</p>
+      </div>
+
+      <!-- Sample Initiatives Showcase Grid -->
+      <div class="my-auto space-y-3.5 text-xs">
+        
+        <!-- Initiative 1 -->
+        <div class="p-3.5 rounded-2xl border bg-white flex items-start gap-3 shadow-sm" style="border-color: var(--border-color);">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background: var(--primary-color);">
+            <i class="fa-solid fa-book-open-reader text-sm"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-sm" style="color: var(--heading-color);">مبادرة "حروفي المضيئة وطليقات القراءة"</h4>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold" style="background: var(--bg-card); color: var(--primary-color);">مبادرة سنوية</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1 leading-relaxed font-medium">
+              برنامج قرائي أسبوعي لتحفيز طالبات الشُعب (1 - 2 - 3) على القراءة السريعة للنصوص وفهم المقروء مع تخصيص شجرة الإنجاز لتتويج فارسات القراءة أسبوعياً.
+            </p>
+          </div>
+        </div>
+
+        <!-- Initiative 2 -->
+        <div class="p-3.5 rounded-2xl border bg-white flex items-start gap-3 shadow-sm" style="border-color: var(--border-color);">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background: var(--primary-color);">
+            <i class="fa-solid fa-pen-nib text-sm"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-sm" style="color: var(--heading-color);">نادي "براعم الخط والإملاء الجميل"</h4>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold" style="background: var(--bg-card); color: var(--primary-color);">نشاط إثرائي</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1 leading-relaxed font-medium">
+              ورش عمل مصغرة لتدريب الطالبات على مهارات رسم الحروف الهجائية على السطر وتفادي الأخطاء الإملائية الشائعة في المدود والتنوين والتاء المربوطة.
+            </p>
+          </div>
+        </div>
+
+        <!-- Initiative 3 -->
+        <div class="p-3.5 rounded-2xl border bg-white flex items-start gap-3 shadow-sm" style="border-color: var(--border-color);">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background: var(--primary-color);">
+            <i class="fa-solid fa-masks-theater text-sm"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-sm" style="color: var(--heading-color);">مسرحة المناهج: "لغتي هويتي وفخري"</h4>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold" style="background: var(--bg-card); color: var(--primary-color);">نشاط صفي مسرحي</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-1 leading-relaxed font-medium">
+              تحويل نصوص دروس لغتي إلى مشاهد تمثيلية مسرحية تؤديها الطالبات باللغة العربية الفصحى لتعزيز الثقة ومهارات الإلقاء والخطابة.
+            </p>
+          </div>
+        </div>
+
+        <!-- Note to Attach Photos -->
+        <div class="p-3 rounded-2xl border border-dashed text-center" style="border-color: var(--border-color); background: var(--bg-card);">
+          <span class="text-[11px] font-extrabold" style="color: var(--heading-color);">
+            <i class="fa-solid fa-camera ml-1" style="color: var(--primary-color);"></i> ترفق صور وشواهد البرامج والفعاليات في الصفحات التالية لهذا القسم بعد الطباعة أو إلكترونياً
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t pt-2 flex items-center justify-between text-[11px] text-slate-400 font-semibold" style="border-color: var(--border-color);">
+        <span>البرامج والأنشطة والفعاليات</span>
+        <span>صفحة 6</span>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         PAGE 7: EVIDENCE TEMPLATE (نموذج إدراج الشواهد والتقارير داخل الأقسام)
+         ======================================================== -->
+    <section class="a4-sheet" id="page-evidence">
+      
+      <!-- Mini Header -->
+      <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+        <span class="text-xs font-bold" style="color: var(--heading-color);">ملف الإنجاز المهني • استمارة توثيق الشواهد</span>
+        <span class="text-xs font-bold text-slate-400">ملحق التقارير والشواهد</span>
+      </div>
+
+      <!-- Title Area -->
+      <div class="text-center my-2">
+        <h3 class="text-xl font-black" style="color: var(--heading-color);">استمارة إدراج شاهد / تقرير نشاط</h3>
+        <p class="text-[11px] text-slate-500 font-bold">يمكن طباعة هذه الصفحة وتكرارها لتوثيق أي برنامج أو درس تطبيقي داخل الأقسام</p>
+      </div>
+
+      <!-- Evidence Meta Info -->
+      <div class="p-3 rounded-2xl border text-xs grid grid-cols-3 gap-3 bg-white" style="border-color: var(--border-color);">
+        <div>
+          <span class="text-slate-400 text-[10px] block">عنوان الفعالية / الشاهد:</span>
+          <span class="font-bold text-slate-800">..................................................</span>
+        </div>
+        <div>
+          <span class="text-slate-400 text-[10px] block">القسم التابع له:</span>
+          <span class="font-bold text-slate-800">البرامج والأنشطة / التطوير</span>
+        </div>
+        <div>
+          <span class="text-slate-400 text-[10px] block">تاريخ التنفيذ:</span>
+          <span class="font-bold text-slate-800">..... / ..... / 1448 هـ</span>
+        </div>
+      </div>
+
+      <!-- Large Framed Evidence Image Holders (Empty or Placeholder for Physical/Digital insertion) -->
+      <div class="my-auto grid grid-cols-2 gap-4">
+        
+        <div class="border-2 border-dashed rounded-2xl p-4 flex flex-col items-center justify-center text-center h-52 bg-white" style="border-color: var(--border-color);">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2" style="background: var(--bg-card); color: var(--primary-color);">
+            <i class="fa-regular fa-image text-xl"></i>
+          </div>
+          <span class="text-xs font-extrabold text-slate-700">موضع الصورة / الشاهد الأول</span>
+          <span class="text-[10px] text-slate-400 mt-1">يُلصق هنا الشاهد المصور أو التقرير الميداني المعتمد</span>
+        </div>
+
+        <div class="border-2 border-dashed rounded-2xl p-4 flex flex-col items-center justify-center text-center h-52 bg-white" style="border-color: var(--border-color);">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mb-2" style="background: var(--bg-card); color: var(--primary-color);">
+            <i class="fa-regular fa-image text-xl"></i>
+          </div>
+          <span class="text-xs font-extrabold text-slate-700">موضع الصورة / الشاهد الثاني</span>
+          <span class="text-[10px] text-slate-400 mt-1">شاهد مشاركة الطالبات أو نموذج من أوراق العمل</span>
+        </div>
+
+      </div>
+
+      <!-- Description Notes & Sign-off -->
+      <div class="space-y-3">
+        <div class="p-3 rounded-2xl border" style="background: var(--bg-card); border-color: var(--border-color);">
+          <span class="text-[11px] font-black block mb-1" style="color: var(--heading-color);">وصف ومخرجات الشاهد:</span>
+          <p class="text-[10px] text-slate-600 leading-relaxed">
+            ......................................................................................................................................................................................................................................................................................................................................................
+          </p>
+        </div>
+
+        <div class="flex justify-between items-center text-xs font-bold pt-2 px-6" style="color: var(--heading-color);">
+          <div class="text-center">
+            <span>المعلمة المنفذة:</span>
+            <p class="font-extrabold mt-1" id="disp-ev-teacher">فاطمة الحربي</p>
+          </div>
+          <div class="text-center">
+            <span>مديرة المدرسة / المشرفة:</span>
+            <p class="font-extrabold mt-1">........................................</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t pt-2 flex items-center justify-between text-[11px] text-slate-400 font-semibold" style="border-color: var(--border-color);">
+        <span>ملحق الشواهد والتقارير</span>
+        <span>صفحة 7</span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       MODAL: EDIT TEACHER DATA (نافذة تعديل البيانات وحفظها)
+       ======================================================== -->
+  <div id="dataModal" class="no-print fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 flex flex-col">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b flex items-center justify-between bg-gradient-to-r from-rose-50 to-pink-50 rounded-t-3xl">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center text-sm">
+            <i class="fa-solid fa-id-card-clip"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-800 text-base">تعديل بيانات ملف الإنجاز</h3>
+            <p class="text-xs text-slate-500">يتم حفظ البيانات تلقائياً في التخزين المحلي (LocalStorage)</p>
+          </div>
+        </div>
+        <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-700 text-lg w-8 h-8 rounded-full flex items-center justify-center hover:bg-white transition-all">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Form Inputs -->
+      <form id="portfolioForm" onsubmit="saveData(event)" class="p-6 space-y-4 text-xs font-semibold">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <div>
+            <label class="block text-slate-600 mb-1">اسم المعلمة:</label>
+            <input type="text" id="inp-teacher-name" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">الرتبة التعليمية:</label>
+            <select id="inp-rank" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none bg-white">
+              <option value="معلم متقدم">معلم متقدم</option>
+              <option value="معلم ممارس">معلم ممارس</option>
+              <option value="معلم خبير">معلم خبير</option>
+              <option value="معلم">معلم</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">الإدارة العامة للتعليم:</label>
+            <input type="text" id="inp-admin" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">اسم المدرسة:</label>
+            <input type="text" id="inp-school" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">التخصص الأكاديمي:</label>
+            <input type="text" id="inp-spec" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">المادة المسندة (التدريس):</label>
+            <input type="text" id="inp-subject" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">المرحلة والصف:</label>
+            <input type="text" id="inp-grade" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">الفصول / الشُعب:</label>
+            <input type="text" id="inp-sections" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">العام الدراسي:</label>
+            <input type="text" id="inp-year" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1">مديرة المدرسة (اختياري):</label>
+            <input type="text" id="inp-principal" placeholder="أ. مديرة المدرسة" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-rose-500 outline-none">
+          </div>
+
+        </div>
+
+        <!-- Buttons Bar -->
+        <div class="pt-4 border-t flex flex-wrap items-center justify-between gap-3">
+          <button type="button" onclick="restoreDefaults()" class="px-4 py-2 text-slate-600 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 rounded-xl transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>استعادة البيانات الافتراضية</span>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="closeEditModal()" class="px-4 py-2 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all">
+              إلغاء
+            </button>
+            <button type="submit" class="px-6 py-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-xl shadow-md transition-all font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>حفظ التعديلات</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript Application Logic -->
+  <script src="js/porto.js"></script>
+</body>
+</html>
