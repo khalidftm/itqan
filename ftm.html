@@ -6,7 +6,7 @@
   <title>FTM | ملف الإنجاز المهني والأداء الوظيفي | معلمة مادة لغتي - الصف الثاني الابتدائي</title>
   <link rel="stylesheet" href="assets/css/core.css" />
   <link rel="stylesheet" href="assets/css/themes.css" />
-  <link rel="stylesheet" href="assets/css/print.css" />
+  
   <link rel="stylesheet" href="assets/css/pages/user-dashboard.css" />
   <link rel="stylesheet" href="assets/css/pages/ftm.css?v=20261108-hsp3-mobile-v2" />
   <link rel="stylesheet" href="assets/css/pages/ftm-layout.css" />
@@ -22,9 +22,9 @@
     </div>
     <div class="ftm-actions">
       <button type="button" class="btn btn-sm btn-accent" id="btn-add-portfolio-evidence">＋ <span>إضافة شاهد</span></button>
-      <button type="button" class="btn btn-sm btn-outline" id="btn-open-github-sync">☁️ <span>مزامنة GitHub</span></button>
-      <button type="button" class="btn btn-sm btn-primary" id="btn-print-full-report">🖨️ <span>طباعة</span></button>
-      <a href="assets/hsp3/preview/itqan-print.html" target="_blank" rel="noopener" class="btn btn-sm btn-outline" title="فتح القوالب الأربعة للمعاينة والطباعة">📄 <span>قوالب الطباعة</span></a>
+      
+      
+      <a href="assets/hsp3/preview/itqan-print.html" class="btn btn-sm btn-primary" id="ftm-print-hsp3" title="طباعة ملف الإنجاز بمحرك HSP3 الجديد">🖨️ <span>طباعة ملف الإنجاز</span></a>
       <a href="index.html" class="btn btn-sm btn-ghost ftm-home">الرئيسية</a>
     </div>
   </header>
@@ -41,16 +41,17 @@
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-performance" title="معايير الأداء"><span aria-hidden="true">◫</span><span class="ftm-nav-label">معايير الأداء</span></button>
         <button type="button" class="ftm-nav-item" data-workspace-tab="tab-messages" title="الرسائل والتوجيهات"><span aria-hidden="true">✉</span><span class="ftm-nav-label">الرسائل والتوجيهات</span> <span class="badge badge-accent ftm-nav-count" id="unread-msg-count">2</span></button>
         <button type="button" class="ftm-nav-item" id="ftm-edit-school" title="تحديث بيانات المدرسة"><span aria-hidden="true">⚙</span><span class="ftm-nav-label">بيانات المدرسة</span></button>
+        <button type="button" class="ftm-nav-item" id="ftm-cloud-settings" title="توصيل مستودع GitHub خاص للنسخ الاحتياطي التلقائي"><span aria-hidden="true">☁</span><span class="ftm-nav-label">إعداد النسخ السحابي</span></button>
         <button type="button" class="ftm-nav-item" id="ftm-open-guide" title="دليل الاستخدام والخطوات"><span aria-hidden="true">ⓘ</span><span class="ftm-nav-label">دليل الاستخدام</span></button>
       </nav>
-      <div class="ftm-sidebar-footer"><div class="ftm-last-update" id="ftm-last-update" role="status" aria-live="polite" title="تاريخ آخر نشر ناجح من GitHub Actions، مع مقارنة الالتزام المنشور بالفرع main"><span class="ftm-last-update-icon" aria-hidden="true">◷</span><span class="ftm-last-update-label">جارٍ التحقق من إصدار الصفحة المنشور...</span><button class="ftm-release-recheck" id="ftm-release-check" type="button" aria-label="التحقق من نشر أحدث إصدار" title="التحقق من نشر أحدث إصدار">↻</button></div></div>
+      <div class="ftm-sidebar-footer"><div id="ftm-auto-backup-status" class="ftm-auto-backup-status" role="status" aria-live="polite">◌ النسخ السحابي: محلي فقط</div><div class="ftm-last-update" id="ftm-last-update" role="status" aria-live="polite" title="تاريخ آخر نشر ناجح من GitHub Actions، مع مقارنة الالتزام المنشور بالفرع main"><span class="ftm-last-update-icon" aria-hidden="true">◷</span><span class="ftm-last-update-label">جارٍ التحقق من إصدار الصفحة المنشور...</span><button class="ftm-release-recheck" id="ftm-release-check" type="button" aria-label="التحقق من نشر أحدث إصدار" title="التحقق من نشر أحدث إصدار">↻</button></div></div>
     </aside>
     <main class="ftm-main">
       <div id="user-inline-alerts" class="page-alerts-stack" aria-live="polite"></div>
       <section id="tab-overview" class="workspace-section is-active">
         <div class="ftm-intro"><div><span class="ftm-eyebrow">مساحة الإنجاز المهني</span><h1 class="js-portfolio-dynamic-title">ملف الإنجاز المهني (معلمة)</h1><p><span class="js-user-name">المعلمة</span> · <span class="js-user-spec">المادة الدراسية</span></p></div>
-          <button type="button" class="btn btn-outline" id="btn-print-portfolio">🖨️ طباعة ملف الإنجاز</button>
-          <a class="btn btn-outline" href="assets/hsp3/preview/itqan-print.html" target="_blank" rel="noopener">📄 طباعة بقوالب HSP3</a>
+          
+          
         </div>
         <div class="ftm-stats">
           <div class="ftm-stat"><span>الشواهد المرفوعة</span><strong class="js-portfolio-count">0</strong><small>ملفات محفوظة</small></div>
@@ -130,7 +131,7 @@
             </div>
             <div class="d-flex gap-2">
               <button type="button" class="btn btn-primary" id="btn-edit-cv-card">✏️ تحرير وتحديث بطاقة السيرة الذاتية</button>
-              <button type="button" class="btn btn-outline" id="btn-print-cv-only">🖨️ طباعة السيرة وملف الإنجاز</button>
+              
             </div>
           </div>
 
@@ -240,6 +241,7 @@
   </div>
   <script src="assets/js/core/engines.js"></script>
   <script src="assets/js/pages/ftm.js?v=20261108-hsp3-mobile-v4"></script>
+  <script src="assets/js/pages/ftm-auto-sync.js?v=20261108-ftm-auto-v1"></script>
   <script src="assets/js/pages/ftm-dashboard.js"></script>
 </body>
 </html>
