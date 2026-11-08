@@ -2019,6 +2019,8 @@
     },
 
     injectSwitcherDock() {
+      // Standalone document viewers use shared data engines, not global site navigation.
+      if (document.documentElement.hasAttribute('data-no-global-dock')) return;
       if (document.getElementById('global-design-switcher-dock')) return;
 
       const currentModel = this.getCurrentModel();
