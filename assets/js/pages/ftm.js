@@ -79,59 +79,65 @@ document.addEventListener('DOMContentLoaded', () => {
   mobileQuery.addEventListener?.('change',() => applyMode(currentMode, false));
   applyMode(readMode() || 'expanded', false);
 
-  // This is a deployment/version indicator, NOT a user-data modification timestamp.
-  // A version is marked current only if its manifest is served by GitHub Pages
-  // and matches the current source manifest on GitHub main.
+  // GitHub Pages success status, rather than timestamps of local portfolio edits.
+  // The public Actions workflow is the authority for a successful publish.
   const releaseBadge = document.getElementById("ftm-last-update");
   const releaseText = releaseBadge?.querySelector(".ftm-last-update-label");
-  const formatCodeDate = iso => {
-    const parsed = new Date(iso);
-    if (!Number.isFinite(parsed.getTime())) throw new Error("تاريخ إصدار غير صالح");
-    return new Intl.DateTimeFormat("ar-SA", {
-      timeZone:"Asia/Riyadh",year:"numeric",month:"2-digit",day:"2-digit",
-      hour:"2-digit",minute:"2-digit"
-    }).format(parsed);
-  };
-  const printReleaseStatus = (status,description) => {
-    if (releaseText) releaseText.textContent = status;
+  const releaseCheck = document.getElementById("ftm-release-check");
+  const releaseApi = "https://api.github.com/repos/khalidftm/itqan";
+  const formatPublishDate = value => new Intl.DateTimeFormat("ar-SA", {
+    timeZone:"Asia/Riyadh",year:"numeric",month:"2-digit",day:"2-digit",
+    hour:"2-digit",minute:"2-digit"
+  }).format(new Date(value));
+  function printReleaseStatus(label, details, state = "unknown") {
+    if (releaseText) releaseText.textContent = label;
     if (releaseBadge) {
-      releaseBadge.title = description || status;
-      releaseBadge.setAttribute("aria-label", status);
-    }
-  };
-  async function verifyRelease() {
-    printReleaseStatus("جارٍ التحقق من نشر الصفحة...", "فحص نسخة الكود المنشورة على GitHub Pages");
-    const cacheBust = String(Date.now());
-    try {
-      const publicUrl = new URL("assets/ftm-release.json", location.href);
-      publicUrl.searchParams.set("v",cacheBust);
-      const response = await fetch(publicUrl.href, {cache:"no-store"});
-      if (!response.ok) throw new Error("لم يصل ملف إصدار الصفحة إلى الاستضافة بعد");
-      const published = await response.json();
-      if (typeof published.version !== "string" || !published.updatedAt) {
-        throw new Error("بيانات الإصدار المنشور غير مكتملة");
-      }
-      const publishedTime = formatCodeDate(published.updatedAt);
-      const base = "تحديث الصفحة: " + publishedTime;
-      try {
-        const mainUrl = new URL("https://raw.githubusercontent.com/khalidftm/itqan/main/assets/ftm-release.json");
-        mainUrl.searchParams.set("v",cacheBust);
-        const upstreamResponse = await fetch(mainUrl.href,{cache:"no-store"});
-        if (!upstreamResponse.ok) throw new Error("تعذر قراءة إصدار GitHub");
-        const main = await upstreamResponse.json();
-        if (main.version === published.version) {
-          printReleaseStatus(base + " ✓", "آخر نسخة برمجية على GitHub Pages مطابقة لملف الإصدار الموجود في المستودع. التاريخ هو تاريخ تحديث الكود، وليس وقت انتهاء النشر.");
-        } else {
-          printReleaseStatus(base + " • تحديث أحدث بانتظار النشر", "نسخة المستودع أحدث من النسخة التي وصلت إلى GitHub Pages. حدّث الصفحة بعد اكتمال النشر.");
-        }
-      } catch (error) {
-        printReleaseStatus(base + " • لم تُقارن بالمستودع", "تم تحميل بيانات الإصدار من GitHub Pages، لكن تعذر مقارنة النسخة بمستودع GitHub: " + error.message);
-      }
-    } catch (error) {
-      printReleaseStatus("تعذر التحقق من نشر آخر إصدار", error.message + ". تأكد من الاتصال أو أعد المحاولة.");
+      releaseBadge.title = details || label;
+      releaseBadge.dataset.publishState = state;
+      releaseBadge.setAttribute("aria-label",label);
     }
   }
-  document.getElementById("ftm-release-check")?.addEventListener("click", verifyRelease);
+  async function verifyRelease() {
+    printReleaseStatus("جارٍ التحقق من نشر الصفحة...","التحقق من GitHub Pages","checking");
+    if (releaseCheck) releaseCheck.disabled = true;
+    try {
+      const headers = {Accept:"application/vnd.github+json"};
+      const noCache = {cache:"no-store",headers};
+      const [runsResponse, branchResponse] = await Promise.all([
+        fetch(releaseApi + "/actions/runs?per_page=20&t=" + Date.now(),noCache),
+        fetch(releaseApi + "/branches/main?t=" + Date.now(),noCache)
+      ]);
+      if (!runsResponse.ok || !branchResponse.ok) {
+        throw new Error("تعذر قراءة حالة نشر GitHub Pages (" + runsResponse.status + "/" + branchResponse.status + ")");
+      }
+      const runsData = await runsResponse.json();
+      const main = await branchResponse.json();
+      const runs = (runsData.workflow_runs || []).filter(run =>
+        run.name === "pages build and deployment" || /pages build and deployment/i.test(run.name || ""));
+      const latest = runs[0];
+      const successful = runs.find(run => run.status === "completed" && run.conclusion === "success");
+      if (!successful) throw new Error("لم يُعثر على عملية نشر ناجحة ضمن أحدث عمليات GitHub Pages");
+      const date = formatPublishDate(successful.updated_at || successful.run_started_at || successful.created_at);
+      if (successful.head_sha === main?.commit?.sha) {
+        printReleaseStatus("آخر نشر ناجح: " + date + " ✓",
+          "تؤكد GitHub Actions نجاح آخر نشر، وهو مطابق للفرع main. قد يحتاج المتصفح إلى إعادة تحميل عند وجود ملفات مخزنة مؤقتًا.","published");
+      } else if (latest?.status !== "completed") {
+        printReleaseStatus("آخر نشر ناجح: " + date + " • إصدار أحدث قيد النشر",
+          "فرع main يحتوي تحديثات أحدث لم تنته عملية نشرها على GitHub Pages بعد.","pending");
+      } else if (latest?.conclusion === "failure") {
+        printReleaseStatus("آخر نشر ناجح: " + date + " • تعذر نشر التحديث الجديد",
+          "فشلت أحدث عملية نشر في GitHub Pages؛ راجع Actions في المستودع.","failed");
+      } else {
+        printReleaseStatus("آخر نشر ناجح: " + date + " • نسخة أحدث بانتظار النشر",
+          "النسخة المنشورة لا تطابق آخر التزام على main حتى الآن.","pending");
+      }
+    } catch (error) {
+      printReleaseStatus("تعذر التأكد من حالة النشر",error.message,"unknown");
+    } finally {
+      if (releaseCheck) releaseCheck.disabled = false;
+    }
+  }
+  releaseCheck?.addEventListener("click",verifyRelease);
   verifyRelease();
   window.addEventListener("storage",event => {
     if (event.key?.startsWith("itqan-ftm-school-v1:")) renderSchool();
