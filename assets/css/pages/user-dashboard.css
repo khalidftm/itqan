@@ -1,0 +1,276 @@
+/* ==========================================================================
+   USER DASHBOARD STYLESHEET (assets/css/pages/user-dashboard.css)
+   تنسيقات صفحة المستخدم الفعلية (معلمة مادة لغتي - الصف الثاني الابتدائي)
+   ومكتبة المكونات المشتركة وبطاقة السيرة الذاتية ومعايير الأداء وشروحاتها
+   ========================================================================== */
+
+.workspace-section {
+  display: none;
+  animation: fadeInWorkspace 0.25s ease forwards;
+}
+
+.workspace-section.is-active {
+  display: block;
+}
+
+@keyframes fadeInWorkspace {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* بطاقة الغلاف الهوياتي لملف الإنجاز (تتكيف بصرياً مع الجنس ذكر/أنثى ومع النموذج 1/2/3) */
+.portfolio-cover-card {
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--gender-gradient);
+  color: #ffffff;
+  box-shadow: var(--shadow-md);
+}
+
+html[data-design-model="model-3"] .portfolio-cover-card {
+  border: 2px solid var(--primary-900);
+  box-shadow: 6px 6px 0 var(--gender-accent);
+}
+
+.portfolio-cover-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 2;
+}
+
+.portfolio-owner-info {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.portfolio-owner-avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 3px solid var(--gender-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.portfolio-meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.6rem;
+}
+
+.portfolio-meta-pill {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 0.25rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* بطاقة السيرة الذاتية المهنية للمعلمة (CV Card) */
+.cv-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.cv-info-block {
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--gender-primary);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.15rem;
+}
+
+.cv-info-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--gender-primary);
+  margin-bottom: 0.25rem;
+}
+
+.cv-info-value {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.65;
+}
+
+/* أزرار التصفية لمكتبة المكونات المشتركة (عام / مرحلة / مادة / خاص) */
+.scope-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.scope-filter-btn {
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.scope-filter-btn:hover {
+  border-color: var(--gender-primary);
+  color: var(--gender-primary);
+}
+
+.scope-filter-btn.active {
+  background: var(--gender-primary);
+  border-color: var(--gender-primary);
+  color: #ffffff;
+}
+
+/* بطاقات المكونات الجاهزة المشتركة (مدونة السلوك، ميثاق الأخلاقيات، أهداف التعليم، أهداف لغتي...) */
+.shared-lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.2rem;
+}
+
+.shared-lib-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.9rem;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.shared-lib-card.is-included {
+  border-color: var(--status-success-Strong);
+  background: linear-gradient(180deg, var(--status-success-bg) 0%, var(--bg-surface) 38%);
+}
+
+/* منطقة رفع الملفات والشواهد الفعلية (PDF, Word, Excel, Images) */
+.upload-dropzone {
+  border: 2px dashed var(--gender-primary);
+  background: var(--gender-soft-bg);
+  border-radius: var(--radius-md);
+  padding: 1.65rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.is-dragover {
+  background: var(--primary-50);
+  border-color: var(--primary-600);
+  transform: translateY(-2px);
+}
+
+/* شبكة أقسام وشواهد ملف الإنجاز المهني */
+.portfolio-sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.2rem;
+}
+
+.evidence-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-color);
+  border-top: 4px solid var(--gender-primary);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.9rem;
+  transition: all var(--transition-fast);
+}
+
+.evidence-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--gender-primary);
+}
+
+.file-attachment-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-color);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-800);
+}
+
+/* بطاقات معايير الأداء الوظيفي الـ 11 مع الشروحات التفصيلية والشواهد المرفقة */
+.criteria-detailed-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-color);
+  border-right: 5px solid var(--gender-primary);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 1.1rem;
+  transition: box-shadow var(--transition-fast);
+}
+
+.criteria-detailed-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.criteria-top-bar {
+  display: grid;
+  grid-template-columns: 1.6fr 0.6fr 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.criteria-explanation-box {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: 0.89rem;
+  background: var(--bg-surface-alt);
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-sm);
+}
+
+.score-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.score-slider-wrap input[type="range"] {
+  flex: 1;
+  accent-color: var(--gender-primary);
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .criteria-top-bar {
+    grid-template-columns: 1fr;
+  }
+}

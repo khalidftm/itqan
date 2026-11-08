@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-design-model="model-1" data-gender-theme="female">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بناء ملف الإنجاز المهني | معلمة مادة لغتي - الصف الثاني الابتدائي</title>
+  <link rel="stylesheet" href="assets/css/core.css" />
+  <link rel="stylesheet" href="assets/css/themes.css" />
+  <link rel="stylesheet" href="assets/css/print.css" />
+  <link rel="stylesheet" href="assets/css/pages/user-dashboard.css" />
+</head>
+<body>
+
+  <!-- شريط النموذج النشط والهوية الجنسية -->
+  <div class="model-indicator-ribbon no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-2">
+      <div>
+        <span>وضع البناء الفعلي: <strong>معلمة مادة لغتي — الصف الثاني الابتدائي</strong></span>
+        <span style="margin-inline: 0.6rem;">|</span>
+        <strong data-active-model-name>النموذج الأول: الهوية الوطنية الرسمية</strong>
+      </div>
+      <div class="d-flex align-center gap-2">
+        <span class="badge badge-accent" id="principal-mode-indicator">صلاحية تربوية: معلمة</span>
+        <span class="badge badge-gender" data-gender-key="identity_badge">الهوية البصرية: طابع مؤسسي راقٍ (بنات)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- الشريط العلوي مع مبدل الحسابات السريع وزر طباعة ملف الإنجاز الكامل -->
+  <header class="site-navbar no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-3" style="padding-block: 0.8rem;">
+      <a href="index.html" class="d-flex align-center gap-2">
+        <div style="width:42px; height:42px; border-radius:10px; background:var(--gender-gradient); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; border:2px solid var(--accent-500);">إ</div>
+        <div>
+          <div class="fw-extrabold js-portfolio-dynamic-title" style="color:var(--primary-800); line-height:1.2;">ملف الإنجاز المهني (معلمة)</div>
+          <div class="text-muted js-user-school" style="font-size:0.76rem;">ابتدائية الإبداع النموذجية للبنات — مادة لغتي (الصف الثاني الابتدائي)</div>
+        </div>
+      </a>
+
+      <div class="d-flex align-center gap-2 flex-wrap">
+        <label for="quick-user-profile-select" class="fw-bold text-muted" style="font-size:0.82rem;">الحساب النشط:</label>
+        <select id="quick-user-profile-select" class="form-select" style="width:auto; padding:0.38rem 0.75rem; font-size:0.84rem;"></select>
+        <button type="button" class="btn btn-sm btn-accent" id="btn-open-github-sync">☁️ مزامنة وحفظ GitHub</button>
+        <button type="button" class="btn btn-sm btn-primary" id="btn-print-full-report">🖨️ طباعة ملف الإنجاز والأداء الكامل (A4)</button>
+        <a href="admin-dashboard.html" class="btn btn-sm btn-outline">مدير النظام</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- هيكل لوحة المعلمة (يتبدل تخطيطه بين النماذج الـ 3) -->
+  <div class="app-shell">
+    <!-- القائمة الجانبية أو العلوية حسب النموذج المختار -->
+    <aside class="app-sidebar no-print">
+      <div class="sidebar-user-card">
+        <div class="sidebar-avatar js-user-initials">س</div>
+        <div>
+          <div class="fw-extrabold js-user-name" style="font-size:1rem;">أ. سارة بنت عبدالله الشهري</div>
+          <div class="badge badge-accent mt-1 js-user-role-badge">معلمة — معلمة متقدمة</div>
+          <div class="mt-1" style="font-size:0.78rem; opacity:0.88;">مادة لغتي — الصف الثاني الابتدائي</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav-list">
+        <button type="button" class="sidebar-nav-btn active" data-workspace-tab="tab-portfolio">
+          <span>📂</span>
+          <span>رفع الملفات والشواهد (ملف الإنجاز)</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-workspace-tab="tab-cv-card">
+          <span>🪪</span>
+          <span data-gender-key="cv_card_title">بطاقة السيرة الذاتية للمعلمة</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-workspace-tab="tab-shared-library">
+          <span>📚</span>
+          <span>المكونات الجاهزة (الأهداف والمدونة)</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-workspace-tab="tab-performance">
+          <span>📊</span>
+          <span>معايير تقييم الأداء وشروحاتها (11)</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-workspace-tab="tab-school-management">
+          <span>🏫</span>
+          <span>اعتماد <span data-gender-key="principal">مديرة مدرسة</span></span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-workspace-tab="tab-messages">
+          <span>✉️</span>
+          <span>محرك الرسائل</span>
+          <span class="badge badge-accent" id="unread-msg-count" style="margin-right:auto;">2</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- منطقة العمل الرئيسية لبناء ملف الإنجاز والأداء الوظيفي -->
+    <main>
+      <!-- حاوية الرسائل الداخلية الموحدة مع زر X للإغلاق -->
+      <div id="user-inline-alerts" class="page-alerts-stack"></div>
+
+      <!-- بطاقة الغلاف الهوياتي لملف الإنجاز المهني للمعلمة -->
+      <div class="portfolio-identity-banner mb-3">
+        <div class="portfolio-cover-top">
+          <div class="portfolio-owner-info">
+            <div class="portfolio-owner-avatar js-user-initials">س</div>
+            <div>
+              <div class="d-flex align-center gap-2 flex-wrap">
+                <span class="badge badge-accent" data-gender-key="identity_badge">الهوية البصرية: طابع مؤسسي راقٍ (بنات)</span>
+                <span class="badge badge-success js-eval-status">معتمد وموثق — رحلة البناء نشطة</span>
+              </div>
+              <h1 class="fw-extrabold mt-1 js-portfolio-dynamic-title" style="font-size:1.55rem;">ملف الإنجاز المهني للمعلمة</h1>
+              <div class="fw-semibold" style="opacity:0.95;">
+                <span class="js-user-name">أ. سارة بنت عبدالله الشهري</span> — <span class="js-user-school">ابتدائية الإبداع النموذجية للبنات</span>
+              </div>
+              <div class="portfolio-meta-pills">
+                <span class="portfolio-meta-pill">📚 التخصص والمادة: <span class="js-user-spec">مادة لغتي — الصف الثاني الابتدائي</span></span>
+                <span class="portfolio-meta-pill">📊 الأداء الوظيفي: <strong class="js-user-score">98%</strong></span>
+                <span class="portfolio-meta-pill">📎 الشواهد المرفوعة: <strong class="js-portfolio-count">5</strong></span>
+                <span class="portfolio-meta-pill">📑 المكونات الجاهزة المضمنة: <strong class="js-library-count">8</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column gap-2">
+            <button type="button" class="btn btn-accent" id="btn-add-portfolio-evidence">
+              📤 رفع ملف / إضافة شاهد جديد
+            </button>
+            <button type="button" class="btn btn-outline" id="btn-print-portfolio" style="background:rgba(255,255,255,0.14); color:#fff; border-color:rgba(255,255,255,0.4);">
+              🖨️ طباعة وثيقة ملف الإنجاز الكامل A4
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           التبويب 1: رفع الملفات والشواهد وبناء ملف الإنجاز المهني
+           ==================================================================== -->
+      <section id="tab-portfolio" class="workspace-section is-active">
+        <!-- منطقة السحب والإفلات ورفع الملفات الفعلية من جهاز المعلمة -->
+        <div class="card mb-3">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">📤 مركز رفع الملفات والشواهد الفعلية (PDF, Word, Excel, الصور)</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                ارفعي ملفاتكِ الفعلية من جهازكِ (أوراق عمل لغتي ثاني ابتدائي، خطط علاجية، تحاضير، شهادات، نتائج طالبات) وحددي نطاق خصوصيتها ومعيار الأداء المرتبط بها:
+              </p>
+            </div>
+            <span class="badge badge-gender">حفظ فوري في ذاكرة المتصفح</span>
+          </div>
+
+          <div class="upload-dropzone" id="direct-file-dropzone">
+            <input type="file" id="direct-file-input" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg" />
+            <div style="font-size:2.1rem; margin-bottom:0.35rem;">📁</div>
+            <h3 class="fw-extrabold mb-1" style="font-size:1.08rem; color:var(--gender-primary);">
+              اضغطي هنا لاختيار ملف من جهازكِ أو اسحبي الملف وأفلتيه هنا
+            </h3>
+            <p class="text-muted" style="font-size:0.86rem;">
+              يدعم ملفات: <code>PDF</code> ، <code>Word (.docx)</code> ، <code>Excel (.xlsx)</code> ، <code>PowerPoint</code> ، والصور (<code>PNG / JPG</code>)
+            </p>
+            <div class="mt-2">
+              <span class="btn btn-sm btn-gender">اختيار ملف من الكمبيوتر وربطه بملف الإنجاز</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- عرض الشواهد والملفات المرفوعة مع تصفية حسب النطاق -->
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">
+                <span>📂</span>
+                <span>سجل الشواهد والملفات المرفوعة في <span class="js-portfolio-dynamic-title">ملف الإنجاز المهني للمعلمة</span></span>
+              </h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                جميع الشواهد الموثقة لمعلمة مادة لغتي (الصف الثاني الابتدائي) ومرتبطة بمعايير تقييم الأداء الوظيفي الـ 11
+              </p>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" id="btn-open-evidence-modal-2">+ إضافة شاهد تفصيلي</button>
+          </div>
+
+          <div id="portfolio-items-grid" class="portfolio-sections-grid"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 2: بطاقة السيرة الذاتية المهنية للمعلمة (CV Card)
+           ==================================================================== -->
+      <section id="tab-cv-card" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">
+                <span>🪪</span>
+                <span data-gender-key="cv_card_title">بطاقة السيرة الذاتية المهنية للمعلمة</span>
+                <span class="badge badge-gender">خاص بالمعلمة الحالية</span>
+              </h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                تظهر هذه البطاقة في مطلع ملف الإنجاز المهني الرسمي عند المعاينة والطباعة، ويمكنكِ تعديل جميع حقولها وتخصيصها
+              </p>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-primary" id="btn-edit-cv-card">✏️ تحرير وتحديث بطاقة السيرة الذاتية</button>
+              <button type="button" class="btn btn-outline" id="btn-print-cv-only">🖨️ طباعة السيرة وملف الإنجاز</button>
+            </div>
+          </div>
+
+          <div id="cv-card-display-container" class="cv-showcase-grid"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 3: مكتبة المكونات والوثائق الجاهزة (عامة / المرحلة الابتدائية / مادة لغتي)
+           ==================================================================== -->
+      <section id="tab-shared-library" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">📚 مكتبة المكونات والوثائق الجاهزة (المشتركة والخاصة)</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                مكونات جاهزة مقسمة حسب نطاقها: (عامة لكل المعلمين بالمملكة) و(خاصة بالمرحلة الابتدائية) و(خاصة بمادة لغتي الصف الثاني الابتدائي) و(خاصة بفئة المعلمة). يمكنكِ تضمين أي مكون في ملف إنجازكِ بضغطة زر أو إضافة مكون جديد:
+              </p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-add-shared-component">+ إنشاء مكون أو وثيقة جديدة</button>
+          </div>
+
+          <!-- شريط تصفية النطاقات (الكل / عام / المرحلة الابتدائية / مادة لغتي ثاني ابتدائي / فئة المعلمة) -->
+          <div class="scope-filter-bar">
+            <button type="button" class="scope-filter-btn active" data-lib-scope="ALL">
+              🌟 جميع المكونات الجاهزة
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="general">
+              🇸🇦 عام لجميع المعلمين (أهداف التعليم / مدونة السلوك / ميثاق الأخلاقيات)
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="stage_primary">
+              🏫 مشترك للمرحلة الابتدائية (أهداف المرحلة وخصائص الصف الثاني)
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="subject_lughati_g2">
+              📖 مشترك لمادة لغتي — الصف الثاني الابتدائي (الأهداف والمهارات)
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="role_teacher">
+              👩‍🏫 خاص بفئة المعلمة (دليل معايير الأداء)
+            </button>
+          </div>
+
+          <div id="shared-library-grid" class="shared-lib-grid"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 4: معايير تقييم الأداء الوظيفي لفئة المعلمة وشروحاتها (11 معياراً)
+           ==================================================================== -->
+      <section id="tab-performance" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">
+                <span>📊</span>
+                <span data-gender-key="performance_sheet">معايير واستمارة تقييم الأداء الوظيفي للمعلمة</span>
+              </h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                البنود الـ 11 المعتمدة وزارياً لفئة المعلمة مع الشرح التفصيلي لكل معيار، ومؤشرات التحقق لمعلمة لغتي (الصف الثاني الابتدائي)، والشواهد المرفقة بكل معيار:
+              </p>
+            </div>
+            <div class="d-flex align-center gap-3">
+              <div class="text-center">
+                <div class="text-muted" style="font-size:0.78rem;">الدرجة الموزونة الكلية</div>
+                <div class="fw-extrabold text-primary" id="live-total-performance-score" style="font-size:1.55rem;">98%</div>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-save-performance-eval">
+                💾 <span data-gender-key="self_eval_action">حفظ واعتماد التقييم الذاتي للمعلمة</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-between mb-1" style="font-size:0.84rem; font-weight:700;">
+              <span>مؤشر اكتمال معايير الأداء الوظيفي والشواهد المرفقة</span>
+              <span>التقدير العام: ممتاز (98 / 100)</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="live-performance-progress" style="width:98%;"></div>
+            </div>
+          </div>
+
+          <div id="criteria-list-container"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 5: بوابة مديرة المدرسة لاعتماد الأداء وملفات الإنجاز
+           ==================================================================== -->
+      <section id="tab-school-management" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">
+                <span>🏫</span>
+                <span>بوابة <span data-gender-key="principal">مديرة مدرسة</span> — مراجعة واعتماد ملفات الإنجاز والأداء الوظيفي</span>
+              </h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                اعتماد ملف الإنجاز المهني ودرجة الأداء الوظيفي للمعلمة ومنسوبات المدرسة
+              </p>
+            </div>
+            <span class="badge badge-primary">إدارة مدرسية متكاملة</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>اسم المنسوبة / المنسوب</th>
+                  <th>الصفة والتخصص</th>
+                  <th>المدرسة</th>
+                  <th>درجة الأداء</th>
+                  <th>الشواهد والمكونات</th>
+                  <th>حالة الاعتماد</th>
+                  <th>إجراءات الاعتماد والطباعة</th>
+                </tr>
+              </thead>
+              <tbody id="school-staff-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 6: محرك الرسائل والمراسلات الداخلية
+           ==================================================================== -->
+      <section id="tab-messages" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">✉️ صندوق الرسائل والتوجيهات التربوية (MessageEngine)</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                المراسلات الرسمية بين معلمة مادة لغتي ومديرة المدرسة وإدارة المنصة المركزية
+              </p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-user-compose-msg">
+              + إرسال رسالة أو توجيه جديد
+            </button>
+          </div>
+
+          <div id="user-messages-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/js/core/engines.js"></script>
+  <script src="assets/js/pages/user-dashboard.js"></script>
+</body>
+</html>

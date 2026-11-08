@@ -1,0 +1,75 @@
+/* ==========================================================================
+   ADMIN DASHBOARD STYLESHEET (assets/css/pages/admin-dashboard.css)
+   تنسيقات صفحة مدير النظام / مالك الموقع المركزي متعدد المدارس
+   ========================================================================== */
+
+.admin-header-banner {
+  background: linear-gradient(125deg, var(--primary-900) 0%, var(--primary-700) 100%);
+  color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  border-bottom: 4px solid var(--accent-500);
+}
+
+html[data-design-model="model-3"] .admin-header-banner {
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 2px solid var(--primary-900);
+  box-shadow: 6px 6px 0 var(--accent-500);
+}
+
+.school-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.25rem;
+}
+
+.school-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+}
+
+.school-card.gender-boys {
+  border-top: 4px solid #0b5d46;
+}
+
+.school-card.gender-girls {
+  border-top: 4px solid #7c2d6b;
+}
+
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-kpi-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.admin-kpi-value {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: var(--primary-800);
+}

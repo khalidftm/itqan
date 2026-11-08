@@ -1,0 +1,152 @@
+/* ==========================================================================
+   HOME PAGE STYLESHEET (assets/css/pages/home.css)
+   تنسيقات الصفحة الرئيسية وتباينات النماذج التصميمية الثلاثة (Model 1, 2, 3)
+   ========================================================================== */
+
+.hero-section {
+  position: relative;
+  padding: 4rem 0 3.5rem;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+/* النموذج الأول: بطل رسمي متدرج زمردي ملكي مع عمودين */
+html[data-design-model="model-1"] .hero-section {
+  background: linear-gradient(130deg, var(--primary-900) 0%, var(--primary-700) 65%, #124e3f 100%);
+  color: #ffffff;
+  border-bottom: 4px solid var(--accent-500);
+}
+
+html[data-design-model="model-1"] .hero-subtitle {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* النموذج الثاني: بطل عصري مركزي بتصميم Bento وشبكة خلفية رقمية */
+html[data-design-model="model-2"] .hero-section {
+  background: radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.14), transparent 45%),
+              radial-gradient(circle at 15% 80%, rgba(20, 184, 166, 0.14), transparent 45%),
+              var(--bg-body);
+  color: var(--text-main);
+  padding-top: 2.8rem;
+}
+
+html[data-design-model="model-2"] .hero-grid {
+  grid-template-columns: 1fr;
+  text-align: center;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+html[data-design-model="model-2"] .hero-actions {
+  justify-content: center;
+}
+
+/* النموذج الثالث: بطل استوديو تنفيذي مؤطر بحدود معمارية */
+html[data-design-model="model-3"] .hero-section {
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border-bottom: 2px solid var(--primary-800);
+}
+
+html[data-design-model="model-3"] .hero-showcase-card {
+  border: 2px solid var(--primary-800);
+  box-shadow: 8px 8px 0 var(--accent-500);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.hero-title {
+  font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.32;
+  margin-bottom: 1.1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.08rem;
+  margin-bottom: 1.8rem;
+  line-height: 1.8;
+}
+
+.hero-showcase-card {
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+}
+
+.stat-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-top: -2rem;
+  position: relative;
+  z-index: 5;
+}
+
+.stat-kpi-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.4rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-kpi-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-100);
+  color: var(--primary-700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-kpi-number {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: var(--primary-800);
+  line-height: 1.2;
+}
+
+/* بطاقات المقارنة بين النماذج الثلاثة في الرئيسية */
+.model-selector-card {
+  cursor: pointer;
+  border: 2px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.model-selector-card.is-selected {
+  border-color: var(--primary-600);
+  background: var(--primary-50);
+  box-shadow: var(--shadow-md);
+}
+
+.role-feature-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .stat-kpi-grid {
+    margin-top: 1.5rem;
+  }
+}

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-design-model="model-1" data-gender-theme="male">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>صفحة مدير النظام (مالك الموقع) | منصة إتقان المركزية</title>
+  <link rel="stylesheet" href="assets/css/core.css" />
+  <link rel="stylesheet" href="assets/css/themes.css" />
+  <link rel="stylesheet" href="assets/css/print.css" />
+  <link rel="stylesheet" href="assets/css/pages/admin-dashboard.css" />
+</head>
+<body>
+
+  <!-- شريط النموذج النشط -->
+  <div class="model-indicator-ribbon no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-2">
+      <div>
+        <span>صفحة مدير النظام / مالك الموقع المركزي — إدارة متعددة المدارس والصلاحيات</span>
+        <span style="margin-inline: 0.6rem;">|</span>
+        <strong data-active-model-name>النموذج الأول: الهوية الوطنية الرسمية</strong>
+      </div>
+      <div class="d-flex align-center gap-2">
+        <span class="badge badge-accent">الصلاحية: مدير / مالك الموقع (Admin)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- القائمة العلوية -->
+  <header class="site-navbar no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-3" style="padding-block: 0.85rem;">
+      <a href="index.html" class="d-flex align-center gap-2">
+        <div style="width:40px; height:40px; border-radius:10px; background:var(--gender-gradient); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; border:2px solid var(--accent-500);">إ</div>
+        <div>
+          <div class="fw-extrabold" style="color:var(--primary-800); line-height:1.2;">مركز القيادة والتحكم — منصة إتقان</div>
+          <div class="text-muted" style="font-size:0.76rem;">الإدارة المركزية للمدارس والأداء الوظيفي وملفات الإنجاز</div>
+        </div>
+      </a>
+
+      <div class="d-flex align-center gap-2 flex-wrap">
+        <button type="button" class="btn btn-sm btn-primary" id="btn-admin-add-school">+ إضافة مدرسة جديدة</button>
+        <button type="button" class="btn btn-sm btn-accent" id="btn-admin-broadcast">📢 إرسال تعميم للمدارس</button>
+        <a href="user-dashboard.html" class="btn btn-sm btn-outline">معاينة صفحة المستخدم</a>
+        <a href="login.html" class="btn btn-sm btn-ghost">خروج</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- هيكل لوحة مدير النظام (يتبدل تخطيطه بين النماذج الـ 3) -->
+  <div class="app-shell">
+    <!-- القائمة الجانبية أو العلوية حسب النموذج المختار -->
+    <aside class="app-sidebar no-print">
+      <div class="sidebar-user-card">
+        <div class="sidebar-avatar">خ</div>
+        <div>
+          <div class="fw-extrabold" style="font-size:1rem;">م. خالد بن عبدالله العتيبي</div>
+          <div class="badge badge-accent mt-1">مدير / مالك الموقع المركزي</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav-list">
+        <button type="button" class="sidebar-nav-btn active" data-admin-tab="admin-tab-schools">
+          <span>🏫</span>
+          <span>إدارة المدارس المشتركة</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-admin-tab="admin-tab-users">
+          <span>👥</span>
+          <span>المستخدمون والصلاحيات</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-admin-tab="admin-tab-criteria">
+          <span>📊</span>
+          <span>بنود الأداء الوظيفي الوزارية</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-btn" data-admin-tab="admin-tab-storage">
+          <span>💾</span>
+          <span>ذاكرة المتصفح والنسخ الاحتياطي</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- منطقة العمل الرئيسية لمدير النظام -->
+    <main>
+      <!-- حاوية الرسائل الداخلية الموحدة مع زر X للإغلاق -->
+      <div id="admin-inline-alerts" class="page-alerts-stack"></div>
+
+      <!-- بانر مدير النظام -->
+      <div class="admin-header-banner">
+        <div>
+          <span class="badge badge-accent mb-1">الإدارة المركزية لمدارس التعليم العام بالمملكة</span>
+          <h1 class="fw-extrabold" style="font-size:1.5rem;">لوحة تحكم مدير النظام ومالك المنصة</h1>
+          <p style="font-size:0.9rem; opacity:0.9;">
+            إشراف مركزي على مدارس البنين والبنات، إدارة حسابات المدراء والمعلمين، وضبط معايير الأداء الوظيفي وملفات الإنجاز.
+          </p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="button" class="btn btn-accent" id="btn-admin-export-db">⬇️ تصدير قاعدة البيانات (JSON)</button>
+          <button type="button" class="btn btn-outline" id="btn-admin-reset-db" style="background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.35);">
+            🔄 استعادة البيانات القياسية
+          </button>
+        </div>
+      </div>
+
+      <!-- مؤشرات الأداء المركزية -->
+      <div class="admin-kpi-grid">
+        <div class="admin-kpi-box">
+          <div>
+            <div class="text-muted fw-bold" style="font-size:0.84rem;">المدارس المسجلة</div>
+            <div class="admin-kpi-value" id="admin-kpi-schools">4</div>
+          </div>
+          <span class="badge badge-primary">بنين وبنات</span>
+        </div>
+
+        <div class="admin-kpi-box">
+          <div>
+            <div class="text-muted fw-bold" style="font-size:0.84rem;">إجمالي الحسابات النشطة</div>
+            <div class="admin-kpi-value" id="admin-kpi-users">5</div>
+          </div>
+          <span class="badge badge-gender">مدير موقع + مستخدمين</span>
+        </div>
+
+        <div class="admin-kpi-box">
+          <div>
+            <div class="text-muted fw-bold" style="font-size:0.84rem;">شواهد ملفات الإنجاز</div>
+            <div class="admin-kpi-value" id="admin-kpi-portfolios">7</div>
+          </div>
+          <span class="badge badge-success">موثقة</span>
+        </div>
+
+        <div class="admin-kpi-box">
+          <div>
+            <div class="text-muted fw-bold" style="font-size:0.84rem;">متوسط الأداء العام</div>
+            <div class="admin-kpi-value" id="admin-kpi-avg">97%</div>
+          </div>
+          <span class="badge badge-accent">تقدير ممتاز</span>
+        </div>
+      </div>
+
+      <!-- التبويب 1: دليل المدارس المشتركة في المنصة -->
+      <section id="admin-tab-schools" class="workspace-section is-active">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">🏫 دليل المدارس المرتبطة بالمنصة المركزية (بنين وبنات)</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                يخدم الموقع أكثر من مدرسة في مختلف إدارات التعليم مع تخصيص الهوية البصرية والمصطلحات لكل مدرسة
+              </p>
+            </div>
+            <a href="register.html" class="btn btn-sm btn-outline">+ تسجيل معلم أو مدير جديد</a>
+          </div>
+
+          <div id="admin-schools-grid" class="school-directory-grid"></div>
+        </div>
+      </section>
+
+      <!-- التبويب 2: إدارة المستخدمين والصلاحيات -->
+      <section id="admin-tab-users" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">👥 سجل المستخدمين ونظام الصلاحيات</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                مستويات الصلاحية الحالية: (مدير/مالك الموقع) و(مستخدم: معلم/معلمة أو مدير/مديرة مدرسة)
+              </p>
+            </div>
+            <span class="badge badge-primary">مرتبط بمحرك التأنيث والتذكير</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>الاسم والبريد</th>
+                  <th>رقم الهوية</th>
+                  <th>صلاحية النظام</th>
+                  <th>المهمة الوظيفية</th>
+                  <th>الجنس / الهوية</th>
+                  <th>المدرسة</th>
+                  <th>الأداء الوظيفي</th>
+                  <th>إجراءات سريعة</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- التبويب 3: معايير الأداء الوظيفي الوزارية المعتمدة -->
+      <section id="admin-tab-criteria" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">📊 عناصر استمارة الأداء الوظيفي المعتمدة وزارياً (100 درجة)</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                المعايير الموحدة المطبقة على المعلمين والمعلمات في كافة مدارس المنصة
+              </p>
+            </div>
+            <span class="badge badge-success">11 عنصراً قياسياً</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>عنصر الأداء الوظيفي</th>
+                  <th>المجال التربوي</th>
+                  <th>الوزن النسبي</th>
+                  <th>الحالة</th>
+                </tr>
+              </thead>
+              <tbody id="admin-criteria-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- التبويب 4: إدارة التخزين المحلي والاستعداد لقاعدة البيانات -->
+      <section id="admin-tab-storage" class="workspace-section">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">💾 إدارة التخزين المحلي (LocalStorage) والتهيئة لقواعد البيانات</h2>
+          </div>
+          <p class="mb-3">
+            يعمل النظام حالياً بشكل كامل على الحفظ في ذاكرة المتصفح عبر محرك <code>StorageEngine</code> المهيكل بصيغة <code>JSON</code> قياسية (الجداول: <code>schools</code>, <code>users</code>, <code>portfolioItems</code>, <code>messages</code>, <code>criteria</code>)، مما يضمن انتقالاً سلساً وفورياً عند بناء قواعد البيانات الخلفية لاحقاً.
+          </p>
+          <div class="grid grid-2 gap-3">
+            <div class="card gender-accent-card">
+              <h4 class="fw-extrabold mb-1">تصدير نسخة احتياطية كاملة (JSON)</h4>
+              <p class="text-muted mb-2" style="font-size:0.88rem;">تنزيل كافة بيانات المدارس والمستخدمين وملفات الإنجاز المحفوظة في المتصفح كملف JSON.</p>
+              <button type="button" class="btn btn-primary" onclick="document.getElementById('btn-admin-export-db').click()">تصدير ملف JSON الآن</button>
+            </div>
+            <div class="card">
+              <h4 class="fw-extrabold mb-1">إعادة تهيئة البيانات الافتراضية</h4>
+              <p class="text-muted mb-2" style="font-size:0.88rem;">استعادة الحسابات والمدارس والشواهد الافتراضية القياسية للتجربة من جديد.</p>
+              <button type="button" class="btn btn-outline" onclick="document.getElementById('btn-admin-reset-db').click()">إعادة ضبط البيانات</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/js/core/engines.js"></script>
+  <script src="assets/js/pages/admin-dashboard.js"></script>
+</body>
+</html>

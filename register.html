@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-design-model="model-1" data-gender-theme="male">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تسجيل حساب جديد وتأسيس ملف الإنجاز | منصة إتقان الوطنية</title>
+  <link rel="stylesheet" href="assets/css/core.css" />
+  <link rel="stylesheet" href="assets/css/themes.css" />
+  <link rel="stylesheet" href="assets/css/print.css" />
+  <link rel="stylesheet" href="assets/css/pages/auth.css" />
+</head>
+<body>
+
+  <!-- شريط النموذج النشط -->
+  <div class="model-indicator-ribbon no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-2">
+      <div>
+        <span>صفحة التسجيل وتأسيس ملف الإنجاز — متكيفة مع محرك التأنيث والتذكير</span>
+        <span style="margin-inline: 0.6rem;">|</span>
+        <strong data-active-model-name>النموذج الأول: الهوية الوطنية الرسمية</strong>
+      </div>
+      <span class="badge badge-accent" data-gender-key="identity_badge">الهوية البصرية: طابع رسمي (بنين)</span>
+    </div>
+  </div>
+
+  <!-- القائمة العلوية -->
+  <header class="site-navbar no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-3" style="padding-block: 0.85rem;">
+      <a href="index.html" class="d-flex align-center gap-2">
+        <div style="width:40px; height:40px; border-radius:10px; background:var(--gender-gradient); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; border:2px solid var(--accent-500);">إ</div>
+        <div>
+          <div class="fw-extrabold" style="color:var(--primary-800); line-height:1.2;">منصة إتقان الوطنية</div>
+          <div class="text-muted" style="font-size:0.76rem;">تسجيل منسوبي ومنسوبات المدارس في المنصة المركزية</div>
+        </div>
+      </a>
+
+      <nav class="d-flex align-center gap-2 flex-wrap">
+        <a href="index.html" class="btn btn-sm btn-ghost">الرئيسية</a>
+        <a href="login.html" class="btn btn-sm btn-primary">تسجيل الدخول</a>
+        <a href="user-dashboard.html" class="btn btn-sm btn-outline">صفحة المستخدم</a>
+        <a href="admin-dashboard.html" class="btn btn-sm btn-outline">صفحة مدير النظام</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-page-wrapper">
+    <div style="width:100%; max-width:1160px;">
+      <!-- حاوية الرسائل الداخلية الموحدة مع زر X للإغلاق -->
+      <div id="auth-inline-alerts" class="page-alerts-stack"></div>
+
+      <div class="auth-container">
+        <!-- الجانب التعريفي البصري -->
+        <div class="auth-visual-side">
+          <div>
+            <span class="badge badge-accent mb-2" data-gender-key="portfolio_main_title">ملف الإنجاز المهني للمعلم</span>
+            <h1 class="fw-extrabold mb-2" style="font-size:1.55rem; line-height:1.4;">
+              أنشئ حسابك التربوي وأسّس ملف الإنجاز المهني خلال دقيقة
+            </h1>
+            <p style="font-size:0.92rem; opacity:0.92; line-height:1.75;" class="mb-3">
+              بمجرد تحديد الجنس والمهمة الوظيفية في المدرسة، يقوم محرك التأنيث والتذكير بتخصيص جميع المسميات وتصميم الغلاف البصري لملف الإنجاز الخاص بك وربطه بمدرستك.
+            </p>
+          </div>
+
+          <div class="auth-benefits-list d-flex flex-column gap-2" style="font-size:0.86rem;">
+            <div style="background:rgba(255,255,255,0.12); padding:0.7rem 1rem; border-radius:var(--radius-sm);">
+              🎨 <strong>هوية بصرية مخصصة للجنسين:</strong> تصميم وقور للبنين وتصميم مؤسسي راقٍ للبنات في ملفات الإنجاز.
+            </div>
+            <div style="background:rgba(255,255,255,0.12); padding:0.7rem 1rem; border-radius:var(--radius-sm);">
+              📊 <strong>استمارة الأداء الوظيفي الذكية:</strong> تضم الـ 11 عنصراً المعتمدة وزارياً مع حساب تلقائي للدرجة الموزونة.
+            </div>
+            <div style="background:rgba(255,255,255,0.12); padding:0.7rem 1rem; border-radius:var(--radius-sm);">
+              🖨️ <strong>محرك طباعة A4 مشترك:</strong> طباعة وتصدير ملف الإنجاز وتقرير الأداء بترويسة رسمية موحدة.
+            </div>
+          </div>
+
+          <div class="mt-3" style="font-size:0.8rem; opacity:0.85;">
+            لديك حساب مسجل بالفعل؟ <a href="login.html" style="color:var(--accent-200); font-weight:800; text-decoration:underline;">انتقل لصفحة الدخول الذكي</a>
+          </div>
+        </div>
+
+        <!-- جانب نموذج التسجيل -->
+        <div class="auth-form-side">
+          <div class="d-flex align-center justify-between flex-wrap gap-2 mb-3">
+            <div>
+              <h2 class="fw-extrabold" style="font-size:1.35rem;">تسجيل مستخدم جديد في المنصة</h2>
+              <p class="text-muted" style="font-size:0.86rem;">تُحفظ البيانات مباشرة في ذاكرة المتصفح (LocalStorage)</p>
+            </div>
+            <span class="badge badge-gender" data-gender-key="employee">منسوب التعليم</span>
+          </div>
+
+          <form id="register-form">
+            <!-- اختيار الجنس لتفعيل محرك التأنيث والتذكير والهوية البصرية -->
+            <div class="form-group">
+              <label class="form-label">1. تحديد الجنس (يضبط محرك التأنيث والتذكير وهوية ملف الإنجاز) <span class="required">*</span></label>
+              <div class="grid grid-2 gap-2">
+                <button type="button" class="selector-card-option active" data-reg-gender="male">
+                  👨 ذكر (مدارس البنين — صيغة المذكر)
+                </button>
+                <button type="button" class="selector-card-option" data-reg-gender="female">
+                  👩 أنثى (مدارس البنات — صيغة المؤنث)
+                </button>
+              </div>
+            </div>
+
+            <!-- اختيار المسمى الوظيفي الذي يمر عبر محرك التأنيث والتذكير -->
+            <div class="form-group">
+              <label class="form-label">2. الصفة أو المهمة الوظيفية في المدرسة <span class="required">*</span></label>
+              <div class="selector-pills-grid">
+                <div class="selector-card-option active" data-reg-role="teacher">
+                  <span data-gender-key="teacher">معلم</span>
+                </div>
+                <div class="selector-card-option" data-reg-role="principal">
+                  <span data-gender-key="principal">مدير مدرسة</span>
+                </div>
+                <div class="selector-card-option" data-reg-role="vice_principal">
+                  <span data-gender-key="vice_principal">وكيل مدرسة</span>
+                </div>
+                <div class="selector-card-option" data-reg-role="counselor">
+                  <span data-gender-key="counselor">موجه طلابي</span>
+                </div>
+                <div class="selector-card-option" data-reg-role="lab_prep">
+                  <span data-gender-key="lab_prep">محضر مختبر</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-2 gap-3">
+              <div class="form-group">
+                <label class="form-label" for="reg-name">الاسم الرباعي الرسمي <span class="required">*</span></label>
+                <input type="text" id="reg-name" class="form-control" placeholder="اكتب الاسم الرباعي كما في السجل" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-national-id">رقم الهوية الوطنية / السجل المدني <span class="required">*</span></label>
+                <input type="text" id="reg-national-id" class="form-control" placeholder="10xxxxxxxx" maxlength="10" required />
+              </div>
+            </div>
+
+            <div class="grid grid-2 gap-3">
+              <div class="form-group">
+                <label class="form-label" for="reg-school">المدرسة التابع لها في المنصة المركزية <span class="required">*</span></label>
+                <select id="reg-school" class="form-select" required></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-rank">الرتبة التعليمية</label>
+                <select id="reg-rank" class="form-select">
+                  <option value="ممارس" data-male="معلم ممارس" data-female="معلمة ممارسة">معلم ممارس</option>
+                  <option value="متقدم" data-male="معلم متقدم" data-female="معلمة متقدمة" selected>معلم متقدم</option>
+                  <option value="خبير" data-male="معلم خبير" data-female="معلمة خبيرة">معلم خبير</option>
+                  <option value="قيادة مدرسية" data-male="قيادي مدرسي معتمد" data-female="قيادية مدرسية معتمدة">قيادي مدرسي معتمد</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-2 gap-3">
+              <div class="form-group">
+                <label class="form-label" for="reg-specialization">التخصص العلمي / التربوي</label>
+                <input type="text" id="reg-specialization" class="form-control" placeholder="مثال: الحاسب الآلي، اللغة العربية، الإدارة المدرسية" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-email">البريد الإلكتروني الوزاري أو الشخصي <span class="required">*</span></label>
+                <input type="email" id="reg-email" class="form-control" placeholder="name@moe.gov.sa" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reg-password">كلمة المرور <span class="required">*</span></label>
+              <input type="password" id="reg-password" class="form-control" placeholder="اختر كلمة مرور آمنة" value="123456" required />
+            </div>
+
+            <button type="submit" class="btn btn-gender btn-lg w-100 mt-1">
+              إنشاء الحساب وتأسيس <span data-gender-key="portfolio_main_title">ملف الإنجاز المهني للمعلم</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/core/engines.js"></script>
+  <script src="assets/js/pages/auth.js"></script>
+</body>
+</html>

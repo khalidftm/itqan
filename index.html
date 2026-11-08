@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-design-model="model-1" data-gender-theme="male">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة إتقان المركزية | إدارة الأداء الوظيفي وملف الإنجاز المهني للتعليم العام</title>
+  <link rel="stylesheet" href="assets/css/core.css" />
+  <link rel="stylesheet" href="assets/css/themes.css" />
+  <link rel="stylesheet" href="assets/css/print.css" />
+  <link rel="stylesheet" href="assets/css/pages/home.css" />
+</head>
+<body>
+
+  <!-- شريط علوي يوضح النموذج التصميمي المعروض حالياً والهوية النشطة -->
+  <div class="model-indicator-ribbon no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-2">
+      <div>
+        <span>المملكة العربية السعودية — منصة مركزية لمدارس التعليم العام (بنين / بنات)</span>
+        <span style="margin-inline: 0.6rem;">|</span>
+        <strong data-active-model-name>النموذج الأول: الهوية الوطنية الرسمية (الزمردي الملكي)</strong>
+      </div>
+      <div class="d-flex align-center gap-2">
+        <span class="badge badge-accent" data-gender-key="identity_badge">الهوية البصرية: طابع رسمي (بنين)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- القائمة العلوية الرئيسية -->
+  <header class="site-navbar no-print">
+    <div class="container d-flex align-center justify-between flex-wrap gap-3" style="padding-block: 0.95rem;">
+      <a href="index.html" class="d-flex align-center gap-2">
+        <div style="width:44px; height:44px; border-radius:12px; background:var(--gender-gradient); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.25rem; border:2px solid var(--accent-500);">
+          إ
+        </div>
+        <div>
+          <div class="fw-extrabold" style="font-size:1.15rem; color:var(--primary-800); line-height:1.2;">منصة إتقان الوطنية</div>
+          <div class="text-muted" style="font-size:0.78rem;">الأداء الوظيفي وملفات الإنجاز للتعليم العام</div>
+        </div>
+      </a>
+
+      <nav class="d-flex align-center gap-2 flex-wrap">
+        <a href="index.html" class="btn btn-sm btn-ghost">الرئيسية</a>
+        <a href="#models-showcase" class="btn btn-sm btn-ghost">النماذج الـ 3</a>
+        <a href="#engines-showcase" class="btn btn-sm btn-ghost">المحركات الموحدة</a>
+        <a href="user-dashboard.html" class="btn btn-sm btn-outline">صفحة المستخدم</a>
+        <a href="admin-dashboard.html" class="btn btn-sm btn-outline">صفحة مدير النظام</a>
+        <a href="login.html" class="btn btn-sm btn-primary">تسجيل الدخول</a>
+        <a href="register.html" class="btn btn-sm btn-accent">حساب جديد</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- قسم البطل الرئيسي (يتغير تخطيطه وتصميمه جذرياً بين النماذج 1 و 2 و 3) -->
+  <section class="hero-section">
+    <div class="container">
+      <!-- حاوية الرسائل الداخلية الموحدة مع زر X للإغلاق -->
+      <div id="home-inline-alerts" class="page-alerts-stack"></div>
+
+      <div class="hero-grid">
+        <div>
+          <div class="d-flex align-center gap-2 flex-wrap mb-2">
+            <span class="badge badge-accent">منصة مركزية متعددة المدارس</span>
+            <span class="badge badge-gender" data-male="موجهة للمعلمين ومدراء المدارس والوكلاء والموجهين" data-female="موجهة للمعلمات ومديرات المدارس والوكيلات والموجهات">
+              موجهة للمعلمين ومدراء المدارس والوكلاء والموجهين
+            </span>
+          </div>
+
+          <h1 class="hero-title">
+            المنظومة الرقمية المتكاملة لإدارة الأداء الوظيفي و<span data-gender-key="portfolio_main_title">ملف الإنجاز المهني للمعلم</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            منصة مركزية تخدم مدارس التعليم العام في المملكة العربية السعودية، مصممة بمحرك ذكي للتأنيث والتذكير وتخصيص الهوية البصرية حسب الجنس (معلم/معلمة — مدير/مديرة مدرسة — وكيل/وكيلة — موجه/موجهة طلابية — محضر/محضرة مختبر) مع توثيق الشواهد وطباعة التقارير الرسمية المعتمدة.
+          </p>
+
+          <div class="d-flex align-center gap-3 flex-wrap hero-actions">
+            <a href="login.html" class="btn btn-lg btn-accent">ابدأ الدخول الذكي للمنصة</a>
+            <a href="register.html" class="btn btn-lg btn-primary">تأسيس ملف إنجاز جديد</a>
+            <button type="button" class="btn btn-lg btn-outline" id="btn-demo-print-engine" style="background:rgba(255,255,255,0.92);">
+              🖨️ معاينة محرك الطباعة الرسمي A4
+            </button>
+          </div>
+        </div>
+
+        <!-- بطاقة الدخول السريع المباشر لتجربة الصلاحيات والهويات -->
+        <div class="hero-showcase-card">
+          <div class="card-header">
+            <h3 class="card-title">⚡ تجربة سريعة للصلاحيات والهويات البصرية</h3>
+            <span class="badge badge-primary">حفظ فوري بالمتصفح</span>
+          </div>
+          <p class="text-muted mb-3" style="font-size:0.88rem;">
+            اضغط على أي حساب تجريبي أدناه للدخول الفوري ومشاهدة كيف يتكيف النظام ومحرك التأنيث والتذكير والهوية البصرية تلقائياً:
+          </p>
+
+          <div class="d-flex flex-column gap-2">
+            <button type="button" class="btn btn-gender justify-between w-100" data-quick-login-user="usr-teacher-m1">
+              <span>👨 حساب معلم: أ. فهد بن محمد القحطاني</span>
+              <span class="badge badge-accent">هوية المذكر</span>
+            </button>
+
+            <button type="button" class="btn btn-outline justify-between w-100" data-quick-login-user="usr-teacher-f1">
+              <span>👩 حساب معلمة: أ. سارة بنت عبدالله الشهري</span>
+              <span class="badge badge-gender">هوية المؤنث</span>
+            </button>
+
+            <button type="button" class="btn btn-outline justify-between w-100" data-quick-login-user="usr-principal-m1">
+              <span>🏫 حساب مدير مدرسة: أ. عبدالرحمن الدوسري</span>
+              <span class="badge badge-primary">مدير مدرسة</span>
+            </button>
+
+            <button type="button" class="btn btn-outline justify-between w-100" data-quick-login-user="usr-principal-f1">
+              <span>🏫 حساب مديرة مدرسة: أ. نورة بنت سلطان الغامدي</span>
+              <span class="badge badge-gender">مديرة مدرسة</span>
+            </button>
+
+            <button type="button" class="btn btn-ghost justify-between w-100" data-quick-login-user="usr-admin-1">
+              <span>🛡️ مدير / مالك الموقع المركزي: م. خالد العتيبي</span>
+              <span class="badge badge-info">مدير النظام</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- شريط الإحصائيات الحية من ذاكرة المتصفح -->
+  <section class="container">
+    <div class="stat-kpi-grid">
+      <div class="stat-kpi-card">
+        <div class="stat-kpi-icon">🏫</div>
+        <div>
+          <div class="stat-kpi-number" id="stat-schools-count">4</div>
+          <div class="text-muted fw-semibold" style="font-size:0.86rem;">مدارس مرتبطة بالمنصة المركزية</div>
+        </div>
+      </div>
+      <div class="stat-kpi-card">
+        <div class="stat-kpi-icon">👥</div>
+        <div>
+          <div class="stat-kpi-number" id="stat-users-count">5</div>
+          <div class="text-muted fw-semibold" style="font-size:0.86rem;" data-male="معلمين ومدراء مسجلين" data-female="معلمات ومديرات مسجلات">معلمين ومدراء مسجلين</div>
+        </div>
+      </div>
+      <div class="stat-kpi-card">
+        <div class="stat-kpi-icon">📂</div>
+        <div>
+          <div class="stat-kpi-number" id="stat-portfolio-count">7</div>
+          <div class="text-muted fw-semibold" style="font-size:0.86rem;">شواهد ملفات إنجاز موثقة</div>
+        </div>
+      </div>
+      <div class="stat-kpi-card">
+        <div class="stat-kpi-icon">📊</div>
+        <div>
+          <div class="stat-kpi-number">11 بنداً</div>
+          <div class="text-muted fw-semibold" style="font-size:0.86rem;">معايير الأداء الوظيفي الوزارية</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم المقارنة والاختيار الفوري بين النماذج التصميمية الثلاثة (3 Models) -->
+  <section id="models-showcase" class="container mt-4">
+    <div class="card">
+      <div class="card-header flex-wrap">
+        <div>
+          <h2 class="card-title">🎨 النماذج التصميمية الثلاثة المعتمدة (اضغط لتطبيق أي نموذج فوراً على جميع الصفحات)</h2>
+          <p class="text-muted" style="font-size:0.9rem;">
+            تم بناء 3 نماذج وتخطيطات متكاملة تطبق على كل صفحة من الصفحات الخمس (الرئيسية، الدخول، التسجيل، المستخدم، مدير النظام) للمقارنة والاعتماد:
+          </p>
+        </div>
+        <span class="badge badge-primary">خط Cairo محلي 100% — بدون أي CDN</span>
+      </div>
+
+      <div class="grid grid-3 gap-3">
+        <!-- النموذج الأول -->
+        <div class="card card-hover model-selector-card is-selected" data-model-card="model-1">
+          <div class="d-flex align-center justify-between mb-2">
+            <span class="badge badge-primary">النموذج الأول (Model 1)</span>
+            <span style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#0b5d46,#c89d4c); display:inline-block;"></span>
+          </div>
+          <h3 class="fw-extrabold mb-1" style="font-size:1.08rem;">1️⃣ الهوية الوطنية الرسمية (الزمردي الملكي)</h3>
+          <p class="text-muted mb-3" style="font-size:0.88rem;">
+            مستوحى من الهوية الرسمية لوزارة التعليم والمنصات الوطنية السعودية (الأخضر الزمردي الملكي والذهبي الرملي) مع قائمة جانبية يمنى كلاسيكية في لوحات التحكم وتقسيم ثنائي رسمي في الدخول.
+          </p>
+          <button type="button" class="btn btn-sm btn-primary w-100">تفعيل ومعاينة النموذج الأول</button>
+        </div>
+
+        <!-- النموذج الثاني -->
+        <div class="card card-hover model-selector-card" data-model-card="model-2">
+          <div class="d-flex align-center justify-between mb-2">
+            <span class="badge badge-info">النموذج الثاني (Model 2)</span>
+            <span style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#0f2942,#14b8a6); display:inline-block;"></span>
+          </div>
+          <h3 class="fw-extrabold mb-1" style="font-size:1.08rem;">2️⃣ النموذج الرقمي العصري (Modern Bento & Glass)</h3>
+          <p class="text-muted mb-3" style="font-size:0.88rem;">
+            تصميم تقني حديث يعتمد الكحلي الأكاديمي والتركواز، مع قوائم علوية عائمة (Top Command Hub) بدلاً من القائمة الجانبية، وبطاقات Bento مستديرة الحواف.
+          </p>
+          <button type="button" class="btn btn-sm btn-outline w-100">تفعيل ومعاينة النموذج الثاني</button>
+        </div>
+
+        <!-- النموذج الثالث -->
+        <div class="card card-hover model-selector-card" data-model-card="model-3">
+          <div class="d-flex align-center justify-between mb-2">
+            <span class="badge badge-accent">النموذج الثالث (Model 3)</span>
+            <span style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#27272a,#b46e40); display:inline-block;"></span>
+          </div>
+          <h3 class="fw-extrabold mb-1" style="font-size:1.08rem;">3️⃣ الاستوديو التنفيذي الهادئ (Minimalist Editorial)</h3>
+          <p class="text-muted mb-3" style="font-size:0.88rem;">
+            تصميم تنفيذي راقٍ بخلفية ورقية دافئة وحدود هندسية معمارية (`2px solid`) وظلال حادة مخصص للقراءة المعمقة واستعراض ملفات الإنجاز المهنية.
+          </p>
+          <button type="button" class="btn btn-sm btn-outline w-100">تفعيل ومعاينة النموذج الثالث</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم اختبار المحركات المركزية الموحدة (Modal, Banner, Gender, Print, Messages) -->
+  <section id="engines-showcase" class="container mt-4 mb-4">
+    <div class="card gender-accent-card">
+      <div class="card-header flex-wrap">
+        <div>
+          <h2 class="card-title">⚙️ مركز اختبار المحركات القياسية الموحدة في المشروع</h2>
+          <p class="text-muted" style="font-size:0.9rem;">
+            تم إلغاء نوافذ `alert()` الافتراضية نهائياً وتوحيد كافة النوافذ والرسائل ومحرك التأنيث والتذكير ومحرك الطباعة:
+          </p>
+        </div>
+        <span class="badge badge-gender" data-gender-key="portfolio_main_title">ملف الإنجاز المهني للمعلم</span>
+      </div>
+
+      <div class="grid grid-3 gap-3">
+        <div class="card">
+          <h4 class="fw-extrabold mb-1">1. محرك النوافذ الموحد (ModalEngine)</h4>
+          <p class="text-muted mb-3" style="font-size:0.86rem;">
+            نوافذ موحدة الألوان والتنسيق لرسائل النجاح والتحذير والتأكيد وجاري التنفيذ دون استخدام `alert` إطلاقاً.
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-sm btn-success" id="btn-demo-modal-success">نافذة نجاح</button>
+            <button type="button" class="btn btn-sm btn-warning" id="btn-demo-modal-warning">نافذة تحذير</button>
+            <button type="button" class="btn btn-sm btn-primary" id="btn-demo-modal-confirm">نافذة تأكيد وتنفيذ</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 class="fw-extrabold mb-1">2. محرك الرسائل الداخلية بزر (X)</h4>
+          <p class="text-muted mb-3" style="font-size:0.86rem;">
+            رسائل داخلية موحدة الألوان تظهر أعلى الصفحات وتحتوي وجوباً على زر (×) لإغلاقها بسلاسة.
+          </p>
+          <button type="button" class="btn btn-sm btn-outline w-100" id="btn-demo-inline-banner">
+            + توليد رسالة تنبيه داخلية جديدة أعلى الصفحة
+          </button>
+        </div>
+
+        <div class="card">
+          <h4 class="fw-extrabold mb-1">3. محرك الطباعة والمراسلات المشترك</h4>
+          <p class="text-muted mb-3" style="font-size:0.86rem;">
+            طباعة رسمية موحدة لتقارير الأداء وملفات الإنجاز، ومحرك رسائل داخلي بين المدارس والمعلمين.
+          </p>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-primary w-100" id="btn-demo-message-engine">✉️ إرسال رسالة</button>
+            <a href="user-dashboard.html" class="btn btn-sm btn-accent w-100">ملف الإنجاز</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- تذييل الصفحة -->
+  <footer class="no-print" style="margin-top:auto; background:var(--bg-surface); border-top:1px solid var(--border-color); padding:1.5rem 0;">
+    <div class="container d-flex align-center justify-between flex-wrap gap-2 text-muted" style="font-size:0.85rem;">
+      <div>منصة إتقان المركزية لإدارة الأداء الوظيفي وملفات الإنجاز — التعليم العام بالمملكة العربية السعودية</div>
+      <div class="d-flex gap-3">
+        <a href="index.html">الرئيسية</a>
+        <a href="login.html">صفحة الدخول</a>
+        <a href="register.html">صفحة التسجيل</a>
+        <a href="user-dashboard.html">صفحة المستخدم</a>
+        <a href="admin-dashboard.html">صفحة مدير النظام</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/core/engines.js"></script>
+  <script src="assets/js/pages/home.js"></script>
+</body>
+</html>

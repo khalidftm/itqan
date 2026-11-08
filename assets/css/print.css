@@ -1,0 +1,164 @@
+/* ==========================================================================
+   SHARED PRINT ENGINE STYLESHEET (print.css)
+   محرك الطباعة المشترك لملفات الإنجاز وتقارير الأداء الوظيفي الرسمية (A4)
+   ========================================================================== */
+
+.official-print-sheet {
+  background: #ffffff;
+  color: #111827;
+  padding: 2rem;
+  border: 2px solid #0b5d46;
+  border-radius: 8px;
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+}
+
+.print-sheet-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 3px double #0b5d46;
+}
+
+.print-header-right {
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.7;
+  color: #084433;
+}
+
+.print-header-center {
+  text-align: center;
+}
+
+.print-emblem-box {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 0.35rem;
+  border-radius: 50%;
+  background: #f2fbf8;
+  border: 2px solid #c89d4c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0b5d46;
+  font-weight: 900;
+  font-size: 0.85rem;
+}
+
+.print-doc-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0b5d46;
+}
+
+.print-header-left {
+  text-align: left;
+  font-size: 0.84rem;
+  color: #374151;
+  line-height: 1.7;
+}
+
+.print-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  background: #f8faf9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1.35rem;
+  font-size: 0.88rem;
+}
+
+.print-section-heading {
+  background: #0b5d46;
+  color: #ffffff;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.96rem;
+  font-weight: 800;
+  border-radius: 4px;
+  margin: 1.25rem 0 0.75rem;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  margin-bottom: 1.25rem;
+}
+
+.print-table th,
+.print-table td {
+  border: 1px solid #94a3b8;
+  padding: 0.55rem 0.75rem;
+  text-align: right;
+}
+
+.print-table th {
+  background: #e3f5ef;
+  color: #084433;
+  font-weight: 800;
+}
+
+.print-signatures {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed #94a3b8;
+  text-align: center;
+  font-size: 0.88rem;
+}
+
+.print-sig-box {
+  min-height: 85px;
+}
+
+.print-sig-title {
+  font-weight: 800;
+  color: #084433;
+  margin-bottom: 1.8rem;
+}
+
+/* إعدادات الطباعة الورقية الفعلية */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* إخفاء كافة عناصر الموقع عند الطباعة وإبقاء حاوية الطباعة فقط */
+  body > *:not(#print-mount-container) {
+    display: none !important;
+  }
+
+  #print-mount-container {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .official-print-sheet {
+    border: 1.5px solid #0b5d46;
+    box-shadow: none !important;
+    padding: 1rem;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+#print-mount-container {
+  display: none;
+}
