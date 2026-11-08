@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مصمم التقارير والأنشطة المدرسية | Design Reports</title>
+  <!-- Tailwind runtime uses CDN; no dependencies on other project modules. -->
+  <link rel="stylesheet" href="css/tailwind-generated.css">
+  <!-- Google Fonts: Cairo & Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  
+
+  <link rel="stylesheet" href="css/design_reports.css">
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-600 selection:text-white">
+
+  <!-- Top Global Navbar (Hidden in Print) -->
+  <header class="no-print bg-white border-b border-slate-200 sticky top-0 z-40 px-4 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-700 flex items-center justify-center text-white text-lg shadow-md">
+        <i class="fa-solid fa-file-invoice"></i>
+      </div>
+      <div>
+        <h1 class="font-extrabold text-base md:text-lg text-slate-800 leading-tight">منظومة التقارير والأنشطة المدرسية</h1>
+        <p class="text-xs text-slate-500 font-medium">التعليم العام - المملكة العربية السعودية</p>
+      </div>
+    </div>
+
+    <!-- Quick Action Bar -->
+    <div class="flex items-center gap-2 md:gap-3">
+      <button onclick="fillDemoData()" class="px-3.5 py-2 text-xs md:text-sm font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-lg transition-all flex items-center gap-1.5 shadow-sm">
+        <i class="fa-solid fa-wand-magic-sparkles text-emerald-600"></i>
+        <span>تعبئة نموذج تجريبي</span>
+      </button>
+
+      <button onclick="resetData()" class="px-3 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 border border-slate-200 rounded-lg transition-all flex items-center gap-1.5">
+        <i class="fa-solid fa-rotate-right"></i>
+        <span class="hidden sm:inline">تفريغ</span>
+      </button>
+
+      <button onclick="window.print()" class="px-5 py-2 text-xs md:text-sm font-bold text-white bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800 rounded-lg shadow hover:shadow-md transition-all flex items-center gap-2">
+        <i class="fa-solid fa-print"></i>
+        <span>طباعة التقرير / PDF</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Layout (Split Screen in Desktop, Stacked in Mobile) -->
+  <main class="flex-1 flex flex-col lg:flex-row w-full overflow-hidden">
+    
+    <!-- LEFT PANEL: Editor & Form Controls (Hidden in Print) -->
+    <aside class="no-print w-full lg:w-[480px] xl:w-[530px] lg:border-l border-slate-200 bg-white h-auto lg:h-[calc(100vh-65px)] overflow-y-auto p-4 sm:p-6 flex flex-col gap-6">
+
+      <!-- Template Selector Badge -->
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2.5">
+          <i class="fa-solid fa-palette text-emerald-600 ml-1"></i> اختر نمط وقالب التقرير (5 نماذج رسمية):
+        </label>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-bold">
+          <button type="button" onclick="changeTemplate(1)" id="btn-tmpl-1" class="tmpl-btn p-2 rounded-lg border text-center transition-all border-emerald-600 bg-emerald-50 text-emerald-800 shadow-sm">
+            1. الإداري الرسمي
+          </button>
+          <button type="button" onclick="changeTemplate(2)" id="btn-tmpl-2" class="tmpl-btn p-2 rounded-lg border text-center transition-all border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
+            2. الإشرافي الحديث
+          </button>
+          <button type="button" onclick="changeTemplate(3)" id="btn-tmpl-3" class="tmpl-btn p-2 rounded-lg border text-center transition-all border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
+            3. الإنجاز المصوّر
+          </button>
+          <button type="button" onclick="changeTemplate(4)" id="btn-tmpl-4" class="tmpl-btn p-2 rounded-lg border text-center transition-all border-slate-200 bg-white text-slate-700 hover:bg-slate-50">
+            4. التوجيه والإرشاد
+          </button>
+          <button type="button" onclick="changeTemplate(5)" id="btn-tmpl-5" class="tmpl-btn p-2 rounded-lg border text-center transition-all border-slate-200 bg-white text-slate-700 hover:bg-slate-50 col-span-2 sm:col-span-1">
+            5. البطاقة التنفيذية
+          </button>
+        </div>
+      </div>
+
+      <!-- Section: Organizational Hierarchy -->
+      <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-3">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 border-b pb-2">
+          <i class="fa-solid fa-landmark text-emerald-700"></i> بيانات المرجعية الإدارية
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">الإدارة العامة للتعليم</label>
+            <input type="text" id="inputEducationAdmin" value="الإدارة العامة للتعليم بمنطقة مكة المكرمة" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="font-semibold text-slate-600 block mb-1">اسم المدرسة</label>
+            <input type="text" id="inputSchoolName" value="ابن سيرين الثانوية ببحرة" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none font-bold">
+          </div>
+        </div>
+
+        <!-- Logos Uploaders -->
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div>
+            <span class="block text-[11px] font-semibold text-slate-600 mb-1">شعار الوزارة / الرؤية</span>
+            <label class="flex flex-col items-center justify-center p-2 border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-lg cursor-pointer bg-slate-50 hover:bg-emerald-50/50 transition-colors">
+              <i class="fa-solid fa-cloud-arrow-up text-slate-400 text-sm mb-1"></i>
+              <span class="text-[10px] text-slate-500 text-center font-medium">تغيير الشعار الأيمن</span>
+              <input type="file" accept="image/*" class="hidden" onchange="handleLogoUpload(event, 'logoRight')">
+            </label>
+          </div>
+          <div>
+            <span class="block text-[11px] font-semibold text-slate-600 mb-1">شعار المدرسة / الفعالية</span>
+            <label class="flex flex-col items-center justify-center p-2 border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-lg cursor-pointer bg-slate-50 hover:bg-emerald-50/50 transition-colors">
+              <i class="fa-solid fa-shield-halved text-slate-400 text-sm mb-1"></i>
+              <span class="text-[10px] text-slate-500 text-center font-medium">رفع شعار المدرسة</span>
+              <input type="file" accept="image/*" class="hidden" onchange="handleLogoUpload(event, 'logoLeft')">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Program Details -->
+      <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-3">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 border-b pb-2">
+          <i class="fa-solid fa-clipboard-check text-emerald-700"></i> تفاصيل البرنامج أو النشاط
+        </h3>
+
+        <div>
+          <label class="font-semibold text-xs text-slate-600 block mb-1">اسم البرنامج / الفعالية</label>
+          <input type="text" id="inputProgName" value="معرض الابتكار والذكاء الاصطناعي المدرسي" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-emerald-900 focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">مجال النشاط</label>
+            <select id="inputDomain" onchange="updateReport()" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:ring-2 focus:ring-emerald-500 outline-none font-medium">
+              <option value="العلمي والتقني">العلمي والتقني</option>
+              <option value="الثقافي والاجتماعي">الثقافي والاجتماعي</option>
+              <option value="الرياضي والكشفي">الرياضي والكشفي</option>
+              <option value="التوجيه والإرشاد">التوجيه والإرشاد</option>
+              <option value="الوطني والبيئي">الوطني والبيئي</option>
+              <option value="التطوع والمسؤولية المجتمعية">التطوع والمسؤولية</option>
+              <option value="المهاري والفني">المهاري والفني</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">الفئة المستهدفة</label>
+            <input type="text" id="inputTargetAudience" value="طلاب المرحلة الثانوية والمعلمون" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">تاريخ التنفيذ</label>
+            <input type="text" id="inputDate" value="1447/05/18 هـ" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">عدد المستفيدين</label>
+            <input type="text" id="inputBeneficiaries" value="280 مستفيد" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">مقر التنفيذ</label>
+            <input type="text" id="inputLocation" value="الصالة الرياضية وقاعة الموهوبين" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">مدة البرنامج</label>
+            <input type="text" id="inputDuration" value="يوم دراسي (4 ساعات)" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="font-semibold text-xs text-slate-600 block mb-1">أهداف البرنامج (نقطة في كل سطر)</label>
+          <textarea id="inputObjectives" rows="3" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-emerald-500 outline-none leading-relaxed">تنمية مهارات التفكير الرقمي والابتكار لدى الطلاب
+تعريف المجتمع المدرسي بتطبيقات الذكاء الاصطناعي الحديثة
+تشجيع الطلاب على تصميم مشاريع تقنية واعدة تخدم رؤية المملكة 2030</textarea>
+        </div>
+
+        <div>
+          <label class="font-semibold text-xs text-slate-600 block mb-1">وصف موجز ومخرجات البرنامج</label>
+          <textarea id="inputDescription" rows="2" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-emerald-500 outline-none leading-relaxed">تم تنظيم المعرض بمشاركة 22 مشروعاً ابتكارياً، وتخلله ورشة عمل تطبيقية ومسابقة لأفضل نموذج أولي بحضور المشرف التربوي ومشاركة فاعلة من الطلاب وأولياء الأمور.</textarea>
+        </div>
+      </div>
+
+      <!-- Section: Signatures -->
+      <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-3">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 border-b pb-2">
+          <i class="fa-solid fa-signature text-emerald-700"></i> بيانات الاعتماد والتوقيع
+        </h3>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">رائد النشاط / المنفذ</label>
+            <input type="text" id="inputOfficer" value="خالد بن علي المحوري" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="font-semibold text-slate-600 block mb-1">مدير / مديرة المدرسة</label>
+            <input type="text" id="inputPrincipal" value="خالد علي المحوري" oninput="updateReport()" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Evidence Photos & Documentation -->
+      <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm space-y-3">
+        <div class="flex items-center justify-between border-b pb-2">
+          <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-images text-emerald-700"></i> شواهد وتوثيق الفعالية
+          </h3>
+          <span id="evidenceCountBadge" class="text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">0 شواهد</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 border-2 border-dashed border-emerald-400 bg-emerald-50/50 hover:bg-emerald-50 text-emerald-800 rounded-xl cursor-pointer text-xs font-bold transition-all">
+            <i class="fa-solid fa-plus text-sm"></i>
+            <span>إضافة صورة شاهد جديدة</span>
+            <input type="file" accept="image/*" class="hidden" onchange="handleAddEvidencePhoto(event)">
+          </label>
+        </div>
+
+        <!-- Evidence List Container -->
+        <div id="evidenceListContainer" class="space-y-3 pt-2 max-h-60 overflow-y-auto">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT PANEL: Live Interactive A4 Preview Stage -->
+    <section class="flex-1 bg-slate-200/80 p-3 sm:p-6 lg:p-8 overflow-y-auto flex justify-center items-start print-container">
+      
+      <!-- The A4 Sheet Paper Target -->
+      <div id="reportA4Paper" class="a4-page p-8 sm:p-10 flex flex-col justify-between text-slate-800 transition-all duration-300">
+        <!-- Rendered by JavaScript dynamically according to selected template -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- JavaScript Logic -->
+  <script src="js/design_reports.js"></script>
+</body>
+</html>
