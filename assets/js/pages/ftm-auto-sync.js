@@ -221,7 +221,11 @@
       }
     } catch (error) {
       latestError = error.message;
-      statusUpdate("⚠ لم يكتمل النسخ السحابي: " + error.message,"error");
+      if (token && destination) {
+        statusUpdate("⚠ لم يكتمل النسخ السحابي: " + error.message,"error");
+      } else {
+        statusUpdate("◌ محلي فقط • النسخ السحابي متوقف","idle");
+      }
       // Do not spin indefinitely on a failed network request; the next local
       // change or explicit reconnection will retry pending backups.
     } finally { active = false; }
