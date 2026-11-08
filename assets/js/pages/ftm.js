@@ -220,7 +220,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const originalOpen = modal.open.bind(modal);
   const originalClose = modal.close.bind(modal);
-  const restore = () => { if (moved) { store.appendChild(moved); moved = null; } };
+  const restore = () => {
+    if (!moved) return;
+    const {element,parent,nextSibling}=moved;
+    const destination=parent?.isConnected ? parent : store;
+    if(destination){
+      const before=nextSibling?.parentNode===destination ? nextSibling : null;
+      destination.insertBefore(element,before);
+    }
+    moved=null;
+  };
   modal.open = function(options) { restore(); return originalOpen(options); };
   modal.close = function() {
     const active = Boolean(moved);
@@ -243,17 +252,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({top:0,behavior:'auto'});
   }));
   function showPanel(kind, trigger) {
-    const element=kind==='upload'
-      ? document.getElementById('direct-file-dropzone')?.closest('.card')
-      : document.getElementById('portfolio-items-grid')?.closest('.card');
+    const selector=kind==='upload' ? 'direct-file-dropzone'
+      : kind==='performance-records' ? 'ftm-performance-evidence-list'
+      : 'portfolio-items-grid';
+    const element=document.getElementById(selector)?.closest('.card');
     if(!element)return;
     focusBefore=trigger;
     restore();
-    modal.open({type:'info',title:kind==='upload'?'مركز رفع الملفات والشواهد':'سجل الشواهد والملفات',html:'<div id="ftm-panel-slot"></div>',hideFooter:true,size:'lg'});
+    const title=kind==='upload'?'مركز رفع الملفات والشواهد'
+      :kind==='performance-records'?'سجل الشواهد والملفات المرفوعة في تقييم الأداء الوظيفي'
+      :'سجل الشواهد والملفات';
+    const parent=element.parentNode,nextSibling=element.nextSibling;
+    modal.open({type:'info',title,html:'<div id="ftm-panel-slot"></div>',hideFooter:true,size:'lg'});
     const root=modal.ensureContainer();
     root.querySelector('#unified-modal-dialog')?.classList.add('ftm-dialog');
     root.querySelector('#ftm-panel-slot')?.appendChild(element);
-    moved=element;
+    moved={element,parent,nextSibling};
     setDrawer(false);
     root.querySelector('#unified-modal-close-x')?.focus();
   }
