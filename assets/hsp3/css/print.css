@@ -1,0 +1,66 @@
+@import url("./fonts.css");
+*{box-sizing:border-box}html{direction:rtl}body{margin:0;background:#e9eef5;color:#17283d;font-family:"Cairo","Cairo",sans-serif}.toolbar{position:sticky;top:0;z-index:30;background:#122f4b;color:#fff;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;padding:10px}.toolbar select,.toolbar button,.toolbar a{font:inherit;padding:7px 12px;border-radius:6px;border:1px solid #c6d5e4;background:white;color:#102b46}.toolbar button{background:#00a99b;color:white;border-color:#00a99b;cursor:pointer}.toolbar a{text-decoration:none}.hint{font-size:12px;color:#d8e9f6}.print-root{display:flex;flex-direction:column;align-items:center;gap:18px;padding:22px 12px}.sheet{--page-w:297mm;--page-h:210mm;--head-h:24mm;--foot-h:10mm;width:var(--page-w);height:var(--page-h);background:white;box-shadow:0 9px 23px #10273e22;position:relative;overflow:hidden;color:#111}.sheet-header{position:absolute;inset:0 0 auto;height:var(--head-h);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;padding:1mm 10mm 0}.header-cell{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1mm;min-width:0;height:100%;font-size:13px;line-height:1.18}.header-cell strong{font-weight:700}.header-cell span{display:block;max-width:100%;overflow-wrap:anywhere}.logo-placeholder{width:29mm;height:18mm;max-height:calc(var(--head-h) - 2mm);display:grid;place-items:center;color:#8292a4;font-size:11px;text-align:center}.sheet[style*="34mm"] .logo-placeholder{height:25mm}.sheet-footer{position:absolute;inset:auto 0 0;height:var(--foot-h);display:flex;align-items:center;justify-content:space-between;padding:0 10mm;font-size:10px;gap:4mm}.sheet-footer>span{flex:1;text-align:center}.sheet-footer>span:first-child{text-align:right}.sheet-footer>span:last-child{text-align:left}.sheet-content{position:absolute;top:calc(var(--head-h) + 3mm);bottom:calc(var(--foot-h) + 6mm);right:10mm;left:10mm;overflow:hidden}.sheet-image{position:absolute;right:0;left:0;width:100%;object-fit:fill;display:block}.sheet-image.head{top:0;height:var(--head-h)}.sheet-image.foot{bottom:0;height:var(--foot-h)}.image-missing{position:absolute;right:0;left:0;display:grid;place-items:center;color:#7b8795;font-size:12px;background:repeating-linear-gradient(45deg,#f6f8fb,#f6f8fb 8px,#e9eff5 8px,#e9eff5 16px)}.image-missing.head{top:0;height:var(--head-h)}.image-missing.foot{bottom:0;height:var(--foot-h)}.page-title{text-align:center;font-size:14pt;line-height:1.25;margin:0 0 4mm;font-weight:700}.section-title{text-align:right;font-size:13pt;margin:0 0 3mm}.data-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12pt;line-height:1.08}.data-table th,.data-table td{border:1px solid #cbd5e1;text-align:center;padding:.8mm;height:8mm;overflow-wrap:anywhere}.data-table th{background:#dbe4ee;font-weight:700}.data-table td{font-weight:400}.data-table td.name{text-align:right}.data-table tbody tr:nth-child(even){background:#f8fafc}.data-table tfoot{background:#e8f0f7;font-weight:700}.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin:5mm 0}.stat{border:1px solid #cbd5e1;border-radius:2mm;padding:4mm;text-align:center}.stat b{font-size:18pt;display:block}.paragraph{font-size:12pt;line-height:1.75;margin:0 0 4mm}.preview-guide .header-cell{outline:1px dashed #bdc7d2;outline-offset:-1px}.preview-guide .logo-placeholder{border:1px dashed #9aa8b8}.preview-guide .sheet-footer{border-top:1px dashed #c1cad6}.content-only{padding:18px;max-width:1000px;margin:auto;background:white}.content-only .data-table{font-size:12pt}
+@media print{@page{size:A4 landscape;margin:0}body{background:white!important}.toolbar,.preview-only,.image-missing{display:none!important}.print-root{padding:0;gap:0;display:block}.sheet{box-shadow:none;width:var(--page-w);height:var(--page-h);break-after:page;page-break-after:always}.sheet:last-child{break-after:auto;page-break-after:auto}.preview-guide .header-cell,.preview-guide .logo-placeholder,.preview-guide .sheet-footer{outline:none!important;border:none!important}.sheet .sheet-content{overflow:hidden}body[data-orientation="portrait"]{--print-orient:portrait}}
+
+.hsp-signoff{margin-top:3mm;text-align:center;border-top:1px solid #bdc8d5;padding-top:3mm;font-size:12pt;break-inside:avoid}.hsp-signoff p{margin:2mm}.hsp-signoff-marks{display:flex;justify-content:space-evenly}.hsp-signoff-mark{min-width:35mm;min-height:19mm;display:flex;flex-direction:column;align-items:center}.hsp-signoff-mark img{max-width:38mm;max-height:17mm;object-fit:contain}.hsp-report-tail{break-inside:avoid}.hsp-report-tail .stat-grid{margin:3mm 0}.hsp-report-tail .stat{padding:2mm}
+/* Official templates only: green structural separators, accounted for by existing content gaps. */
+.sheet--official::before,.sheet--official::after{content:"";position:absolute;right:0;left:0;height:1.5mm;background:#176b45;z-index:2;pointer-events:none}
+.sheet--official::before{top:var(--head-h)}
+.sheet--official::after{bottom:var(--foot-h)}
+
+/* Internal green rules: same 10mm inline padding as the report; never full bleed. */
+.sheet--official::before,.sheet--official::after{right:10mm!important;left:10mm!important}
+/* The image header has two distinct name zones: administration in the upper dark
+   band (left of the ministry logo), school in the lower centered ribbon.
+   Percentages use the actual image box, and therefore work in A4 portrait/landscape. */
+.hsp-branded-education,.hsp-branded-school{
+  position:absolute;z-index:3;display:flex;align-items:center;justify-content:center;
+  text-align:center;direction:rtl;color:#fff;font-family:"Cairo",sans-serif;font-weight:700;
+  overflow-wrap:anywhere;white-space:normal;pointer-events:none;box-sizing:border-box;
+  padding:0 1mm;line-height:1.15;text-shadow:0 1px 2px rgba(0,0,0,.35);
+}
+.hsp-branded-education{
+  top:23%;right:14%;width:46%;height:34%;font-size:12px;
+}
+.hsp-branded-school{
+  top:71%;right:24%;width:52%;height:25%;font-size:12px;
+}
+.sheet[style*="34mm"] .hsp-branded-education{top:24%;right:14%;width:45%;height:32%;font-size:13px}
+.sheet[style*="34mm"] .hsp-branded-school{top:71%;right:24%;width:52%;height:25%;font-size:13px}
+@media print{.hsp-branded-education,.hsp-branded-school{text-shadow:none}}
+
+/* Branded names must be positioned relative to the HEADER, not the A4 page.
+   Previous top:23% and top:71% were percentages of entire sheet height. */
+.sheet .hsp-branded-header{position:absolute;inset:0 0 auto 0;height:var(--head-h);overflow:hidden;z-index:3}
+.sheet .hsp-branded-header .sheet-image.head{position:absolute;inset:0 0 auto 0;height:100%;width:100%;z-index:0}
+.sheet .hsp-branded-header .image-missing.head{height:100%;z-index:0}
+.sheet .hsp-branded-header .hsp-branded-education,
+.sheet .hsp-branded-header .hsp-branded-school{z-index:1}
+.sheet .hsp-branded-header .hsp-branded-education{
+  /* Left text zone: ends before the logo (which occupies the right-hand side). */
+  top:21%;right:44%;width:42%;height:34%;font-size:clamp(10px,1.15vw,15px);
+}
+.sheet .hsp-branded-header .hsp-branded-school{
+  /* Tiny vertical adjustment to center the name within the lower ribbon. */
+  top:69%;right:28%;width:44%;height:26%;font-size:clamp(10px,1.15vw,15px);
+}
+.sheet[style*="34mm"] .hsp-branded-header .hsp-branded-education{top:21%;right:44%;width:42%;height:34%;font-size:13px}
+.sheet[style*="34mm"] .hsp-branded-header .hsp-branded-school{top:69%;right:28%;width:44%;height:26%;font-size:13px}
+
+
+/* Font contract: Cairo is the UI/display chrome. The page itself always uses Tajawal,
+   in both on-screen preview and print/PDF. Do not scale or substitute when printing. */
+html,body,body button,body input,body select,body textarea,.toolbar,.toolbar *{font-family:"Cairo",sans-serif}
+.sheet,.sheet *,.content-only,.content-only *{font-family:"Tajawal",sans-serif!important}
+@media print {.sheet,.sheet *,.content-only,.content-only *{font-family:"Tajawal",sans-serif!important}}
+
+/* Official header logo, shared by portrait and landscape only; centered and contained. */
+.sheet--official .logo-placeholder{display:flex;justify-content:center;align-items:center;overflow:hidden}
+/* The JPG contains white padding around the printed logo. Double the image scale
+   within its clipped center cell; keep the original aspect ratio and restrict
+   this correction to official portrait/landscape headers. */
+.sheet--official .official-admin-logo{
+ display:block;width:100%;height:100%;object-fit:contain;object-position:center center;
+ transform:scale(2);transform-origin:center center;
+}
+.preview-guide.sheet--official .logo-placeholder{border:none}
