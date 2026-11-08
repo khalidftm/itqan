@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-design-model="model-2" data-gender-theme="female" data-lock-teacher-page="true">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FTM | ملف الإنجاز المهني والأداء الوظيفي | معلمة مادة لغتي - الصف الثاني الابتدائي</title>
+  <link rel="stylesheet" href="assets/css/core.css" />
+  <link rel="stylesheet" href="assets/css/themes.css" />
+  <link rel="stylesheet" href="assets/css/print.css" />
+  <link rel="stylesheet" href="assets/css/pages/user-dashboard.css" />
+  <link rel="stylesheet" href="assets/css/pages/ftm.css" />
+</head>
+<body class="ftm-page">
+
+
+  <header class="ftm-topbar no-print">
+    <div class="ftm-brand">
+      <button id="ftm-menu-toggle" class="ftm-menu-toggle" type="button" aria-label="فتح قائمة التنقل" aria-expanded="false" aria-controls="ftm-sidebar">☰</button>
+      <div class="ftm-mark" aria-hidden="true">إ</div>
+      <div class="ftm-brand-text"><strong class="js-portfolio-dynamic-title">ملف الإنجاز المهني (معلمة)</strong><small class="js-user-school">المدرسة</small></div>
+    </div>
+    <div class="ftm-actions">
+      <button type="button" class="btn btn-sm btn-accent" id="btn-add-portfolio-evidence">＋ <span>إضافة شاهد</span></button>
+      <button type="button" class="btn btn-sm btn-outline" id="btn-open-github-sync">☁️ <span>مزامنة GitHub</span></button>
+      <button type="button" class="btn btn-sm btn-primary" id="btn-print-full-report">🖨️ <span>طباعة</span></button>
+      <a href="index.html" class="btn btn-sm btn-ghost ftm-home">الرئيسية</a>
+    </div>
+  </header>
+  <div id="ftm-menu-backdrop" class="ftm-menu-backdrop" hidden></div>
+  <div class="ftm-shell">
+    <aside class="ftm-sidebar no-print" id="ftm-sidebar" aria-label="قائمة التنقل">
+      <div class="ftm-account"><span class="ftm-avatar js-user-initials">س</span><div><strong class="js-user-name">المعلمة</strong><small class="js-user-role-badge">معلمة</small></div></div>
+      <nav class="ftm-nav" aria-label="أقسام ملف الإنجاز">
+        <button type="button" class="ftm-nav-item active" data-workspace-tab="tab-overview" aria-current="page"><span aria-hidden="true">⌂</span>نظرة عامة</button>
+        <button type="button" class="ftm-nav-item" data-ftm-panel="upload"><span aria-hidden="true">⬆</span>رفع الملفات والشواهد</button>
+        <button type="button" class="ftm-nav-item" data-ftm-panel="records"><span aria-hidden="true">▤</span>سجل الشواهد والملفات</button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-cv-card"><span aria-hidden="true">♧</span>السيرة الذاتية</button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-shared-library"><span aria-hidden="true">▦</span>مكتبة المكونات</button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-performance"><span aria-hidden="true">◫</span>معايير الأداء</button>
+        <button type="button" class="ftm-nav-item" data-workspace-tab="tab-messages"><span aria-hidden="true">✉</span>الرسائل والتوجيهات <span class="badge badge-accent" id="unread-msg-count">2</span></button>
+      </nav>
+      <div class="ftm-sidebar-footer"><a href="user-dashboard.html">الواجهة الأصلية</a></div>
+    </aside>
+    <main class="ftm-main">
+      <div id="user-inline-alerts" class="page-alerts-stack" aria-live="polite"></div>
+      <section id="tab-overview" class="workspace-section is-active">
+        <div class="ftm-intro"><div><span class="ftm-eyebrow">مساحة الإنجاز المهني</span><h1 class="js-portfolio-dynamic-title">ملف الإنجاز المهني (معلمة)</h1><p><span class="js-user-name">المعلمة</span> · <span class="js-user-spec">المادة الدراسية</span></p></div>
+          <button type="button" class="btn btn-outline" id="btn-print-portfolio">🖨️ طباعة ملف الإنجاز</button>
+        </div>
+        <div class="ftm-stats">
+          <div class="ftm-stat"><span>الشواهد المرفوعة</span><strong class="js-portfolio-count">0</strong><small>ملفات محفوظة</small></div>
+          <div class="ftm-stat"><span>المكونات المضمنة</span><strong class="js-library-count">0</strong><small>من المكتبة المهنية</small></div>
+          <div class="ftm-stat"><span>التقييم الذاتي</span><strong class="js-user-score">—</strong><small>مؤشر الأداء</small></div>
+        </div>
+        <h2 class="ftm-heading">الوصول السريع</h2>
+        <div class="ftm-quick">
+          <button type="button" class="ftm-quick-card" data-ftm-panel="upload"><span class="ftm-quick-icon">⬆</span><strong>رفع ملف أو شاهد</strong><small>إضافة الوثائق وربطها بمعايير الأداء</small><em>فتح نافذة الرفع ←</em></button>
+          <button type="button" class="ftm-quick-card" data-ftm-panel="records"><span class="ftm-quick-icon">▤</span><strong>سجل الشواهد والملفات</strong><small>عرض المرفقات ومعاينتها وتنزيلها</small><em>عرض السجل ←</em></button>
+          <button type="button" class="ftm-quick-card" data-workspace-tab="tab-cv-card"><span class="ftm-quick-icon">♧</span><strong>السيرة الذاتية</strong><small>المعلومات والإنجازات المهنية</small><em>فتح القسم ←</em></button>
+          <button type="button" class="ftm-quick-card" data-workspace-tab="tab-performance"><span class="ftm-quick-icon">◫</span><strong>التقييم الوظيفي</strong><small>متابعة المعايير والشواهد المرتبطة</small><em>فتح القسم ←</em></button>
+        </div>
+      </section>
+            <section id="tab-portfolio" class="workspace-section">
+        <div class="card mb-3">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">📤 مركز رفع الملفات والشواهد الفعلية للمعلمة (PDF, Word, Excel, الصور)</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                ارفعي ملفاتكِ الفعلية من جهازكِ (أوراق عمل لغتي ثاني ابتدائي، خطط علاجية، تحاضير، شهادات، نتائج طالبات) وحددي معيار الأداء المرتبط بها:
+              </p>
+            </div>
+            <span class="badge badge-gender">حفظ فوري في المتصفح + مزامنة GitHub</span>
+          </div>
+
+          <div class="upload-dropzone" id="direct-file-dropzone">
+            <input type="file" id="direct-file-input" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg" />
+            <div style="font-size:2.1rem; margin-bottom:0.35rem;">📁</div>
+            <h3 class="fw-extrabold mb-1" style="font-size:1.08rem; color:var(--gender-primary);">
+              اضغطي هنا لاختيار ملف من جهازكِ أو اسحبي الملف وأفلتيه هنا
+            </h3>
+            <p class="text-muted" style="font-size:0.86rem;">
+              يدعم ملفات: <code>PDF</code> ، <code>Word (.docx)</code> ، <code>Excel (.xlsx)</code> ، <code>PowerPoint</code> ، والصور (<code>PNG / JPG</code>)
+            </p>
+            <div class="mt-2">
+              <span class="btn btn-sm btn-gender">اختيار ملف من الكمبيوتر وربطه بملف الإنجاز</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">
+                <span>📂</span>
+                <span>سجل الشواهد والملفات المرفوعة في ملف إنجاز المعلمة</span>
+              </h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                جميع الشواهد الموثقة لمعلمة مادة لغتي (الصف الثاني الابتدائي) ومرتبطة بمعايير تقييم الأداء الوظيفي الـ 11
+              </p>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" id="btn-open-evidence-modal-2">+ إضافة شاهد تفصيلي</button>
+          </div>
+
+          <div id="portfolio-items-grid" class="portfolio-sections-grid"></div>
+        </div>
+      </section>
+
+
+            <!-- ====================================================================
+           التبويب 2: بطاقة السيرة الذاتية المهنية للمعلمة (CV Card)
+           ==================================================================== -->
+      <section id="tab-cv-card" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">
+                <span>🪪</span>
+                <span>بطاقة السيرة الذاتية المهنية للمعلمة</span>
+                <span class="badge badge-gender">خاص بالمعلمة</span>
+              </h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                تظهر هذه البطاقة في مطلع ملف الإنجاز المهني الرسمي عند المعاينة والطباعة، ويمكنكِ تعديل جميع حقولها وتخصيصها
+              </p>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-primary" id="btn-edit-cv-card">✏️ تحرير وتحديث بطاقة السيرة الذاتية</button>
+              <button type="button" class="btn btn-outline" id="btn-print-cv-only">🖨️ طباعة السيرة وملف الإنجاز</button>
+            </div>
+          </div>
+
+          <div id="cv-card-display-container" class="cv-showcase-grid"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 3: مكتبة المكونات والوثائق الجاهزة (عامة / المرحلة الابتدائية / مادة لغتي)
+           ==================================================================== -->
+      <section id="tab-shared-library" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">📚 مكتبة المكونات والوثائق الجاهزة للمعلمة</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                مكونات جاهزة مقسمة حسب نطاقها: (عامة لكل المعلمات والمعلمين بالمملكة) و(خاصة بالمرحلة الابتدائية) و(خاصة بمادة لغتي الصف الثاني الابتدائي) و(خاصة بفئة المعلمة):
+              </p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-add-shared-component">+ إنشاء مكون أو وثيقة جديدة</button>
+          </div>
+
+          <div class="scope-filter-bar">
+            <button type="button" class="scope-filter-btn active" data-lib-scope="ALL">
+              🌟 جميع المكونات الجاهزة
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="general">
+              🇸🇦 عام (أهداف التعليم / مدونة السلوك / ميثاق الأخلاقيات)
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="stage_primary">
+              🏫 المرحلة الابتدائية (أهداف المرحلة وخصائص الصف الثاني)
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="subject_lughati_g2">
+              📖 مادة لغتي — الصف الثاني الابتدائي (الأهداف والمهارات)
+            </button>
+            <button type="button" class="scope-filter-btn" data-lib-scope="role_teacher">
+              👩‍🏫 فئة المعلمة (دليل معايير الأداء)
+            </button>
+          </div>
+
+          <div id="shared-library-grid" class="shared-lib-grid"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 4: معايير تقييم الأداء الوظيفي لفئة المعلمة وشروحاتها (11 معياراً)
+           ==================================================================== -->
+      <section id="tab-performance" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">
+                <span>📊</span>
+                <span>معايير واستمارة تقييم الأداء الوظيفي لفئة المعلمة</span>
+              </h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                البنود الـ 11 المعتمدة وزارياً لفئة المعلمة مع الشرح التفصيلي لكل معيار، ومؤشرات التحقق لمعلمة لغتي (الصف الثاني الابتدائي)، والشواهد المرفقة بكل معيار:
+              </p>
+            </div>
+            <div class="d-flex align-center gap-3">
+              <div class="text-center">
+                <div class="text-muted" style="font-size:0.78rem;">الدرجة الموزونة الكلية</div>
+                <div class="fw-extrabold text-primary" id="live-total-performance-score" style="font-size:1.55rem;">98%</div>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-save-performance-eval">
+                💾 حفظ واعتماد التقييم الذاتي للمعلمة
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-between mb-1" style="font-size:0.84rem; font-weight:700;">
+              <span>مؤشر اكتمال معايير الأداء الوظيفي والشواهد المرفقة</span>
+              <span>التقدير العام: ممتاز (98 / 100)</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="live-performance-progress" style="width:98%;"></div>
+            </div>
+          </div>
+
+          <div id="criteria-list-container"></div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           التبويب 5: محرك الرسائل والمراسلات الداخلية للمعلمة
+           ==================================================================== -->
+      <section id="tab-messages" class="workspace-section">
+        <div class="card">
+          <div class="card-header flex-wrap">
+            <div>
+              <h2 class="card-title">✉️ صندوق الرسائل والتوجيهات التربوية للمعلمة</h2>
+              <p class="text-muted" style="font-size:0.88rem;">
+                المراسلات الرسمية والإشادات الواردة لمعلمة مادة لغتي من إدارة المدرسة والمنصة المركزية
+              </p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-user-compose-msg">
+              + إرسال رسالة جديدة
+            </button>
+          </div>
+
+          <div id="user-messages-list"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script src="assets/js/core/engines.js"></script>
+  <script src="assets/js/pages/ftm.js"></script>
+  <script src="assets/js/pages/ftm-dashboard.js"></script>
+</body>
+</html>
