@@ -26,6 +26,7 @@
   let queued = false;
   let timer = null;
   let latestError = "";
+  let controller = new AbortController();
 
   function safeRead(store, key) {
     try { return store.getItem(key); } catch { return null; }
@@ -81,6 +82,7 @@
   async function github(path, options = {}) {
     const response = await fetch(api(path), {
       ...options,
+      signal:controller.signal,
       headers:{...authHeaders(), ...(options.body ? {"Content-Type":"application/json"} : {})},
       cache:"no-store"
     });
@@ -115,7 +117,7 @@
     return "/contents/" + path.split("/").map(encodeURIComponent).join("/");
   }
   async function currentSha(path) {
-    const response = await fetch(api(dataPath(path)), {headers:authHeaders(),cache:"no-store"});
+    const response = await fetch(api(dataPath(path)), {headers:authHeaders(),cache:"no-store",signal:controller.signal});
     if (response.status === 404) return null;
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.message || "تعذر قراءة نسخة الملف السحابي");
@@ -160,7 +162,6 @@
   async function snapshotUser() {
     const user = storage.getCurrentUser();
     if (!user?.id) throw new Error("لم يتم تحديد مستخدم لنسخ ملف الإنجاز.");
-    const db = storage.getDB();
     const items = storage.getPortfolioForUser(user.id);
     const manifest = getManifest(user.id);
     const managed = new Set(items.map(item => String(item.id)));
@@ -236,12 +237,15 @@
   }
   function disconnect() {
     token = "";
+    controller.abort();
+    controller = new AbortController();
     queued = false;
     clearTimeout(timer);
     safeDelete(sessionStorage,sessionKey);
     statusUpdate("◌ محلي فقط • الاتصال السحابي غير مفعّل","idle");
   }
   async function connect(owner,repo,credential) {
+    if (active) throw new Error("أكملي النسخ الحالي قبل تغيير المستودع.");
     const proposed = {owner:owner.trim(),repo:repo.trim(),branch:"main"};
     if (!validPart(proposed.owner) || !validPart(proposed.repo)) {
       throw new Error("المالك والمستودع يجب أن يكونا اسمي GitHub صحيحين.");
@@ -249,7 +253,8 @@
     destination = proposed;
     token = credential.trim();
     try {
-      await verifyPrivate();
+      const verified = await verifyPrivate();
+      if (verified.default_branch) destination.branch = verified.default_branch;
       safeWrite(localStorage,localKey,JSON.stringify(destination));
       safeWrite(sessionStorage,sessionKey,token);
       queueBackup("connected");
@@ -274,7 +279,8 @@
         <div class="form-group"><label class="form-label" for="ftm-cloud-token">رمز GitHub بصلاحية Contents: Read and write للمستودع الخاص فقط</label>
           <input id="ftm-cloud-token" type="password" class="form-control" autocomplete="off" spellcheck="false" placeholder="يُستخدم لهذه الجلسة فقط ولا يُحفظ في قاعدة بيانات الموقع"></div>
         <p class="text-muted">بعد التفعيل: تُرفع الشواهد الجديدة ونسخة بيانات المعلمة تلقائيًا عند الحفظ، دون زر مزامنة أو رفع سحابي. يُتحقق من كون المستودع Private قبل كل دفعة. الملفات تبقى محفوظة محليًا عند تعذر الاتصال.</p>
-        <p class="text-muted"><strong>تنبيه خصوصية:</strong> هذا حل متصفح تجريبي، وتظل رموز الوصول قابلة للقراءة من سكربتات نفس الموقع. لا تستخدمه لبيانات الطالبات أو غيرها من البيانات الحساسة قبل اعتماد خدمة خلفية آمنة وتصريح جهة العمل.</p>`,
+        <p class="text-muted"><strong>تنبيه خصوصية:</strong> هذا حل متصفح تجريبي، وتظل رموز الوصول قابلة للقراءة من سكربتات نفس الموقع. لا تستخدمه لبيانات الطالبات أو غيرها من البيانات الحساسة قبل اعتماد خدمة خلفية آمنة وتصريح جهة العمل.</p>
+        <button id="ftm-cloud-stop" type="button" class="btn btn-sm btn-outline">إيقاف النسخ السحابي لهذه الجلسة</button>`,
       onConfirm:() => {
         const owner=document.getElementById("ftm-cloud-owner")?.value.trim()||"";
         const repo=document.getElementById("ftm-cloud-repo")?.value.trim()||"";
@@ -289,6 +295,10 @@
           E.ToastEngine?.show({type:"warning",title:"لم يُفعّل النسخ السحابي",message:error.message});
         });
       }
+    });
+    document.getElementById("ftm-cloud-stop")?.addEventListener("click", () => {
+      disconnect();
+      modal.close();
     });
   }
 
