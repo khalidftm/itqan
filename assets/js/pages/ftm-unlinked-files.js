@@ -33,7 +33,7 @@
         el("div","أضيف في "+new Date(item.uploadedAt).toLocaleString("ar-SA"),"ftm-unlinked-meta"));
       if(item.note)card.append(el("p",item.note,"ftm-unlinked-meta"));
       const actions=el("div","","ftm-unlinked-actions");
-      actions.append(btn("👁 عرض / تنزيل","btn-outline",()=>preview(item.id)),
+      actions.append(btn("👁 معاينة","btn-outline",()=>preview(item.id)),
         btn("🔗 ربط","btn-primary",()=>link(item.id)),
         btn("حذف","btn-ghost",()=>remove(item.id)));
       card.append(actions);grid.append(card);
@@ -64,28 +64,11 @@
       finally{save.disabled=false;}
     });
   }
-  async function preview(id){
-    const item=get(id);if(!item||!safeId(id))return;
-    const record=await files.getFile(id);
-    if(!record?.blob){alert("warning","الملف غير موجود","لم يُعثر على النسخة المحلية في هذا المتصفح.");return;}
-    const url=URL.createObjectURL(record.blob);
-    dialog("الملف: "+item.title,'<div id="fuv-preview" class="ftm-unlinked-preview"></div>'+
-      '<div class="ftm-unlinked-modal-actions"><a class="btn btn-primary" id="fuv-download">⬇ تنزيل الملف</a><button type="button" id="fuv-close" class="btn btn-ghost">إغلاق</button></div>');
-    const holder=document.getElementById("fuv-preview"),download=document.getElementById("fuv-download");
-    download.href=url;download.download=item.fileName;
-    const type=record.type||item.mimeType||"",name=item.fileName.toLowerCase();
-    if(type==="application/pdf"||name.endsWith(".pdf")){
-      const frame=document.createElement("iframe");frame.title="معاينة PDF";frame.src=url;frame.setAttribute("sandbox","allow-scripts");holder.append(frame);
-    }else if(["image/png","image/jpeg","image/webp","image/gif"].includes(type)||/\.(png|jpe?g|gif|webp)$/.test(name)){
-      const img=document.createElement("img");img.src=url;img.alt=item.title;holder.append(img);
-    }else holder.append(el("p","لا تتوفر معاينة لهذا النوع؛ استخدمي تنزيل الملف لفتحه في التطبيق المناسب."));
-    document.getElementById("fuv-close").addEventListener("click",close);
-    const backdrop=modal.ensureContainer();let opened=backdrop.classList.contains("is-open");
-    const observer=new MutationObserver(()=>{
-      if(backdrop.classList.contains("is-open"))opened=true;
-      else if(opened){observer.disconnect();URL.revokeObjectURL(url);}
-    });
-    observer.observe(backdrop,{attributes:true,attributeFilter:["class"]});
+  function preview(id){
+    const item=get(id);
+    if(!item||!safeId(id))return;
+    // Full-page viewer avoids sandboxed iframe / PDF plugin failures in modal overlays.
+    window.location.assign("ftm-file-viewer.html?file="+encodeURIComponent(id));
   }
   function link(id){
     const item=get(id);if(!item||!safeId(id))return;
