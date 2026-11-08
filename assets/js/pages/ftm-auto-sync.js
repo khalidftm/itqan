@@ -4,7 +4,7 @@
  * Security rules:
  *  - NEVER upload to a public repository (including khalidftm/itqan).
  *  - Verify the selected destination via GitHub API before EVERY upload pass.
- *  - Only transfer the active teacher's snapshot and locally stored evidence.
+ *  - Back up linked evidence AND unlinked files belonging to the active teacher.
  *  - No long-lived GitHub token in localStorage or the public repository.
  *  - Store credentials only for this browser session; production deployments
  *    handling sensitive data must replace this with server-side OAuth/storage.
@@ -163,8 +163,12 @@
     const user = storage.getCurrentUser();
     if (!user?.id) throw new Error("لم يتم تحديد مستخدم لنسخ ملف الإنجاز.");
     const items = storage.getPortfolioForUser(user.id);
+    const unlinkedFiles = (storage.getDB().unlinkedFiles || []).filter(file => file.userId === user.id);
+    // Both collections reference the SAME IndexedDB binary ID when a file gets linked.
+    // Preserve the remote path and SHA so linking will never upload a duplicate blob.
+    const allFiles = [...items, ...unlinkedFiles];
     const manifest = getManifest(user.id);
-    const managed = new Set(items.map(item => String(item.id)));
+    const managed = new Set(allFiles.map(item => String(item.id)));
     // Remove previously backed-up attachments that have been deleted locally.
     for (const [id, entry] of Object.entries(manifest)) {
       if (managed.has(id)) continue;
@@ -174,7 +178,7 @@
     }
 
     let uploaded = 0;
-    for (const item of items) {
+    for (const item of allFiles) {
       const id = String(item.id);
       if (manifest[id]?.sha) continue;
       const record = await blobs.getFile(id);
@@ -183,7 +187,7 @@
       const path = "uploads/" + userPath(user.id) + "/" + cleanId(id) + "/" +
         cleanFile(record.name || item.fileName);
       const saved = await pushFile(path,await base64Blob(blob),
-        "FTM: حفظ شاهد في المستودع الخاص " + cleanId(id));
+        "FTM: نسخ ملف المعلمة إلى المستودع الخاص " + cleanId(id));
       manifest[id] = saved;
       putManifest(user.id,manifest);
       uploaded++;
@@ -197,6 +201,7 @@
       schemaVersion:1,exportedAt:new Date().toISOString(),
       userId:user.id,user,
       portfolioItems:items,
+      unlinkedFiles,
       includedLibraryIds:user.includedLibraryIds || [],
       schoolIdentity,
       files:manifest
@@ -204,7 +209,7 @@
     const snapshotPath = "data/" + userPath(user.id) + "/snapshot.json";
     await pushFile(snapshotPath,base64Utf8(JSON.stringify(snapshot,null,2)),
       "FTM: تحديث النسخة الاحتياطية الخاصة بالمستخدمة");
-    return {uploaded,count:items.length};
+    return {uploaded,count:allFiles.length,linked:items.length,unlinked:unlinkedFiles.length};
   }
 
   async function flush() {
@@ -217,7 +222,7 @@
         await verifyPrivate(); // fail closed on any visibility or authorization change
         const summary = await snapshotUser();
         latestError = "";
-        statusUpdate("✓ نسخة خاصة محفوظة تلقائيًا • " + summary.count + " شواهد","synced");
+        statusUpdate("✓ نسخة خاصة محفوظة تلقائيًا • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة","synced");
       }
     } catch (error) {
       latestError = error.message;
@@ -237,7 +242,7 @@
     }
     queued = true;
     clearTimeout(timer);
-    timer = setTimeout(flush,reason==="evidence-saved" ? 100 : 900);
+    timer = setTimeout(flush,["evidence-saved","unlinked-file-saved"].includes(reason) ? 100 : 900);
   }
   function disconnect() {
     token = "";
@@ -282,7 +287,7 @@
           <input id="ftm-cloud-repo" class="form-control" autocomplete="off" value="${esc(saved.repo)}" placeholder="اسم مستودع خاص منفصل عن itqan"></div>
         <div class="form-group"><label class="form-label" for="ftm-cloud-token">رمز GitHub بصلاحية Contents: Read and write للمستودع الخاص فقط</label>
           <input id="ftm-cloud-token" type="password" class="form-control" autocomplete="off" spellcheck="false" placeholder="يُستخدم لهذه الجلسة فقط ولا يُحفظ في قاعدة بيانات الموقع"></div>
-        <p class="text-muted">بعد التفعيل: تُرفع الشواهد الجديدة ونسخة بيانات المعلمة تلقائيًا عند الحفظ، دون زر مزامنة أو رفع سحابي. يُتحقق من كون المستودع Private قبل كل دفعة. الملفات تبقى محفوظة محليًا عند تعذر الاتصال.</p>
+        <p class="text-muted">بعد التفعيل: تُرفع الشواهد والملفات غير المرتبطة ونسخة بيانات المعلمة تلقائيًا عند الحفظ، دون زر مزامنة أو رفع سحابي. يُتحقق من كون المستودع Private قبل كل دفعة. الملفات تبقى محفوظة محليًا عند تعذر الاتصال.</p>
         <p class="text-muted"><strong>تنبيه خصوصية:</strong> هذا حل متصفح تجريبي، وتظل رموز الوصول قابلة للقراءة من سكربتات نفس الموقع. لا تستخدمه لبيانات الطالبات أو غيرها من البيانات الحساسة قبل اعتماد خدمة خلفية آمنة وتصريح جهة العمل.</p>
         <button id="ftm-cloud-stop" type="button" class="btn btn-sm btn-outline">إيقاف النسخ السحابي لهذه الجلسة</button>`,
       onConfirm:() => {
