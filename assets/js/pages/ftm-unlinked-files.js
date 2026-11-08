@@ -32,6 +32,13 @@
         el("div","📎 "+item.fileName+" • "+fmt(item.size),"ftm-unlinked-meta"),
         el("div","أضيف في "+new Date(item.uploadedAt).toLocaleString("ar-SA"),"ftm-unlinked-meta"));
       if(item.note)card.append(el("p",item.note,"ftm-unlinked-meta"));
+      const cloudState=window.FTMAutoSync?.fileSyncState(item.id)||"local";
+      const cloudLabel=cloudState==="synced"?"✓ نسخة الملف محفوظة سحابيًا"
+        :cloudState==="pending"?"◷ بانتظار النسخ السحابي التلقائي"
+        :"◌ الاتصال السحابي غير مفعّل في هذه الجلسة";
+      const cloud=el("div",cloudLabel,"ftm-unlinked-cloud-status");
+      cloud.dataset.state=cloudState;
+      card.append(cloud);
       const actions=el("div","","ftm-unlinked-actions");
       actions.append(btn("👁 معاينة","btn-outline",()=>preview(item.id)),
         btn("🔗 ربط","btn-primary",()=>link(item.id)),
@@ -59,7 +66,10 @@
         db.unlinkedFiles.unshift({id,userId:uid,title:name.value.trim()||file.name,fileName:file.name,
           size:file.size,mimeType:file.type||"application/octet-stream",note:note.value.trim(),uploadedAt:new Date().toISOString()});
         try{storage.saveDB(db);}catch(e){await files.deleteFile(id);throw e;}
-        close();render();alert("success","تم حفظ الملف","أُضيف إلى قسم «الملفات غير المرتبطة» دون ربطه بملف الإنجاز أو الأداء.");
+        close();
+        window.FTMAutoSync?.queueBackup("unlinked-file-saved");
+        render();
+        alert("success","تم حفظ الملف","أُضيف إلى «الملفات غير المرتبطة». سيبدأ نسخه سحابيًا تلقائيًا عند تفعيل اتصال GitHub.");
       }catch(error){alert("danger","تعذر الحفظ",error.message);}
       finally{save.disabled=false;}
     });
@@ -132,6 +142,7 @@
     ["ftm-upload-unlinked","ftm-upload-unlinked-in-section"].forEach(id=>document.getElementById(id)?.addEventListener("click",openUpload));
     document.getElementById("ftm-unlinked-search")?.addEventListener("input",render);
     window.addEventListener("itqan:activeUserChanged",render);
+    window.addEventListener("itqan:cloudSyncChanged",render);
     window.addEventListener("storage",render);
     render();
   }
