@@ -98,9 +98,7 @@
   "availableImageAssets": {
     "header": "assets/images/header.png",
     "footer": "assets/images/footer.png",
-    "logo": "assets/images/الشعار.jpg",
-    "signature": "assets/images/Khalid-Signature-Original-Clean.png",
-    "stamp": "assets/images/STMP.PNG"
+    "logo": "assets/images/admin_logo.jpg"
   },
-  "signoffAssetsOptIn": true
+  "signoffAssetsOptIn": false
 }
