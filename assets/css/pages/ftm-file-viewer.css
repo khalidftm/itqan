@@ -1,0 +1,29 @@
+
+/* Independent FTM PDF/image viewer: same-origin IndexedDB, no remote document service. */
+.ftm-file-viewer-page{margin:0;background:#f5f7f9;color:#213547;min-height:100dvh}
+.ftm-viewer-header{position:sticky;top:0;z-index:10;background:white;border-bottom:1px solid #e3e8ee;padding:12px clamp(12px,3vw,32px);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.ftm-viewer-header h1{margin:0;font-size:clamp(1.08rem,2.5vw,1.45rem)}
+.ftm-viewer-header p{margin:4px 0 0;color:#64748b;font-size:.8rem}
+.ftm-viewer-header .btn{white-space:nowrap}
+.ftm-viewer-main{width:100%;max-width:1500px;margin:0 auto;padding:clamp(12px,2vw,25px)}
+.ftm-viewer-status{border:1px solid #e1e8ed;border-radius:12px;background:white;padding:18px;color:#526879;line-height:1.8}
+.ftm-viewer-status[data-state=error]{border-color:#f0c4c4;color:#9a2424;background:#fff5f4}
+.ftm-viewer-section{min-width:0}
+.ftm-viewer-meta{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.ftm-viewer-meta h2{font-size:1.04rem;margin:0;overflow-wrap:anywhere}
+.ftm-viewer-meta span{font-size:.8rem;color:#63758a}
+.ftm-viewer-content{display:grid;place-items:center;min-height:50dvh;background:#eef2f5;border:1px solid #d8e1e8;border-radius:14px;overflow:hidden}
+.ftm-viewer-content iframe{display:block;width:100%;height:calc(100dvh - 240px);min-height:420px;border:0;background:white}
+.ftm-viewer-content img{display:block;object-fit:contain;max-width:100%;max-height:calc(100dvh - 220px);margin:auto}
+.ftm-viewer-content p{padding:20px;text-align:center;line-height:1.8}
+.ftm-viewer-tools{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 9px}
+.ftm-viewer-help{font-size:.82rem;color:#66788a;line-height:1.85}
+@media(max-width:680px){
+.ftm-viewer-header{padding:10px 12px;flex-wrap:wrap}
+.ftm-viewer-header .btn{font-size:.77rem;padding:7px 11px}
+.ftm-viewer-main{padding:9px}
+.ftm-viewer-content iframe{height:calc(100dvh - 245px);min-height:360px}
+.ftm-viewer-content img{max-height:calc(100dvh - 230px)}
+.ftm-viewer-tools .btn{flex:1 1 auto}
+}
+@media print{.ftm-viewer-header,.ftm-viewer-tools,.ftm-viewer-help{display:none!important}.ftm-viewer-main{padding:0}.ftm-viewer-content{border:0;background:white}.ftm-viewer-content img{max-height:none}}
