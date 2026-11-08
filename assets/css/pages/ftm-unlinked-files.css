@@ -34,3 +34,8 @@
 }
 .ftm-page .ftm-cloud-consent input{margin-top:5px;flex:0 0 auto;width:18px;height:18px}
 @media(max-width:760px){.ftm-page .ftm-cloud-warning{padding:10px}.ftm-page .ftm-cloud-consent{font-size:.78rem}}
+
+.ftm-page .ftm-auto-backup-status[data-state="public"]{
+  color:#8a4316!important;background:#fff6e6!important;border-color:#ebbf70!important;
+  font-weight:700;
+}
