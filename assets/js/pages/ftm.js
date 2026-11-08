@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
   }
   function editSchool() {
+    if (mobileQuery.matches) setDrawer(false);
     const values = window.ITQAN_FTM_IDENTITY.get();
     modal.open({
       type:"form", title:"تحديث بيانات إدارة التعليم والمدرسة", size:"lg",
@@ -169,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <p class="text-muted">يعرض أسفل القائمة موعد آخر حفظ محلي مسجّل. لا يدل هذا التاريخ على نجاح المزامنة السحابية.</p>
     </div>`;
   document.getElementById("ftm-open-guide")?.addEventListener("click",() => {
+    if (mobileQuery.matches) setDrawer(false);
     modal.open({type:"info",title:"دليل العمل على ملف الإنجاز",size:"lg",html:guideMarkup,confirmText:"إغلاق"});
   });
 
