@@ -97,6 +97,25 @@
     const manager = window.hspPrintManager;
     const toolbarSelect = document.getElementById("itqan-template-switch");
     if (!manager || !toolbarSelect) return;
+
+    // FTM uses the print manager as a dedicated screen. Closing/back must
+    // return to the portfolio, never reveal the intermediary manager-entry page.
+    const returnToPortfolio = () => {
+      const url = new URL("../../../ftm.html", window.location.href);
+      window.location.replace(url.href);
+    };
+    const originalClose = manager.close.bind(manager);
+    let returning = false;
+    manager.close = function() {
+      if (returning) return;
+      returning = true;
+      if (this.dialog.open) originalClose();
+      returnToPortfolio();
+    };
+    manager.dialog.addEventListener("close", () => {
+      if (!returning) returnToPortfolio();
+    });
+
     (window.HSP3?.profiles || []).forEach(profile => {
       toolbarSelect.add(new Option(profile.name, profile.id));
     });
