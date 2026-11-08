@@ -153,6 +153,19 @@
       reader.readAsDataURL(blob);
     });
   }
+  // Exclude authentication material even if older user records contain it.
+  const scrubSecrets = value => {
+    if (Array.isArray(value)) return value.map(scrubSecrets);
+    if (value && typeof value==="object") {
+      const clean={};
+      for (const [key,val] of Object.entries(value)) {
+        if (/password|passphrase|access[_-]?token|refresh[_-]?token|github[_-]?token|api[_-]?key|authorization|credential|client[_-]?secret/i.test(key)) continue;
+        clean[key]=scrubSecrets(val);
+      }
+      return clean;
+    }
+    return value;
+  };
   async function snapshotUser() {
     const user = storage.getCurrentUser();
     if (!user?.id) throw new Error("لم يتم تحديد مستخدم لنسخ ملف الإنجاز.");
@@ -193,9 +206,9 @@
     // Never export authentication tokens or other users' records in this snapshot.
     const snapshot = {
       schemaVersion:1,exportedAt:new Date().toISOString(),
-      userId:user.id,user,
-      portfolioItems:items,
-      unlinkedFiles,
+      userId:user.id,user:scrubSecrets(user),
+      portfolioItems:scrubSecrets(items),
+      unlinkedFiles:scrubSecrets(unlinkedFiles),
       includedLibraryIds:user.includedLibraryIds || [],
       schoolIdentity,
       files:manifest
