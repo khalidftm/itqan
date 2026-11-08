@@ -1,0 +1,21 @@
+/* Standalone performance evidence register, only applied to FTM. */
+.ftm-page .ftm-performance-records-card { margin-top: 16px; min-width: 0; }
+.ftm-page .ftm-performance-filter { padding: 3px 18px 15px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ftm-page .ftm-performance-filter label { font-weight: 700; font-size: .85rem; color: var(--text-secondary,#64748b); }
+.ftm-page .ftm-performance-filter input { flex: 1 1 210px; max-width: 450px; }
+.ftm-page .ftm-performance-evidence-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%,275px),1fr)); gap: 12px; padding: 12px 18px 18px; }
+.ftm-page .ftm-performance-evidence-item { border: 1px solid var(--border-color,#dde5eb); border-radius: 12px; padding: 14px; background: var(--bg-surface,#fff); display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+.ftm-page .ftm-performance-evidence-item h4 { font-weight: 800; font-size: .95rem; line-height: 1.55; overflow-wrap: anywhere; margin: 0; }
+.ftm-page .ftm-performance-evidence-meta { font-size: .8rem; color: var(--text-secondary,#64748b); line-height: 1.75; overflow-wrap: anywhere; }
+.ftm-page .ftm-performance-evidence-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+.ftm-page .ftm-performance-evidence-actions .btn { flex: 1 1 auto; }
+.ftm-page .ftm-performance-evidence-empty { grid-column: 1/-1; border: 1px dashed var(--border-color,#dde5eb); background: var(--bg-surface,#fff); padding: 24px 16px; border-radius: 12px; text-align: center; color: var(--text-secondary,#64748b); }
+.ftm-page .ftm-performance-nav-count { margin-inline-start: auto; border: 1px solid var(--border-color,#dde5eb); border-radius: 20px; font-size: .72rem; padding: 0 7px; line-height: 1.8; }
+.ftm-page.ftm-sidebar-icons .ftm-performance-nav-count { display: none; }
+@media (max-width:760px) {
+ .ftm-page .ftm-performance-filter { flex-direction: column; align-items: stretch; padding-inline: 12px; gap: 6px; }
+ .ftm-page .ftm-performance-filter input { width: 100%; max-width: none; flex-basis: auto; }
+ .ftm-page .ftm-performance-evidence-list { padding: 12px; }
+ .ftm-page.ftm-sidebar-icons .ftm-performance-nav-count { display: inline-block; }
+}
+@media print { .ftm-page .ftm-performance-evidence-actions {display:none!important;} }
