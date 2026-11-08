@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "units": "mm",
+  "paper": "A4",
+  "safeBandMm": 3,
+  "profiles": [
+    {
+      "id": "official-landscape",
+      "label": "الرسمي العرضي",
+      "orientation": "landscape",
+      "page": {
+        "widthMm": 297,
+        "heightMm": 210
+      },
+      "headerMm": 24,
+      "footerMm": 10,
+      "content": {
+        "paddingTopMm": 3,
+        "paddingBottomMm": 3,
+        "paddingInlineMm": 10
+      },
+      "headerMode": "text",
+      "footerMode": "text",
+      "contentHeightMm": 167,
+      "contentWidthMm": 277
+    },
+    {
+      "id": "branded-landscape",
+      "label": "المصور العرضي",
+      "orientation": "landscape",
+      "page": {
+        "widthMm": 297,
+        "heightMm": 210
+      },
+      "headerMm": 24,
+      "footerMm": 10,
+      "content": {
+        "paddingTopMm": 3,
+        "paddingBottomMm": 3,
+        "paddingInlineMm": 10
+      },
+      "headerMode": "image",
+      "footerMode": "image",
+      "imagePaths": {
+        "header": "assets/images/header.png",
+        "footer": "assets/images/footer.png"
+      },
+      "contentHeightMm": 167,
+      "contentWidthMm": 277,
+      "imageFit": "fill"
+    },
+    {
+      "id": "official-portrait",
+      "label": "الرسمي الطولي",
+      "orientation": "portrait",
+      "page": {
+        "widthMm": 210,
+        "heightMm": 297
+      },
+      "headerMm": 34,
+      "footerMm": 16,
+      "content": {
+        "paddingTopMm": 3,
+        "paddingBottomMm": 3,
+        "paddingInlineMm": 10
+      },
+      "headerMode": "text",
+      "footerMode": "text",
+      "contentHeightMm": 238,
+      "contentWidthMm": 190
+    },
+    {
+      "id": "branded-portrait",
+      "label": "المصور الطولي",
+      "orientation": "portrait",
+      "page": {
+        "widthMm": 210,
+        "heightMm": 297
+      },
+      "headerMm": 34,
+      "footerMm": 16,
+      "content": {
+        "paddingTopMm": 3,
+        "paddingBottomMm": 3,
+        "paddingInlineMm": 10
+      },
+      "headerMode": "image",
+      "footerMode": "image",
+      "imagePaths": {
+        "header": "assets/images/header.png",
+        "footer": "assets/images/footer.png"
+      },
+      "contentHeightMm": 238,
+      "contentWidthMm": 190,
+      "imageFit": "fill"
+    }
+  ],
+  "availableImageAssets": {
+    "header": "assets/images/header.png",
+    "footer": "assets/images/footer.png",
+    "logo": "assets/images/الشعار.jpg",
+    "signature": "assets/images/Khalid-Signature-Original-Clean.png",
+    "stamp": "assets/images/STMP.PNG"
+  },
+  "signoffAssetsOptIn": true
+}
