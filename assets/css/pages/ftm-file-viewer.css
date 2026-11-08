@@ -1,6 +1,6 @@
 
 /* Independent FTM PDF/image viewer: same-origin IndexedDB, no remote document service. */
-.ftm-file-viewer-page{margin:0;background:#f5f7f9;color:#213547;min-height:100dvh}
+.ftm-file-viewer-page{margin:0;padding-bottom:0!important;display:block;background:#f5f7f9;color:#213547;min-height:100dvh}
 .ftm-viewer-header{position:sticky;top:0;z-index:10;background:white;border-bottom:1px solid #e3e8ee;padding:12px clamp(12px,3vw,32px);display:flex;align-items:center;justify-content:space-between;gap:14px}
 .ftm-viewer-header h1{margin:0;font-size:clamp(1.08rem,2.5vw,1.45rem)}
 .ftm-viewer-header p{margin:4px 0 0;color:#64748b;font-size:.8rem}
@@ -27,3 +27,6 @@
 .ftm-viewer-tools .btn{flex:1 1 auto}
 }
 @media print{.ftm-viewer-header,.ftm-viewer-tools,.ftm-viewer-help{display:none!important}.ftm-viewer-main{padding:0}.ftm-viewer-content{border:0;background:white}.ftm-viewer-content img{max-height:none}}
+
+/* Defensive isolation if an older cached engine still injects the site dock. */
+body.ftm-file-viewer-page #global-design-switcher-dock{display:none!important}
