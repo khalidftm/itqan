@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1. رسالة ترحيبية داخلية موحدة قابلة للإغلاق بزر (×)
   function renderWelcomeAlert() {
-    const school = StorageEngine.getSchoolById(currentUser.schoolId);
+    const school = { ...StorageEngine.getSchoolById(currentUser.schoolId), name: window.ITQAN_FTM_IDENTITY?.get(currentUser.id).schoolName || StorageEngine.getSchoolById(currentUser.schoolId).name };
     const roleLabel = GenderEngine.jobTitle(currentUser.jobRole, currentUser.gender);
     BannerEngine.render('#user-inline-alerts', {
       type: 'success',
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderUserHeaderAndCover() {
     currentUser = getActiveUser();
     const g = currentUser.gender || GenderEngine.getCurrentGender();
-    const school = StorageEngine.getSchoolById(currentUser.schoolId);
+    const school = { ...StorageEngine.getSchoolById(currentUser.schoolId), name: window.ITQAN_FTM_IDENTITY?.get(currentUser.id).schoolName || StorageEngine.getSchoolById(currentUser.schoolId).name };
     const jobTitle = GenderEngine.jobTitle(currentUser.jobRole, g);
     const portfolioTitle = GenderEngine.portfolioTitle(currentUser.jobRole, g);
     const portfolioItems = StorageEngine.getPortfolioForUser(currentUser.id);
@@ -94,12 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Saved school names may contain user input: escape before innerHTML rendering.
+  const escapeSchoolName = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+
   // 3. عرض وتحرير بطاقة السيرة الذاتية المهنية للمعلمة (CV Card)
   function renderCVCard() {
     const container = document.getElementById('cv-card-display-container');
     if (!container) return;
 
-    const school = StorageEngine.getSchoolById(currentUser.schoolId);
+    const school = { ...StorageEngine.getSchoolById(currentUser.schoolId), name: window.ITQAN_FTM_IDENTITY?.get(currentUser.id).schoolName || StorageEngine.getSchoolById(currentUser.schoolId).name };
     const cv = currentUser.cvData || {
       qualification: 'بكالوريوس اللغة العربية والتربية + دبلوم الصفوف الأولية',
       university: 'جامعة الأميرة نورة بنت عبدالرحمن',
@@ -119,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="cv-info-block">
         <div class="cv-info-label">🏫 المدرسة والمرحلة الدراسية</div>
-        <div class="cv-info-value">${school.name} — (${currentUser.stage || 'المرحلة الابتدائية'})</div>
+        <div class="cv-info-value">${escapeSchoolName(school.name)} — (${currentUser.stage || 'المرحلة الابتدائية'})</div>
       </div>
       <div class="cv-info-block">
         <div class="cv-info-label">📚 التخصص والمادة والصف المسند</div>
@@ -1147,6 +1150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderMessagesList();
   }
 
+  window.addEventListener('itqan:ftmIdentityChanged', () => { renderUserHeaderAndCover(); renderCVCard(); });
   window.addEventListener('itqan:genderChanged', refreshAllUserViews);
   window.addEventListener('itqan:messagesUpdated', renderMessagesList);
 
