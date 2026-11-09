@@ -88,6 +88,10 @@
         }
       }
     }
+    let hasLocalBlobs=false;
+    for(const item of [...localLinked,...localPending]) {
+      if((await blobs.getFile(item.id))?.blob){hasLocalBlobs=true;break;}
+    }
     let restored=0,missing=0;
     for(const item of [...matches.linked,...matches.pending]) {
       const record=manifest[item.id];
@@ -112,10 +116,6 @@
       const current=plainArray(localDB.users).find(x=>x.id===userId);
       // On a newly opened device without real locally uploaded files, hydrate
       // the cloud profile. Existing locally edited profiles are not overwritten.
-      let hasLocalBlobs=false;
-      for(const x of [...localLinked,...localPending]) {
-        if((await blobs.getFile(x.id))?.blob){hasLocalBlobs=true;break;}
-      }
       if(current && !hasLocalBlobs && comparable(current)!==comparable(remote.user)) {
         // Preserve an undo copy of the local profile before adopting the cloud version.
         try{
