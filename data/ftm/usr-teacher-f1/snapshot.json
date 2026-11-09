@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "exportedAt": "2026-11-09T00:07:38.544Z",
+  "exportedAt": "2026-11-09T00:09:52.386Z",
   "userId": "usr-teacher-f1",
   "user": {
     "id": "usr-teacher-f1",
     "nationalId": "1030405060",
     "email": "sara@itqan.edu.sa",
-    "name": "أ. سارة بنت عبدالله الشهري",
+    "name": "أ. فاطمة الحربي",
     "systemRole": "user",
     "jobRole": "teacher",
     "gender": "female",
@@ -32,14 +32,14 @@
       "lib-role-1"
     ],
     "cvData": {
-      "qualification": "بكالوريوس اللغة العربية والتربية + دبلوم الصفوف الأولية",
-      "university": "جامعة الأميرة نورة بنت عبدالرحمن",
+      "qualification": "بكالوريوس اللغة العربية",
+      "university": "كلية التربية",
       "graduationYear": "1438 هـ",
-      "ministerialNumber": "4489201",
-      "classesTaught": "الصف الثاني الابتدائي (فصل 2/أ ، فصل 2/ب) — نصاب 18 حصة",
+      "ministerialNumber": "99",
+      "classesTaught": "الصف الثاني الابتدائي الفصول 1-2-3",
       "vision": "بناء جيل من التلميذات القارئات بطلاقة والمعتزات بلغتهن العربية الفصيحة وقيمهن الإسلامية والوطنية.",
       "mission": "تقديم تعليم نوعي محفز في مادة (لغتي) لطالبات الصف الثاني الابتدائي عبر توظيف استراتيجيات التعلم باللعب والتقنيات التفاعلية ومراعاة الفروق الفردية.",
-      "keySkills": "تأسيس القراءة والكتابة بالقاعدة النورانية والوعي الصوتي، تصميم الألعاب القرائية الرقمية، بناء الخطط العلاجية والإثرائية، الإدارة الصفية المحفزة.",
+      "keySkills": "- تأسيس القراءة والكتابة بالقاعدة النورانية والوعي الصوتي\n- تصميم الألعاب القرائية الرقمية\n- بناء الخطط العلاجية والإثرائية\n- الإدارة الصفية المحفزة.",
       "achievementsSummary": "تحقيق نسبة إتقان 97% في مهارات الانطلاق القرائي والإملاء لطالبات الصف الثاني الابتدائي، والفوز بجائزة المعلمة المتميزة على مستوى المكتب."
     },
     "criteriaScores": {
@@ -147,6 +147,22 @@
       "fileSize": "1.9 MB",
       "attachmentType": "وثيقة PDF + شهادة حضور",
       "description": "تطبيق استراتيجيات القبعات الست والخرائط الذهنية المصورة في تدريس الفهم القرائي والظواهر اللغوية."
+    },
+    {
+      "id": "pf-1794173234017",
+      "date": "1447/04/25 هـ",
+      "status": "معتمد وموثق",
+      "scopeType": "خاص بالمعلمة الحالية (رحلة البناء)",
+      "userId": "usr-teacher-f1",
+      "criteriaId": "c1",
+      "section": "تحليل نتائج المتعلمات وتشخيص المستويات",
+      "title": "تقرير اليوم الوطني",
+      "type": "تحليل نتائج المتعلمات وتشخيص المستويات",
+      "fileName": "تقرير اليوم الوطني.pdf",
+      "fileSize": "477 KB",
+      "attachmentType": "وثيقة PDF معتمدة",
+      "githubDownloadUrl": null,
+      "description": "توثيق تطبيقي ضمن رحلة بناء ملف الإنجاز المهني لمعلمة مادة لغتي للصف الثاني الابتدائي."
     }
   ],
   "unlinkedFiles": [
@@ -199,6 +215,30 @@
       "mimeType": "application/pdf",
       "note": "",
       "uploadedAt": "2026-11-08T22:54:34.092Z"
+    },
+    {
+      "id": "unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e",
+      "userId": "usr-teacher-f1",
+      "title": "سجل_متابعة_أعمال_الطالبات_-_لغتي.pdf",
+      "fileName": "سجل_متابعة_أعمال_الطالبات_-_لغتي.pdf",
+      "mimeType": "application/octet-stream",
+      "size": 791605,
+      "uploadedAt": "2026-11-09T00:09:44.382Z",
+      "recoveredFromCloud": true,
+      "cloudPath": "uploads/ftm/usr-teacher-f1/unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e/سجل_متابعة_أعمال_الطالبات_-_لغتي.pdf",
+      "cloudSha": "ddbb14cf232f79b4b603ac8925dc2983b23cd784"
+    },
+    {
+      "id": "unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278",
+      "userId": "usr-teacher-f1",
+      "title": "اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
+      "fileName": "اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
+      "mimeType": "application/octet-stream",
+      "size": 1514256,
+      "uploadedAt": "2026-11-09T00:09:45.068Z",
+      "recoveredFromCloud": true,
+      "cloudPath": "uploads/ftm/usr-teacher-f1/unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278/اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
+      "cloudSha": "7b4ffc1f476091ede6981010f3823acc90bee6c4"
     }
   ],
   "includedLibraryIds": [
@@ -213,9 +253,21 @@
   ],
   "schoolIdentity": {
     "educationAdministrationName": "الإدارة العامة للتعليم بمنطقة مكة المكرمة",
-    "schoolName": "ابتدائية بحرة المجاهدين الخامسة"
+    "schoolName": "ابتدائية بحرة المجاهدين الخامسة ببحرة المجاهدين"
   },
   "files": {
+    "pf-1794173234017": {
+      "path": "uploads/ftm/usr-teacher-f1/pf-1794173234017/تقرير_اليوم_الوطني.pdf",
+      "sha": "9fa0551382894a3d4353de71d4c329a451d2f158"
+    },
+    "unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278/اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
+      "sha": "7b4ffc1f476091ede6981010f3823acc90bee6c4"
+    },
+    "unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e/سجل_متابعة_أعمال_الطالبات_-_لغتي.pdf",
+      "sha": "ddbb14cf232f79b4b603ac8925dc2983b23cd784"
+    },
     "pf-1794178030614": {
       "path": "uploads/ftm/usr-teacher-f1/pf-1794178030614/الاستعداد_للعام_الدراسي.pdf",
       "sha": "50020b31b790b065bd1bc89a7fb557176ed84d52"
