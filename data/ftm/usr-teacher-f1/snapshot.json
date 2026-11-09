@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "exportedAt": "2026-11-09T00:06:46.812Z",
+  "exportedAt": "2026-11-09T00:07:03.651Z",
   "userId": "usr-teacher-f1",
   "user": {
     "id": "usr-teacher-f1",
     "nationalId": "1030405060",
     "email": "sara@itqan.edu.sa",
-    "name": "أ. فاطمة الحربي",
+    "name": "أ. سارة بنت عبدالله الشهري",
     "systemRole": "user",
     "jobRole": "teacher",
     "gender": "female",
@@ -32,14 +32,14 @@
       "lib-role-1"
     ],
     "cvData": {
-      "qualification": "بكالوريوس اللغة العربية",
-      "university": "كلية التربية",
+      "qualification": "بكالوريوس اللغة العربية والتربية + دبلوم الصفوف الأولية",
+      "university": "جامعة الأميرة نورة بنت عبدالرحمن",
       "graduationYear": "1438 هـ",
-      "ministerialNumber": "99",
-      "classesTaught": "الصف الثاني الابتدائي الفصول 1-2-3",
+      "ministerialNumber": "4489201",
+      "classesTaught": "الصف الثاني الابتدائي (فصل 2/أ ، فصل 2/ب) — نصاب 18 حصة",
       "vision": "بناء جيل من التلميذات القارئات بطلاقة والمعتزات بلغتهن العربية الفصيحة وقيمهن الإسلامية والوطنية.",
       "mission": "تقديم تعليم نوعي محفز في مادة (لغتي) لطالبات الصف الثاني الابتدائي عبر توظيف استراتيجيات التعلم باللعب والتقنيات التفاعلية ومراعاة الفروق الفردية.",
-      "keySkills": "- تأسيس القراءة والكتابة بالقاعدة النورانية والوعي الصوتي\n- تصميم الألعاب القرائية الرقمية\n- بناء الخطط العلاجية والإثرائية\n- الإدارة الصفية المحفزة.",
+      "keySkills": "تأسيس القراءة والكتابة بالقاعدة النورانية والوعي الصوتي، تصميم الألعاب القرائية الرقمية، بناء الخطط العلاجية والإثرائية، الإدارة الصفية المحفزة.",
       "achievementsSummary": "تحقيق نسبة إتقان 97% في مهارات الانطلاق القرائي والإملاء لطالبات الصف الثاني الابتدائي، والفوز بجائزة المعلمة المتميزة على مستوى المكتب."
     },
     "criteriaScores": {
@@ -58,17 +58,17 @@
   },
   "portfolioItems": [
     {
-      "id": "pf-1794173234017",
+      "id": "pf-1794178030614",
       "date": "1447/04/25 هـ",
       "status": "معتمد وموثق",
       "scopeType": "خاص بالمعلمة الحالية (رحلة البناء)",
       "userId": "usr-teacher-f1",
-      "criteriaId": "c1",
-      "section": "تحليل نتائج المتعلمات وتشخيص المستويات",
-      "title": "تقرير اليوم الوطني",
-      "type": "تحليل نتائج المتعلمات وتشخيص المستويات",
-      "fileName": "تقرير اليوم الوطني.pdf",
-      "fileSize": "477 KB",
+      "criteriaId": "c4",
+      "section": "استراتيجيات تدريس مادة لغتي (ثاني ابتدائي)",
+      "title": "الاستعداد للعام الدراسي",
+      "type": "استراتيجيات تدريس مادة لغتي (ثاني ابتدائي)",
+      "fileName": "الاستعداد للعام الدراسي.pdf",
+      "fileSize": "445 KB",
       "attachmentType": "وثيقة PDF معتمدة",
       "githubDownloadUrl": null,
       "description": "توثيق تطبيقي ضمن رحلة بناء ملف الإنجاز المهني لمعلمة مادة لغتي للصف الثاني الابتدائي."
@@ -151,24 +151,54 @@
   ],
   "unlinkedFiles": [
     {
-      "id": "unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e",
+      "id": "unlinked-0155e5b8-6e6d-4747-b8e2-de0e7d0d31ff",
       "userId": "usr-teacher-f1",
-      "title": "سجل متابعة أعمال الطالبات - لغتي",
-      "fileName": "سجل متابعة أعمال الطالبات - لغتي.pdf",
-      "size": 791605,
+      "title": "تقرير اليوم الوطني",
+      "fileName": "تقرير اليوم الوطني.pdf",
+      "size": 496894,
       "mimeType": "application/pdf",
-      "note": "",
-      "uploadedAt": "2026-11-09T00:06:40.788Z"
+      "note": "من الجوال",
+      "uploadedAt": "2026-11-08T22:58:04.775Z"
     },
     {
-      "id": "unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278",
+      "id": "unlinked-d31e294b-9417-4899-99b2-8fe439611ac2",
       "userId": "usr-teacher-f1",
-      "title": "اختبار_تشخيصي_رياضيات_الصف_الثاني",
-      "fileName": "اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
-      "size": 1514256,
+      "title": "الاستعداد للعام الدراسي",
+      "fileName": "الاستعداد للعام الدراسي.pdf",
+      "size": 455925,
       "mimeType": "application/pdf",
-      "note": "من اللاب",
-      "uploadedAt": "2026-11-08T23:02:05.442Z"
+      "note": "",
+      "uploadedAt": "2026-11-08T22:57:40.661Z"
+    },
+    {
+      "id": "unlinked-4ecfca6d-ea80-4fec-8e7c-9209a41b0c33",
+      "userId": "usr-teacher-f1",
+      "title": "تقرير تنفيذ مبادرة قارئ اليوم",
+      "fileName": "تقرير تنفيذ مبادرة قارئ اليوم.pdf",
+      "size": 105592,
+      "mimeType": "application/pdf",
+      "note": "",
+      "uploadedAt": "2026-11-08T22:57:27.208Z"
+    },
+    {
+      "id": "unlinked-a75add1e-ea16-4c7f-a00a-59663126f8a7",
+      "userId": "usr-teacher-f1",
+      "title": "تقرير فن تراثي معاصر",
+      "fileName": "تقرير فن تراثي معاصر.pdf",
+      "size": 475233,
+      "mimeType": "application/pdf",
+      "note": "",
+      "uploadedAt": "2026-11-08T22:57:09.294Z"
+    },
+    {
+      "id": "unlinked-e197c59c-d3c1-4f68-9072-c334d4f9dae9",
+      "userId": "usr-teacher-f1",
+      "title": "الاستعداد للعام الدراسي",
+      "fileName": "الاستعداد للعام الدراسي.pdf",
+      "size": 455925,
+      "mimeType": "application/pdf",
+      "note": "",
+      "uploadedAt": "2026-11-08T22:54:34.092Z"
     }
   ],
   "includedLibraryIds": [
@@ -183,20 +213,32 @@
   ],
   "schoolIdentity": {
     "educationAdministrationName": "الإدارة العامة للتعليم بمنطقة مكة المكرمة",
-    "schoolName": "ابتدائية بحرة المجاهدين الخامسة ببحرة المجاهدين"
+    "schoolName": "ابتدائية بحرة المجاهدين الخامسة"
   },
   "files": {
-    "pf-1794173234017": {
-      "path": "uploads/ftm/usr-teacher-f1/pf-1794173234017/تقرير_اليوم_الوطني.pdf",
-      "sha": "9fa0551382894a3d4353de71d4c329a451d2f158"
+    "pf-1794178030614": {
+      "path": "uploads/ftm/usr-teacher-f1/pf-1794178030614/الاستعداد_للعام_الدراسي.pdf",
+      "sha": "50020b31b790b065bd1bc89a7fb557176ed84d52"
     },
-    "unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278": {
-      "path": "uploads/ftm/usr-teacher-f1/unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278/اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
-      "sha": "7b4ffc1f476091ede6981010f3823acc90bee6c4"
+    "unlinked-0155e5b8-6e6d-4747-b8e2-de0e7d0d31ff": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-0155e5b8-6e6d-4747-b8e2-de0e7d0d31ff/تقرير_اليوم_الوطني.pdf",
+      "sha": "a8d8af880eb6c9f328748676ef5de265eab77808"
     },
-    "unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e": {
-      "path": "uploads/ftm/usr-teacher-f1/unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e/سجل_متابعة_أعمال_الطالبات_-_لغتي.pdf",
-      "sha": "ddbb14cf232f79b4b603ac8925dc2983b23cd784"
+    "unlinked-d31e294b-9417-4899-99b2-8fe439611ac2": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-d31e294b-9417-4899-99b2-8fe439611ac2/الاستعداد_للعام_الدراسي.pdf",
+      "sha": "50020b31b790b065bd1bc89a7fb557176ed84d52"
+    },
+    "unlinked-4ecfca6d-ea80-4fec-8e7c-9209a41b0c33": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-4ecfca6d-ea80-4fec-8e7c-9209a41b0c33/تقرير_تنفيذ_مبادرة_قارئ_اليوم.pdf",
+      "sha": "bef66a18e99d09ecfed1408b6bd23e10bc7c1bc9"
+    },
+    "unlinked-a75add1e-ea16-4c7f-a00a-59663126f8a7": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-a75add1e-ea16-4c7f-a00a-59663126f8a7/تقرير_فن_تراثي_معاصر.pdf",
+      "sha": "f0c92296de9f8dc5771af678a057aa1eb934160d"
+    },
+    "unlinked-e197c59c-d3c1-4f68-9072-c334d4f9dae9": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-e197c59c-d3c1-4f68-9072-c334d4f9dae9/الاستعداد_للعام_الدراسي.pdf",
+      "sha": "50020b31b790b065bd1bc89a7fb557176ed84d52"
     }
   }
 }
