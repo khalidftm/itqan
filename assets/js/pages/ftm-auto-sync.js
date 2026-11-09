@@ -29,6 +29,8 @@
   let timer = null;
   let latestError = "";
   let controller = new AbortController();
+  let discoveredOrphans = null;
+  let discoveredAt = 0;
 
   function safeRead(store, key) {
     try { return store.getItem(key); } catch { return null; }
@@ -99,7 +101,9 @@
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(result.message || "GitHub HTTP " + response.status);
+      const err=new Error(result.message || "GitHub HTTP " + response.status);
+      err.status=response.status;
+      throw err;
     }
     return result;
   }
@@ -162,6 +166,81 @@
       reader.readAsDataURL(blob);
     });
   }
+  // Read a remote snapshot BEFORE any upload; its SHA prevents overwriting
+  // changes another device committed between the read and the write.
+  function decodeBase64(encoded) {
+    const raw=atob(String(encoded||"").replace(/\s/g,""));
+    const bytes=new Uint8Array(raw.length);
+    for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+    return bytes;
+  }
+  async function fetchRemoteSnapshot(userId) {
+    const path="data/"+userPath(userId)+"/snapshot.json";
+    const response=await fetch(api(dataPath(path)),{
+      headers:authHeaders(),signal:controller.signal,cache:"no-store"
+    });
+    if(response.status===404)return {snapshot:null,sha:null,path};
+    const info=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(info.message||"تعذر قراءة نسخة البيانات السحابية.");
+    const sha=info.sha;
+    if(typeof sha!=="string"||!/^[a-f0-9]{40}$/i.test(sha))throw new Error("تعذر التحقق من نسخة البيانات البعيدة.");
+    const encoded=info.encoding==="base64"&&info.content?
+      info.content:(await github("/git/blobs/"+encodeURIComponent(sha))).content;
+    if(!encoded)throw new Error("ملف البيانات البعيدة لا يحتوي على محتوى قابل للقراءة.");
+    let snapshot;
+    try {snapshot=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(decodeBase64(encoded)));}
+    catch{throw new Error("صيغة بيانات السحابة غير صالحة؛ لن نكتب فوقها.");}
+    if(snapshot?.schemaVersion!==1 || snapshot?.userId!==userId){
+      throw new Error("معرف المعلمة أو إصدار النسخة السحابية لا يطابق هذا الجهاز. لا يُسمح بالدمج التلقائي.");
+    }
+    return {snapshot,sha,path};
+  }
+  async function listCloudDir(path) {
+    const response=await fetch(api(dataPath(path)),{
+      headers:authHeaders(),signal:controller.signal,cache:"no-store"
+    });
+    if(response.status===404)return [];
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.message||"تعذر فحص مجلد المرفقات السحابي.");
+    if(!Array.isArray(data))throw new Error("رد غير متوقع من مجلد المرفقات السحابي.");
+    return data;
+  }
+  async function discoverCloudOrphans(userId,known) {
+    // A legacy device may have overwritten the snapshot while the actual files
+    // stayed in GitHub. Recover these files conservatively as unlinked.
+    if(discoveredOrphans && Date.now()-discoveredAt<10*60*1000)return discoveredOrphans;
+    const base="uploads/"+userPath(userId);
+    const directories=(await listCloudDir(base)).filter(entry=>
+      entry.type==="dir" && /^[a-zA-Z0-9_-]{1,128}$/.test(entry.name));
+    if(directories.length>250)throw new Error("عدد مجلدات المرفقات كبير؛ يلزم استرجاعها على دفعات.");
+    const found=[];
+    for(const dir of directories) {
+      if(known.has(dir.name))continue;
+      const files=await listCloudDir(dir.path);
+      const candidate=files.find(entry=>entry.type==="file" &&
+        /^[a-f0-9]{40}$/i.test(entry.sha||""));
+      if(!candidate)continue;
+      found.push({
+        id:dir.name,userId,title:candidate.name,fileName:candidate.name,
+        mimeType:"application/octet-stream",size:candidate.size||0,
+        uploadedAt:new Date().toISOString(),recoveredFromCloud:true,
+        cloudPath:candidate.path,cloudSha:candidate.sha
+      });
+    }
+    discoveredOrphans=found;discoveredAt=Date.now();
+    return found;
+  }
+  async function downloadCloudBlob(sha) {
+    if(!/^[a-f0-9]{40}$/i.test(sha))throw new Error("مرجع مرفق سحابي غير صالح.");
+    const data=await github("/git/blobs/"+encodeURIComponent(sha));
+    if(data.encoding!=="base64"||!data.content)throw new Error("تعذر تنزيل محتوى المرفق من GitHub.");
+    return decodeBase64(data.content);
+  }
+  async function pushSnapshotStrict(path,encoded,previousSha) {
+    const body={message:"FTM two-way merged backup",content:encoded,branch:destination.branch||"main"};
+    if(previousSha)body.sha=previousSha;
+    return github(dataPath(path),{method:"PUT",body:JSON.stringify(body)});
+  }
   // Exclude authentication material even if older user records contain it.
   const scrubSecrets = value => {
     if (Array.isArray(value)) return value.map(scrubSecrets);
@@ -176,53 +255,89 @@
     return value;
   };
   async function snapshotUser() {
-    const user = storage.getCurrentUser();
-    if (!user?.id) throw new Error("لم يتم تحديد مستخدم لنسخ ملف الإنجاز.");
-    const items = storage.getPortfolioForUser(user.id);
-    const unlinkedFiles = (storage.getDB().unlinkedFiles || []).filter(file => file.userId === user.id);
-    // Both collections reference the SAME IndexedDB binary ID when a file gets linked.
-    // Preserve the remote path and SHA so linking will never upload a duplicate blob.
-    const allFiles = [...items, ...unlinkedFiles];
-    const manifest = getManifest(user.id);
-    const managed = new Set(allFiles.map(item => String(item.id)));
-    // Never delete cloud files merely because another device does not have
-    // them in its local IndexedDB. Previous behaviour could erase backups
-    // created on other devices before the second device had imported them.
-    // Cloud deletes require a separate explicit, conflict-aware action.
-
-    let uploaded = 0;
-    for (const item of allFiles) {
-      const id = String(item.id);
-      if (manifest[id]?.sha) continue;
-      const record = await blobs.getFile(id);
-      if (!record?.blob) continue; // legacy seed examples with no actual file
-      const blob = record.blob;
-      const path = "uploads/" + userPath(user.id) + "/" + cleanId(id) + "/" +
-        cleanFile(record.name || item.fileName);
-      const saved = await pushFile(path,await base64Blob(blob),
-        "FTM automatic file backup " + cleanId(id));
-      manifest[id] = saved;
-      putManifest(user.id,manifest);
-      uploaded++;
+    const initialUser=storage.getCurrentUser();
+    if(!initialUser?.id)throw new Error("تعذر تحديد حساب المعلمة لمزامنة البيانات.");
+    if(!window.FTMCloudMerge)throw new Error("محرك دمج بيانات السحابة لم يُحمّل.");
+    let lastConflict=null;
+    for(let attempt=0;attempt<3;attempt++) {
+      const userId=initialUser.id;
+      const remote=await fetchRemoteSnapshot(userId);
+      const known=new Set([
+        ...(remote.snapshot?.portfolioItems||[]).map(x=>String(x.id)),
+        ...(remote.snapshot?.unlinkedFiles||[]).map(x=>String(x.id))
+      ]);
+      const orphaned=await discoverCloudOrphans(userId,known);
+      const merged=await window.FTMCloudMerge.reconcile({
+        storage,blobs,userId,remote:remote.snapshot,cloudFiles:orphaned,
+        download:downloadCloudBlob,localManifest:getManifest(userId),
+        onSave:db=>originalSave.call(storage,db)
+      });
+      const manifest=merged.manifest;
+      putManifest(userId,manifest);
+      if(merged.profileChanged){
+        const refreshed=storage.getUsers().find(u=>u.id===userId);
+        if(refreshed)storage.saveSessionUser(refreshed);
+      }
+      const identityKey="itqan-ftm-school-v1:"+userId;
+      if(remote.snapshot?.schoolIdentity &&
+         Object.keys(remote.snapshot.schoolIdentity).length &&
+         !safeRead(localStorage,identityKey)) {
+        safeWrite(localStorage,identityKey,JSON.stringify(remote.snapshot.schoolIdentity));
+        window.dispatchEvent(new Event("itqan:ftmIdentityChanged"));
+      }
+      if(merged.changed){
+        window.FTMUnlinkedFiles?.render();
+        window.FTMPerformanceRecords?.render();
+        window.dispatchEvent(new Event("itqan:portfolioChanged"));
+        window.dispatchEvent(new Event("itqan:activeUserChanged"));
+        window.dispatchEvent(new CustomEvent("itqan:cloudDataPulled",{detail:{
+          restored:merged.restored,linked:merged.linked.length,
+          unlinked:merged.pending.length
+        }}));
+      }
+      const items=storage.getPortfolioForUser(userId);
+      const unlinkedFiles=(storage.getDB().unlinkedFiles||[]).filter(f=>f.userId===userId);
+      let uploaded=0;
+      for(const item of [...items,...unlinkedFiles]) {
+        const id=String(item.id);
+        if(manifest[id]?.sha)continue;
+        const file=await blobs.getFile(id);
+        if(!file?.blob)continue;
+        const path="uploads/"+userPath(userId)+"/"+cleanId(id)+"/"+
+          cleanFile(file.name||item.fileName);
+        const result=await pushFile(path,await base64Blob(file.blob),
+          "FTM automatic file backup "+cleanId(id));
+        manifest[id]=result;
+        putManifest(userId,manifest);
+        uploaded++;
+      }
+      let schoolIdentity={};
+      try {schoolIdentity=JSON.parse(safeRead(localStorage,identityKey)||"{}");}catch{}
+      const user=storage.getCurrentUser();
+      const snapshot={
+        schemaVersion:1,exportedAt:new Date().toISOString(),
+        userId,user:scrubSecrets(user),
+        portfolioItems:scrubSecrets(items),
+        unlinkedFiles:scrubSecrets(unlinkedFiles),
+        includedLibraryIds:user.includedLibraryIds||[],
+        schoolIdentity,
+        files:manifest
+      };
+      try {
+        await pushSnapshotStrict(remote.path,
+          base64Utf8(JSON.stringify(snapshot,null,2)),remote.sha);
+        putManifest(userId,manifest);
+        return {uploaded,restored:merged.restored,recovered:orphaned.length,
+          count:items.length+unlinkedFiles.length,
+          linked:items.length,unlinked:unlinkedFiles.length};
+      }catch(error){
+        if((error.status===409||error.status===422)&&attempt<2){
+          lastConflict=error;continue;
+        }
+        throw error;
+      }
     }
-
-    const identityKey = "itqan-ftm-school-v1:" + user.id;
-    let schoolIdentity = {};
-    try { schoolIdentity = JSON.parse(safeRead(localStorage,identityKey) || "{}"); } catch {}
-    // Never export authentication tokens or other users' records in this snapshot.
-    const snapshot = {
-      schemaVersion:1,exportedAt:new Date().toISOString(),
-      userId:user.id,user:scrubSecrets(user),
-      portfolioItems:scrubSecrets(items),
-      unlinkedFiles:scrubSecrets(unlinkedFiles),
-      includedLibraryIds:user.includedLibraryIds || [],
-      schoolIdentity,
-      files:manifest
-    };
-    const snapshotPath = "data/" + userPath(user.id) + "/snapshot.json";
-    await pushFile(snapshotPath,base64Utf8(JSON.stringify(snapshot,null,2)),
-      "FTM automatic metadata backup");
-    return {uploaded,count:allFiles.length,linked:items.length,unlinked:unlinkedFiles.length};
+    throw lastConflict||new Error("تعذر دمج تعديلات الجهازين.");
   }
 
   async function flush() {
@@ -231,12 +346,13 @@
     try {
       while (queued && token && destination) {
         queued = false;
-        statusUpdate("☁️ جارٍ رفع النسخة السحابية تلقائيًا...","syncing");
+        statusUpdate("☁️ جارٍ استرجاع الملفات ودمج البيانات ثم حفظها سحابيًا...","syncing");
         const destinationRepo = await verifyDestination();
         const summary = await snapshotUser();
         latestError = "";
         statusUpdate((destinationRepo.private ? "✓ نسخة خاصة محفوظة" : "⚠ نسخة محفوظة في مستودع عام") +
-          " • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة",destinationRepo.private ? "synced" : "public");
+          " • " + summary.linked + " شواهد + " + summary.unlinked + " ملفات غير مرتبطة" +
+          (summary.restored?" • استُعيدت "+summary.restored+" ملفات":"") ,"synced");
       }
     } catch (error) {
       latestError = error.message;
@@ -260,6 +376,8 @@
   }
   function disconnect() {
     token = "";
+    discoveredOrphans = null;
+    discoveredAt = 0;
     publicConsent = false;
     safeDelete(sessionStorage,publicConsentKey);
     controller.abort();
