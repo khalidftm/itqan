@@ -19,3 +19,79 @@
  .ftm-page.ftm-sidebar-icons .ftm-performance-nav-count { display: inline-block; }
 }
 @media print { .ftm-page .ftm-performance-evidence-actions {display:none!important;} }
+
+/* Mobile-width correction: keep performance cards and toolbar inside the viewport.
+   Screen-only; leave HSP3 print layouts and print styles unchanged. */
+@media screen {
+  html body.ftm-page { max-width: 100%; overflow-x: clip; }
+  .ftm-page .ftm-topbar, .ftm-page .ftm-shell,
+  .ftm-page .ftm-main, .ftm-page .workspace-section,
+  .ftm-page .workspace-section > .card,
+  .ftm-page #criteria-list-container, .ftm-page .criteria-detailed-card,
+  .ftm-page .criteria-top-bar, .ftm-page .criteria-top-bar > *,
+  .ftm-page .criteria-explanation-box { min-width: 0; max-width: 100%; }
+  .ftm-page :is(.card-title,.criteria-explanation-box,.file-attachment-chip) {
+    overflow-wrap: anywhere;
+  }
+  .ftm-page .file-attachment-chip { white-space: normal; }
+  .ftm-page #tab-performance > .card > .card-header > div:first-child {
+    min-width: 0; flex: 1 1 280px;
+  }
+  .ftm-page #tab-performance > .card > .card-header > .d-flex {
+    min-width: 0; flex: 1 1 340px; flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .ftm-page #tab-performance > .card > .card-header .btn {
+    white-space: normal; text-align: center;
+  }
+  .ftm-page .criteria-top-bar { grid-template-columns: minmax(0,1.6fr) minmax(0,.7fr) minmax(0,1fr) auto; }
+  .ftm-page .criteria-top-bar .score-slider-wrap { min-width: 0; }
+  .ftm-page .criteria-top-bar input[type="range"] { min-width: 0; }
+}
+@media screen and (max-width: 760px) {
+  .ftm-page .ftm-topbar { width: 100%; max-width: 100%; gap: 8px; }
+  .ftm-page .ftm-brand { flex: 1 1 auto; overflow: hidden; }
+  .ftm-page .ftm-brand-text { flex: 1 1 auto; min-width: 0; }
+  .ftm-page .ftm-brand-text strong { max-width: none; }
+  .ftm-page .ftm-actions { flex: 0 0 auto; flex-wrap: nowrap; gap: 5px; }
+  .ftm-page .ftm-actions .btn { flex: 0 0 auto; min-width: 36px; min-height: 38px; }
+  .ftm-page .ftm-main { padding: 10px; }
+  .ftm-page .workspace-section > .card { padding: 14px 12px; }
+  .ftm-page #tab-performance > .card > .card-header {
+    display: flex; flex-direction: column; align-items: stretch; gap: 12px;
+  }
+  .ftm-page #tab-performance > .card > .card-header > div:first-child,
+  .ftm-page #tab-performance > .card > .card-header > .d-flex { flex: 0 1 auto; width: 100%; }
+  .ftm-page #tab-performance > .card > .card-header > .d-flex {
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px;
+  }
+  .ftm-page #tab-performance > .card > .card-header > .d-flex > .text-center { grid-column: 1/-1; }
+  .ftm-page #tab-performance > .card > .card-header > .d-flex > .btn {
+    width: 100%; min-height: 42px; padding: 8px; font-size: .78rem;
+  }
+  .ftm-page #tab-performance > .card > .mb-3 > .d-flex {
+    flex-wrap: wrap; gap: 4px 12px;
+  }
+  .ftm-page .criteria-detailed-card { padding: 14px 12px; }
+  .ftm-page .criteria-top-bar { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; }
+  .ftm-page .criteria-top-bar > div { min-width: 0; }
+  .ftm-page .criteria-top-bar .badge { white-space: normal; overflow-wrap: anywhere; }
+  .ftm-page .criteria-top-bar .score-slider-wrap { width: 100%; }
+  .ftm-page .criteria-top-bar .score-slider-wrap input[type="range"] { flex: 1 1 auto; width: 100%; }
+  .ftm-page .criteria-top-bar button { max-width: 100%; white-space: normal; }
+  .ftm-page .criteria-explanation-box { padding: 12px; }
+  .ftm-page .ftm-performance-records-card .card-header { align-items: flex-start; }
+  .ftm-page .ftm-performance-evidence-list { grid-template-columns: minmax(0,1fr); }
+  .ftm-page .cv-showcase-grid, .ftm-page .shared-lib-grid,
+  .ftm-page .portfolio-sections-grid { grid-template-columns: minmax(0,1fr); }
+}
+@media screen and (max-width: 420px) {
+  .ftm-page .ftm-menu-toggle { width: 36px; min-width: 36px; }
+  .ftm-page .ftm-mark { width: 33px; height: 33px; }
+  .ftm-page .ftm-topbar { padding-inline: 7px; gap: 5px; }
+  .ftm-page .ftm-brand, .ftm-page .ftm-actions { gap: 4px; }
+  .ftm-page .ftm-actions .btn { min-width: 33px; padding-inline: 7px; }
+  .ftm-page #tab-performance > .card > .card-header > .d-flex {
+    grid-template-columns: minmax(0,1fr);
+  }
+}
