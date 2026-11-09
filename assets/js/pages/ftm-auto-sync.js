@@ -185,13 +185,10 @@
     const allFiles = [...items, ...unlinkedFiles];
     const manifest = getManifest(user.id);
     const managed = new Set(allFiles.map(item => String(item.id)));
-    // Remove previously backed-up attachments that have been deleted locally.
-    for (const [id, entry] of Object.entries(manifest)) {
-      if (managed.has(id)) continue;
-      if (entry?.path && entry?.sha) await removeFile(entry.path,entry.sha);
-      delete manifest[id];
-      putManifest(user.id,manifest);
-    }
+    // Never delete cloud files merely because another device does not have
+    // them in its local IndexedDB. Previous behaviour could erase backups
+    // created on other devices before the second device had imported them.
+    // Cloud deletes require a separate explicit, conflict-aware action.
 
     let uploaded = 0;
     for (const item of allFiles) {
