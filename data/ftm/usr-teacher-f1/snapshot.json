@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "exportedAt": "2026-11-09T00:09:52.386Z",
+  "exportedAt": "2026-11-09T00:11:33.562Z",
   "userId": "usr-teacher-f1",
   "user": {
     "id": "usr-teacher-f1",
     "nationalId": "1030405060",
     "email": "sara@itqan.edu.sa",
-    "name": "أ. فاطمة الحربي",
+    "name": "أ. سارة بنت عبدالله الشهري",
     "systemRole": "user",
     "jobRole": "teacher",
     "gender": "female",
@@ -32,14 +32,14 @@
       "lib-role-1"
     ],
     "cvData": {
-      "qualification": "بكالوريوس اللغة العربية",
-      "university": "كلية التربية",
+      "qualification": "بكالوريوس اللغة العربية والتربية + دبلوم الصفوف الأولية",
+      "university": "جامعة الأميرة نورة بنت عبدالرحمن",
       "graduationYear": "1438 هـ",
-      "ministerialNumber": "99",
-      "classesTaught": "الصف الثاني الابتدائي الفصول 1-2-3",
+      "ministerialNumber": "4489201",
+      "classesTaught": "الصف الثاني الابتدائي (فصل 2/أ ، فصل 2/ب) — نصاب 18 حصة",
       "vision": "بناء جيل من التلميذات القارئات بطلاقة والمعتزات بلغتهن العربية الفصيحة وقيمهن الإسلامية والوطنية.",
       "mission": "تقديم تعليم نوعي محفز في مادة (لغتي) لطالبات الصف الثاني الابتدائي عبر توظيف استراتيجيات التعلم باللعب والتقنيات التفاعلية ومراعاة الفروق الفردية.",
-      "keySkills": "- تأسيس القراءة والكتابة بالقاعدة النورانية والوعي الصوتي\n- تصميم الألعاب القرائية الرقمية\n- بناء الخطط العلاجية والإثرائية\n- الإدارة الصفية المحفزة.",
+      "keySkills": "تأسيس القراءة والكتابة بالقاعدة النورانية والوعي الصوتي، تصميم الألعاب القرائية الرقمية، بناء الخطط العلاجية والإثرائية، الإدارة الصفية المحفزة.",
       "achievementsSummary": "تحقيق نسبة إتقان 97% في مهارات الانطلاق القرائي والإملاء لطالبات الصف الثاني الابتدائي، والفوز بجائزة المعلمة المتميزة على مستوى المكتب."
     },
     "criteriaScores": {
@@ -253,21 +253,9 @@
   ],
   "schoolIdentity": {
     "educationAdministrationName": "الإدارة العامة للتعليم بمنطقة مكة المكرمة",
-    "schoolName": "ابتدائية بحرة المجاهدين الخامسة ببحرة المجاهدين"
+    "schoolName": "ابتدائية بحرة المجاهدين الخامسة"
   },
   "files": {
-    "pf-1794173234017": {
-      "path": "uploads/ftm/usr-teacher-f1/pf-1794173234017/تقرير_اليوم_الوطني.pdf",
-      "sha": "9fa0551382894a3d4353de71d4c329a451d2f158"
-    },
-    "unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278": {
-      "path": "uploads/ftm/usr-teacher-f1/unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278/اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
-      "sha": "7b4ffc1f476091ede6981010f3823acc90bee6c4"
-    },
-    "unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e": {
-      "path": "uploads/ftm/usr-teacher-f1/unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e/سجل_متابعة_أعمال_الطالبات_-_لغتي.pdf",
-      "sha": "ddbb14cf232f79b4b603ac8925dc2983b23cd784"
-    },
     "pf-1794178030614": {
       "path": "uploads/ftm/usr-teacher-f1/pf-1794178030614/الاستعداد_للعام_الدراسي.pdf",
       "sha": "50020b31b790b065bd1bc89a7fb557176ed84d52"
@@ -291,6 +279,18 @@
     "unlinked-e197c59c-d3c1-4f68-9072-c334d4f9dae9": {
       "path": "uploads/ftm/usr-teacher-f1/unlinked-e197c59c-d3c1-4f68-9072-c334d4f9dae9/الاستعداد_للعام_الدراسي.pdf",
       "sha": "50020b31b790b065bd1bc89a7fb557176ed84d52"
+    },
+    "pf-1794173234017": {
+      "path": "uploads/ftm/usr-teacher-f1/pf-1794173234017/تقرير_اليوم_الوطني.pdf",
+      "sha": "9fa0551382894a3d4353de71d4c329a451d2f158"
+    },
+    "unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-8df09b73-7bec-4ea6-9f9f-443b2f6b5278/اختبار_تشخيصي_رياضيات_الصف_الثاني.pdf",
+      "sha": "7b4ffc1f476091ede6981010f3823acc90bee6c4"
+    },
+    "unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e": {
+      "path": "uploads/ftm/usr-teacher-f1/unlinked-7ba47d96-0519-4ee5-b14f-1580e497b95e/سجل_متابعة_أعمال_الطالبات_-_لغتي.pdf",
+      "sha": "ddbb14cf232f79b4b603ac8925dc2983b23cd784"
     }
   }
 }
